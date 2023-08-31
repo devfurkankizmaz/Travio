@@ -33,7 +33,7 @@ class RegisterViewModel {
             "password": input.password,
         ]
 
-        NetworkManager.shared.request(TravioRouter.register(params: params), ofType: ResponseModel.self) { result in
+        NetworkManager.shared.request(TravioRouter.register(params: params), responseType: ResponseModel.self) { result in
             switch result {
             case .success:
                 callback("You're registered successfully.", true)

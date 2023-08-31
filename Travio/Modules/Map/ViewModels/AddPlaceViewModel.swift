@@ -18,39 +18,29 @@ class AddPlaceViewModel {
     }
 
     func uploadImage(images: [UIImage]?, callback: @escaping UploadImageHandler) {
+        var imagesData: [Data] = []
         guard let images = images, !images.isEmpty else {
             callback(true)
             return
         }
 
-        var uploadCounter = images.count
-        var uploadSuccess = true
-
         images.forEach { image in
             guard let imageData = image.convertToData(withFormat: .jpeg(compressionQuality: 0.8)) else {
-                print("Convert error.")
-                uploadSuccess = false
-                uploadCounter -= 1
+                print("Convert err.")
                 return
             }
+            imagesData.append(imageData)
+        }
 
-            NetworkManager.shared.uploadImage(route: TravioRouter.uploadImage(imageData: imageData), imageData: imageData, responseType: UploadResponse.self) { result in
-                switch result {
-                case .success(let response):
-                    print("Image uploaded successfully. URLs: \(response.urls[0])")
-                    self.urls.append(response.urls[0])
-                case .failure(let error):
-                    print("Error uploading image: \(error)")
-                    uploadSuccess = false
-                }
-
-                uploadCounter -= 1
-
-                if uploadCounter == 0, uploadSuccess {
-                    callback(true)
-                } else if uploadCounter == 0 {
-                    callback(false)
-                }
+        NetworkManager.shared.uploadImage(TravioRouter.uploadImage(imageData: imagesData), responseType: UploadResponse.self) { result in
+            switch result {
+            case .success(let response):
+                print("Image uploaded successfully. URLs: \(response.urls)")
+                self.urls = response.urls
+                callback(true)
+            case .failure(let error):
+                print("Error uploading image: \(error)")
+                callback(true)
             }
         }
     }
@@ -65,7 +55,7 @@ class AddPlaceViewModel {
             "longitude": input.longitude
         ]
 
-        NetworkManager.shared.request(TravioRouter.postPlace(params: params), ofType: ResponseModel.self) { result in
+        NetworkManager.shared.request(TravioRouter.postPlace(params: params), responseType: ResponseModel.self) { result in
             switch result {
             case .success(let response):
                 self.placeId = response.message
@@ -94,7 +84,7 @@ class AddPlaceViewModel {
                 "image_url": url
             ]
 
-            NetworkManager.shared.request(TravioRouter.postGalleryByPlaceId(params: params), ofType: ResponseModel.self) { result in
+            NetworkManager.shared.request(TravioRouter.postGalleryByPlaceId(params: params), responseType: ResponseModel.self) { result in
                 switch result {
                 case .success:
                     print("Gallery image posted successfully. URL: \(url)")

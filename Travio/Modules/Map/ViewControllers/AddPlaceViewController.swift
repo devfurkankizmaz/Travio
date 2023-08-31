@@ -82,6 +82,7 @@ class AddPlaceViewController: UIViewController {
     private lazy var descriptionTextView: TravioTextView = {
         let view = TravioTextView()
         view.titleView = "Visit Description"
+
         return view
     }()
 

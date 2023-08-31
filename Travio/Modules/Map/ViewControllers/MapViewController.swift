@@ -47,6 +47,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        placesCollectionView.delegate = self
         setupView()
         fetchPlaces()
         setupLongPressGesture()
@@ -65,6 +66,7 @@ class MapViewController: UIViewController {
         for place in mapViewModel.places {
             let latitude = place.latitude
             let longitude = place.longitude
+            // let id = place.id
             let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             let annotation = CustomAnnotation(coordinate: coordinate)
             annotation.title = place.title
@@ -127,7 +129,6 @@ class MapViewController: UIViewController {
                         addPlaceVC.stateTextField.textField.text = address
                     } else {
                         print("Location information not found")
-                        // stateTextFieldText = ""
                     }
                 }
             }
@@ -168,7 +169,27 @@ extension MapViewController: MapViewControllerDelegate {
     }
 }
 
+extension MapViewController: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let visibleRect = CGRect(origin: placesCollectionView.contentOffset, size: placesCollectionView.bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+
+        if let indexPath = placesCollectionView.indexPathForItem(at: visiblePoint) {
+            placesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+}
+
 extension MapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let annotation = view.annotation as? CustomAnnotation {
+            if let index = mapViewModel.places.firstIndex(where: { $0.title == annotation.title }) {
+                let indexPath = IndexPath(item: index, section: 0)
+                placesCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            }
+        }
+    }
+
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is CustomAnnotation == false {
             return nil

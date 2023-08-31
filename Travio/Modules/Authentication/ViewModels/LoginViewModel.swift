@@ -56,7 +56,7 @@ class LoginViewModel {
             "password": input.password,
         ]
 
-        NetworkManager.shared.request(TravioRouter.login(params: params), ofType: LoginResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.login(params: params), responseType: LoginResponse.self) { result in
             switch result {
             case .success:
                 callback("You're logged in successfully.", true)

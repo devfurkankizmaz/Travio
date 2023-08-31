@@ -13,7 +13,7 @@ class DetailsViewModel {
     var images: [Image] = []
 
     func fetchPlace(with placeId: String, callback: @escaping DetailHandler) {
-        NetworkManager.shared.request(TravioRouter.getPlaceById(id: placeId), ofType: PlaceResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getPlaceById(id: placeId), responseType: PlaceResponse.self) { result in
             switch result {
             case .success(let response):
                 callback(true)
@@ -26,7 +26,7 @@ class DetailsViewModel {
     }
 
     func fetchGallery(with placeId: String, callback: @escaping DetailHandler) {
-        NetworkManager.shared.request(TravioRouter.getGalleryByPlaceId(id: placeId), ofType: ImageResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getGalleryByPlaceId(id: placeId), responseType: ImageResponse.self) { result in
             switch result {
             case .success(let response):
                 callback(true)
