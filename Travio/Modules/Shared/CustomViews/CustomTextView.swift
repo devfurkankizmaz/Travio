@@ -20,11 +20,13 @@ class TravioTextView: UIView {
     }()
 
     public var textView: UITextView = {
-        let textField = UITextView()
-        textField.font = AppFont.poppinsRegular.withSize(12)
-        textField.autocapitalizationType = .none
-        textField.autocorrectionType = .no
-        return textField
+        let textView = UITextView()
+        textView.font = AppFont.poppinsRegular.withSize(12)
+        textView.backgroundColor = .white
+        textView.autocapitalizationType = .none
+        textView.autocorrectionType = .no
+        textView.textColor = AppColor.secondary.color
+        return textView
     }()
 
     var insets: UIEdgeInsets
@@ -66,7 +68,7 @@ class TravioTextView: UIView {
         textView.snp.makeConstraints { make in
             make.top.equalTo(label.snp.bottom).offset(8)
             make.leading.equalTo(label.snp.leading)
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-12)
             make.bottom.equalToSuperview().offset(-8)
         }
     }

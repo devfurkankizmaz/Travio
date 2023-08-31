@@ -17,7 +17,7 @@ enum TravioRouter {
     case postGalleryByPlaceId(params: Parameters)
     case getAllVisits
     case postPlace(params: Parameters)
-    case uploadImage(imageData: Data)
+    case uploadImage(imageData: [Data])
 
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
@@ -76,6 +76,20 @@ enum TravioRouter {
         case .uploadImage:
             return nil
         }
+    }
+
+    var multipartFormData: MultipartFormData {
+        let formData = MultipartFormData()
+        switch self {
+        case .uploadImage(let imageData):
+            imageData.forEach { image in
+                formData.append(image, withName: "file", fileName: "image.jpg", mimeType: "image/jpeg")
+            }
+            return formData
+        default:
+            break
+        }
+        return formData
     }
 
     var headers: HTTPHeaders {

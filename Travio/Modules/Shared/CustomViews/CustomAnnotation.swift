@@ -5,7 +5,8 @@ class CustomAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String?
     var subtitle: String?
-    var image: UIImage? // Özel pin görüntüsü
+    var id: String?
+    var image: UIImage?
 
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate

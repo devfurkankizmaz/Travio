@@ -13,7 +13,7 @@ class MapViewModel {
     var onDataFetch: ((Bool) -> Void)?
 
     func fetchPlaces(callback: @escaping PlaceHandler) {
-        NetworkManager.shared.request(TravioRouter.getAllPlaces, ofType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getAllPlaces, responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
                 callback("You're fetch all places successfully.", true)

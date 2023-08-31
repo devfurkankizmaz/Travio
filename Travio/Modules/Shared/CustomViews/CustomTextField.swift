@@ -59,6 +59,7 @@ class TravioUIView: UIView {
         textField.font = AppFont.poppinsRegular.withSize(12)
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
+        textField.textColor = AppColor.secondary.color
         return textField
     }()
 
