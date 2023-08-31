@@ -44,7 +44,7 @@ class SettingsViewController: UIViewController {
     private lazy var editButton: UIButton = {
         let button = UIButton()
         button.setTitle("Edit Profile", for: .normal)
-        button.setTitleColor(AppColor.primary.color, for: .normal)
+        button.setTitleColor(#colorLiteral(red: 0.09019607843, green: 0.7529411765, blue: 0.9215686275, alpha: 1), for: .normal)
         button.titleLabel?.font = AppFont.poppinsRegular.withSize(12)
         button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         return button
@@ -69,7 +69,6 @@ class SettingsViewController: UIViewController {
     }
     
     @objc func editButtonTapped() {
-        
         print("Edit Butonu tıkladı")
     }
 
