@@ -14,6 +14,7 @@ class DetailsViewController: UIViewController {
     var placeId: String?
     var visitId: String?
     var visitButtonIsHidden = true
+    var placeRemovable = false
     weak var delegate: VisitsViewControllerDelegate?
 
     private lazy var detailsViewModel: DetailsViewModel = {
@@ -149,6 +150,7 @@ class DetailsViewController: UIViewController {
         setupView()
         fetchPlace()
         fetchGallery()
+        checkVisited()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -156,6 +158,19 @@ class DetailsViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+
+    private func checkVisited() {
+        guard let placeId = placeId else { return }
+        detailsViewModel.checkVisit(with: placeId, callback: { [weak self] confirm in
+            DispatchQueue.main.async {
+                if confirm {
+                    self?.placeRemovable = true
+                    self?.visitButton.labelText = "Delete"
+                    self?.visitButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+                }
+            }
+        })
+    }
 
     private func updateUIWithData() {
         let customFormattedDate = detailsViewModel.place?.created_at.formatISO8601ToCustomFormat()
