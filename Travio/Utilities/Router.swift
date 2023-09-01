@@ -17,6 +17,7 @@ enum TravioRouter {
     case postGalleryByPlaceId(params: Parameters)
     case getAllVisits
     case postPlace(params: Parameters)
+    case postVisit(params: Parameters)
     case uploadImage(imageData: [Data])
     case deleteVisitById(id: String)
     case getVisitByPlace(id: String)
@@ -43,6 +44,8 @@ enum TravioRouter {
             return "/v1/visits"
         case .postPlace:
             return "/v1/places"
+        case .postVisit:
+            return "/v1/visits"
         case .uploadImage:
             return "/upload"
         case .deleteVisitById(let visitId):
@@ -54,7 +57,7 @@ enum TravioRouter {
 
     var method: HTTPMethod {
         switch self {
-        case .login, .register, .postPlace, .uploadImage, .postGalleryByPlaceId:
+        case .login, .register, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
         case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
             return .get
@@ -81,6 +84,8 @@ enum TravioRouter {
             return nil
         case .postPlace(let parameters):
             return parameters
+        case .postVisit(let parameters):
+            return parameters
         case .uploadImage:
             return nil
         case .deleteVisitById:
@@ -94,7 +99,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
-        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace:
+        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
         case .uploadImage:
             return ["Content-Type": "multipart/form-data"]
