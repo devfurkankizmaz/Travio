@@ -230,6 +230,7 @@ extension MapViewController: UICollectionViewDelegateFlowLayout {
         if let place = mapViewModel.getAPlace(at: indexPath.row) {
             detailVC.placeId = place.id
             detailVC.visitButtonIsHidden = false
+            detailVC.isFromVisit = false
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }

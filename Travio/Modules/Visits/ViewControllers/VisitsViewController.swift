@@ -118,6 +118,7 @@ extension VisitsViewController: UICollectionViewDelegateFlowLayout {
             detailVC.visitId = visit.id
             detailVC.delegate = self
             detailVC.visitButtonIsHidden = true
+            detailVC.isFromVisit = true
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }

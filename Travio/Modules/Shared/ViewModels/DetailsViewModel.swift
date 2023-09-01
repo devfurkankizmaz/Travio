@@ -5,6 +5,7 @@
 //  Created by Furkan Kızmaz on 26.08.2023.
 //
 
+import Alamofire
 import Foundation
 
 class DetailsViewModel {
@@ -47,6 +48,31 @@ class DetailsViewModel {
             case .failure(let error):
                 callback(error.localizedDescription)
                 print(error)
+            }
+        }
+    }
+
+    func getCurrentSystemDate() -> String {
+        let currentDate = Date()
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        let formattedDate = dateFormatter.string(from: currentDate)
+        return formattedDate
+    }
+
+    func postVisit(placeId: String, callback: @escaping DetailHandler) {
+        let params: Parameters = [
+            "place_id": placeId,
+            "visited_at": getCurrentSystemDate(),
+        ]
+
+        NetworkManager.shared.request(TravioRouter.postVisit(params: params), responseType: ResponseModel.self) { result in
+            switch result {
+            case .success:
+                callback(true)
+            case .failure:
+                callback(false)
             }
         }
     }
