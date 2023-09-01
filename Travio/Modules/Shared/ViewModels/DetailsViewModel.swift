@@ -9,6 +9,7 @@ import Foundation
 
 class DetailsViewModel {
     typealias DetailHandler = (Bool) -> Void
+    typealias DeleteHandler = (String) -> Void
     var place: Place?
     var images: [Image] = []
 
@@ -33,6 +34,18 @@ class DetailsViewModel {
                 self.images = response.data.images
             case .failure(let error):
                 callback(false)
+                print(error)
+            }
+        }
+    }
+
+    func deleteVisit(with visitId: String, callback: @escaping DeleteHandler) {
+        NetworkManager.shared.request(TravioRouter.deleteVisitById(id: visitId), responseType: ResponseModel.self) { result in
+            switch result {
+            case .success(let response):
+                callback(response.message)
+            case .failure(let error):
+                callback(error.localizedDescription)
                 print(error)
             }
         }

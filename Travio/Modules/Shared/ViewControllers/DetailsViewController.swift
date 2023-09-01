@@ -12,6 +12,7 @@ class DetailsViewController: UIViewController {
     // MARK: - Properties
 
     var placeId: String?
+    var visitId: String?
     var visitButtonIsHidden = true
 
     private lazy var detailsViewModel: DetailsViewModel = {
@@ -119,8 +120,14 @@ class DetailsViewController: UIViewController {
 
     private lazy var visitButton: DetailButton = {
         let button = DetailButton()
-        button.isHidden = visitButtonIsHidden
-        // button.setImage(UIImage(named: "visitButton"), for: .normal)
+        if visitButtonIsHidden {
+            button.labelText = "Delete"
+            button.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+        } else {
+            button.labelText = "Add"
+            button.backgroundColor = AppColor.primary.color
+        }
+
         return button
     }()
 
@@ -198,9 +205,9 @@ class DetailsViewController: UIViewController {
         stackView.addArrangedSubviews(locationLabel, visitDateLabel, creatorLabel)
         mapUIView.addSubview(mapView)
         scrollView.addSubview(contentView)
-        contentView.addSubviews(stackView, mapUIView, descLabel, visitButton)
+        contentView.addSubviews(stackView, mapUIView, descLabel)
 
-        view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView)
+        view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView, visitButton)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -248,8 +255,8 @@ class DetailsViewController: UIViewController {
         }
 
         visitButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalTo(mapUIView.snp.top).offset(-20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.trailing.equalToSuperview().offset(-24)
             make.width.height.equalTo(50)
         }
 

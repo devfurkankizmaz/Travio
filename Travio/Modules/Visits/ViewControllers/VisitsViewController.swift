@@ -100,6 +100,7 @@ extension VisitsViewController: UICollectionViewDelegateFlowLayout {
         let detailVC = DetailsViewController()
         if let visit = visitsViewModel.getAVisit(at: indexPath.row) {
             detailVC.placeId = visit.placeID
+            detailVC.visitId = visit.id
             detailVC.visitButtonIsHidden = true
             navigationController?.pushViewController(detailVC, animated: true)
         }

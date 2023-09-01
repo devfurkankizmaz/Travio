@@ -18,6 +18,7 @@ enum TravioRouter {
     case getAllVisits
     case postPlace(params: Parameters)
     case uploadImage(imageData: [Data])
+    case deleteVisitById(id: String)
 
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
@@ -43,6 +44,8 @@ enum TravioRouter {
             return "/v1/places"
         case .uploadImage:
             return "/upload"
+        case .deleteVisitById(let visitId):
+            return "/v1/visits/\(visitId)"
         }
     }
 
@@ -52,6 +55,8 @@ enum TravioRouter {
             return .post
         case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits:
             return .get
+        case .deleteVisitById:
+            return .delete
         }
     }
 
@@ -75,6 +80,8 @@ enum TravioRouter {
             return parameters
         case .uploadImage:
             return nil
+        case .deleteVisitById:
+            return nil
         }
     }
 
@@ -96,7 +103,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
-        case .getAllVisits, .postPlace, .postGalleryByPlaceId:
+        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
         case .uploadImage:
             return ["Content-Type": "multipart/form-data"]
