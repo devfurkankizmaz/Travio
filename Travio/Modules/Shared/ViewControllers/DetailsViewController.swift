@@ -13,8 +13,8 @@ class DetailsViewController: UIViewController {
 
     var placeId: String?
     var visitId: String?
-    var visitButtonIsHidden = true
-    var placeRemovable = false
+    var visitButtonIsHidden = Bool()
+    var isFromVisit = Bool()
     weak var delegate: VisitsViewControllerDelegate?
 
     private lazy var detailsViewModel: DetailsViewModel = {
@@ -31,7 +31,6 @@ class DetailsViewController: UIViewController {
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPageIndicatorTintColor = .black
-        // pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
         pageControl.pageIndicatorTintColor = UIColor(white: 1, alpha: 0.5)
         pageControl.backgroundStyle = .prominent
         return pageControl
@@ -120,11 +119,12 @@ class DetailsViewController: UIViewController {
         return imageView
     }()
 
-    private lazy var visitButton: DetailButton = {
+    private lazy var visitedButton: DetailButton = {
         let button = DetailButton()
+        button.addTarget(self, action: #selector(visitedButtonTapped), for: .touchUpInside)
+
         if visitButtonIsHidden {
             button.labelText = "Delete"
-            button.addTarget(self, action: #selector(deleteVisitButtonTapped), for: .touchUpInside)
             button.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
         } else {
             button.labelText = "Add"
@@ -164,9 +164,8 @@ class DetailsViewController: UIViewController {
         detailsViewModel.checkVisit(with: placeId, callback: { [weak self] confirm in
             DispatchQueue.main.async {
                 if confirm {
-                    self?.placeRemovable = true
-                    self?.visitButton.labelText = "Delete"
-                    self?.visitButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+                    self?.visitedButton.labelText = "Delete"
+                    self?.visitedButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
                 }
             }
         })
@@ -224,7 +223,7 @@ class DetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubviews(stackView, mapUIView, descLabel)
 
-        view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView, visitButton)
+        view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView, visitedButton)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -271,7 +270,7 @@ class DetailsViewController: UIViewController {
             make.leading.equalToSuperview().offset(24)
         }
 
-        visitButton.snp.makeConstraints { make in
+        visitedButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.trailing.equalToSuperview().offset(-24)
             make.width.height.equalTo(50)
@@ -299,19 +298,41 @@ class DetailsViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc func deleteVisitButtonTapped() {
-        guard let visitId = visitId else { return }
+    @objc func visitedButtonTapped() {
+        // If its hidden will be perform deletion else addition
+        if visitButtonIsHidden {
+            guard let placeId = placeId else { return }
+            showDeleteConfirmationAlert(completion: { confirm in
+                if confirm {
+                    if self.isFromVisit {
+                        self.detailsViewModel.deleteVisit(with: placeId, callback: { [weak self] message in
+                            self?.navigationController?.popViewController(animated: true)
+                            self?.delegate?.reloadView()
+                            self?.delegate?.showDeletionAlert(message: message)
 
-        showDeleteConfirmationAlert(completion: { confirm in
-            if confirm {
-                self.detailsViewModel.deleteVisit(with: visitId, callback: { [weak self] message in
-                    self?.navigationController?.popViewController(animated: true)
-                    self?.delegate?.reloadView()
-                    self?.delegate?.showDeletionAlert(message: message)
-
-                })
-            }
-        })
+                        })
+                    } else {
+                        self.detailsViewModel.deleteVisit(with: placeId, callback: { [weak self] _ in
+                            self?.delegate?.reloadView()
+                            self?.showAlert(title: "Success", message: "Place deleted from visits")
+                            self?.visitedButton.labelText = "Add"
+                            self?.visitedButton.backgroundColor = AppColor.primary.color
+                            self?.visitButtonIsHidden = false
+                        })
+                    }
+                }
+            })
+        } else {
+            guard let placeId = placeId else { return }
+            detailsViewModel.postVisit(placeId: placeId, callback: { [weak self] confirm in
+                if confirm {
+                    self?.visitButtonIsHidden = true
+                    self?.visitedButton.labelText = "Delete"
+                    self?.visitedButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+                    self?.showAlert(title: "Success", message: "Visit created.")
+                }
+            })
+        }
     }
 
     @objc func backButtonTapped() {
