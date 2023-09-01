@@ -1,6 +1,12 @@
 import UIKit
 
 class DetailButton: UIButton {
+    var labelText: String = "" {
+        didSet {
+            updateText()
+        }
+    }
+
     var insets: UIEdgeInsets
     init(insets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)) {
         self.insets = insets
@@ -36,6 +42,10 @@ class DetailButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         roundCorners(corners: [.topLeft, .bottomLeft, .topRight], radius: 16)
+    }
+
+    private func updateText() {
+        buttonLabel.text = labelText
     }
 
     private func setupLayout() {
