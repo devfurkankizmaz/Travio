@@ -117,10 +117,10 @@ class DetailsViewController: UIViewController {
         return imageView
     }()
 
-    private lazy var visitButton: UIButton = {
-        let button = UIButton()
+    private lazy var visitButton: DetailButton = {
+        let button = DetailButton()
         button.isHidden = visitButtonIsHidden
-        button.setImage(UIImage(named: "visitButton"), for: .normal)
+        // button.setImage(UIImage(named: "visitButton"), for: .normal)
         return button
     }()
 
