@@ -17,7 +17,10 @@ enum TravioRouter {
     case postGalleryByPlaceId(params: Parameters)
     case getAllVisits
     case postPlace(params: Parameters)
+    case postVisit(params: Parameters)
     case uploadImage(imageData: [Data])
+    case deleteVisitById(id: String)
+    case getVisitByPlace(id: String)
 
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
@@ -41,17 +44,25 @@ enum TravioRouter {
             return "/v1/visits"
         case .postPlace:
             return "/v1/places"
+        case .postVisit:
+            return "/v1/visits"
         case .uploadImage:
             return "/upload"
+        case .deleteVisitById(let visitId):
+            return "/v1/visits/\(visitId)"
+        case .getVisitByPlace(let placeId):
+            return "/v1/visits/user/\(placeId)"
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .login, .register, .postPlace, .uploadImage, .postGalleryByPlaceId:
+        case .login, .register, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
-        case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits:
+        case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
             return .get
+        case .deleteVisitById:
+            return .delete
         }
     }
 
@@ -73,11 +84,30 @@ enum TravioRouter {
             return nil
         case .postPlace(let parameters):
             return parameters
+        case .postVisit(let parameters):
+            return parameters
         case .uploadImage:
+            return nil
+        case .deleteVisitById:
+            return nil
+        case .getVisitByPlace:
             return nil
         }
     }
 
+    var headers: HTTPHeaders {
+        switch self {
+        case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
+            return [:]
+        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
+            return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
+        case .uploadImage:
+            return ["Content-Type": "multipart/form-data"]
+        }
+    }
+}
+
+extension TravioRouter {
     var multipartFormData: MultipartFormData {
         let formData = MultipartFormData()
         switch self {
@@ -90,17 +120,6 @@ enum TravioRouter {
             break
         }
         return formData
-    }
-
-    var headers: HTTPHeaders {
-        switch self {
-        case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
-            return [:]
-        case .getAllVisits, .postPlace, .postGalleryByPlaceId:
-            return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
-        case .uploadImage:
-            return ["Content-Type": "multipart/form-data"]
-        }
     }
 }
 

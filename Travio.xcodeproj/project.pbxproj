@@ -18,6 +18,7 @@
 		0A56F5622A90FF3F0093BBAA /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A56F5612A90FF3F0093BBAA /* MainTabBarController.swift */; };
 		0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E190B2A98430B00895386 /* PlaceModel.swift */; };
 		0A60CA242A98A51B00A8418E /* PlaceViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */; };
+		0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */; };
 		0A7A7A4D2A937D3C000A4B43 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7A7A4C2A937D3C000A4B43 /* IQKeyboardManagerSwift */; };
 		0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA44B352A95F1AF0070052D /* CustomTextView.swift */; };
 		0AA8C3902A9A6B0700F25219 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */; };
@@ -72,6 +73,7 @@
 		0A56F5612A90FF3F0093BBAA /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		0A5E190B2A98430B00895386 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
 		0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewCell.swift; sourceTree = "<group>"; };
+		0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDetailButton.swift; sourceTree = "<group>"; };
 		0AA44B352A95F1AF0070052D /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		0AA8C3922A9A6BB600F25219 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				0AFC1DEC2A8F8C3C002A55B1 /* CustomButton.swift */,
 				0AB141182A94A2B600EEE32A /* GalleryViewCell.swift */,
 				0AB83DA12A9B2B8C00E9ABEB /* CustomAnnotation.swift */,
+				0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -575,6 +578,7 @@
 				0AFC1DE22A8F5666002A55B1 /* Font.swift in Sources */,
 				0AFC1DCE2A8F5558002A55B1 /* Extensions.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
+				0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */,
 				0AAEFABC2A9CB9500075B7C4 /* AddPlaceViewModel.swift in Sources */,
 				0AFC1DEB2A8F680A002A55B1 /* CustomTextField.swift in Sources */,
 				0A0933522A99553E00AE9B99 /* AuthModel.swift in Sources */,
