@@ -19,6 +19,7 @@ enum TravioRouter {
     case postPlace(params: Parameters)
     case uploadImage(imageData: [Data])
     case deleteVisitById(id: String)
+    case getVisitByPlace(id: String)
 
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
@@ -46,6 +47,8 @@ enum TravioRouter {
             return "/upload"
         case .deleteVisitById(let visitId):
             return "/v1/visits/\(visitId)"
+        case .getVisitByPlace(let placeId):
+            return "/v1/visits/user/\(placeId)"
         }
     }
 
@@ -53,7 +56,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .postPlace, .uploadImage, .postGalleryByPlaceId:
             return .post
-        case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits:
+        case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
             return .get
         case .deleteVisitById:
             return .delete
@@ -82,9 +85,24 @@ enum TravioRouter {
             return nil
         case .deleteVisitById:
             return nil
+        case .getVisitByPlace:
+            return nil
         }
     }
 
+    var headers: HTTPHeaders {
+        switch self {
+        case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
+            return [:]
+        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace:
+            return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
+        case .uploadImage:
+            return ["Content-Type": "multipart/form-data"]
+        }
+    }
+}
+
+extension TravioRouter {
     var multipartFormData: MultipartFormData {
         let formData = MultipartFormData()
         switch self {
@@ -97,17 +115,6 @@ enum TravioRouter {
             break
         }
         return formData
-    }
-
-    var headers: HTTPHeaders {
-        switch self {
-        case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
-            return [:]
-        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById:
-            return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
-        case .uploadImage:
-            return ["Content-Type": "multipart/form-data"]
-        }
     }
 }
 
