@@ -14,6 +14,7 @@ class DetailsViewController: UIViewController {
     var placeId: String?
     var visitId: String?
     var visitButtonIsHidden = true
+    weak var delegate: VisitsViewControllerDelegate?
 
     private lazy var detailsViewModel: DetailsViewModel = {
         let vm = DetailsViewModel()
@@ -122,6 +123,7 @@ class DetailsViewController: UIViewController {
         let button = DetailButton()
         if visitButtonIsHidden {
             button.labelText = "Delete"
+            button.addTarget(self, action: #selector(deleteVisitButtonTapped), for: .touchUpInside)
             button.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
         } else {
             button.labelText = "Add"
@@ -281,6 +283,21 @@ class DetailsViewController: UIViewController {
     // MARK: - Public Methods
 
     // MARK: - Actions
+
+    @objc func deleteVisitButtonTapped() {
+        guard let visitId = visitId else { return }
+
+        showDeleteConfirmationAlert(completion: { confirm in
+            if confirm {
+                self.detailsViewModel.deleteVisit(with: visitId, callback: { [weak self] message in
+                    self?.navigationController?.popViewController(animated: true)
+                    self?.delegate?.reloadView()
+                    self?.delegate?.showDeletionAlert(message: message)
+
+                })
+            }
+        })
+    }
 
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)

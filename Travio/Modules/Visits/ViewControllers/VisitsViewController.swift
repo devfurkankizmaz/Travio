@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol VisitsViewControllerDelegate: AnyObject {
+    func showDeletionAlert(message: String)
+    func reloadView()
+}
+
 class VisitsViewController: UIViewController {
     // MARK: - Properties
 
@@ -83,6 +88,16 @@ class VisitsViewController: UIViewController {
     }
 }
 
+extension VisitsViewController: VisitsViewControllerDelegate {
+    func showDeletionAlert(message: String) {
+        showAlert(title: "success", message: message)
+    }
+
+    func reloadView() {
+        fetchVisits()
+    }
+}
+
 extension VisitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = collectionView.frame.width - 48
@@ -101,6 +116,7 @@ extension VisitsViewController: UICollectionViewDelegateFlowLayout {
         if let visit = visitsViewModel.getAVisit(at: indexPath.row) {
             detailVC.placeId = visit.placeID
             detailVC.visitId = visit.id
+            detailVC.delegate = self
             detailVC.visitButtonIsHidden = true
             navigationController?.pushViewController(detailVC, animated: true)
         }
