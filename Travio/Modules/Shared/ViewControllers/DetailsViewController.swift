@@ -166,6 +166,7 @@ class DetailsViewController: UIViewController {
                 if confirm {
                     self?.visitedButton.labelText = "Delete"
                     self?.visitedButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+                    self?.visitButtonIsHidden = true
                 }
             }
         })
