@@ -18,6 +18,8 @@
 		0A56F5622A90FF3F0093BBAA /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A56F5612A90FF3F0093BBAA /* MainTabBarController.swift */; };
 		0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E190B2A98430B00895386 /* PlaceModel.swift */; };
 		0A60CA242A98A51B00A8418E /* PlaceViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */; };
+		0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */; };
+		0A6636F02AA331D600515C8B /* HeaderCustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6636EF2AA331D600515C8B /* HeaderCustomView.swift */; };
 		0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */; };
 		0A7A7A4D2A937D3C000A4B43 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7A7A4C2A937D3C000A4B43 /* IQKeyboardManagerSwift */; };
 		0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA44B352A95F1AF0070052D /* CustomTextView.swift */; };
@@ -73,6 +75,8 @@
 		0A56F5612A90FF3F0093BBAA /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		0A5E190B2A98430B00895386 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
 		0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewCell.swift; sourceTree = "<group>"; };
+		0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		0A6636EF2AA331D600515C8B /* HeaderCustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCustomView.swift; sourceTree = "<group>"; };
 		0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDetailButton.swift; sourceTree = "<group>"; };
 		0AA44B352A95F1AF0070052D /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -278,6 +282,8 @@
 		0A35EEBF2A9FA6A2008E9299 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				0A6636E92AA31CFB00515C8B /* CustomViews */,
+				0A6636E82AA31CB400515C8B /* ViewModels */,
 				0A35EEC02A9FA6AA008E9299 /* ViewControllers */,
 			);
 			path = Home;
@@ -289,6 +295,22 @@
 				0A35EEC12A9FA6BE008E9299 /* HomeViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0A6636E82AA31CB400515C8B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0A6636E92AA31CFB00515C8B /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				0A6636EF2AA331D600515C8B /* HeaderCustomView.swift */,
+			);
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		0AA8C38E2A9A6AE700F25219 /* ViewControllers */ = {
@@ -546,6 +568,7 @@
 				0ACBC21C2A9B40C000141CB9 /* AddPlaceViewController.swift in Sources */,
 				0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */,
 				0AB141172A949DA600EEE32A /* GalleryModel.swift in Sources */,
+				0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */,
 				0A35EEC22A9FA6BE008E9299 /* HomeViewController.swift in Sources */,
 				0AFC1DE82A8F5AFD002A55B1 /* LoginViewController.swift in Sources */,
 				D3569F8D2AA0AB84000653BC /* SettingsViewController.swift in Sources */,
@@ -578,6 +601,7 @@
 				0AFC1DE22A8F5666002A55B1 /* Font.swift in Sources */,
 				0AFC1DCE2A8F5558002A55B1 /* Extensions.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
+				0A6636F02AA331D600515C8B /* HeaderCustomView.swift in Sources */,
 				0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */,
 				0AAEFABC2A9CB9500075B7C4 /* AddPlaceViewModel.swift in Sources */,
 				0AFC1DEB2A8F680A002A55B1 /* CustomTextField.swift in Sources */,
