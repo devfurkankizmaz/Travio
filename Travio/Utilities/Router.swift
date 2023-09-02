@@ -12,6 +12,8 @@ enum TravioRouter {
     case login(params: Parameters)
     case register(params: Parameters)
     case getAllPlaces
+    case getPopularPlaces
+    case getNewPlaces
     case getPlaceById(id: String)
     case getGalleryByPlaceId(id: String)
     case postGalleryByPlaceId(params: Parameters)
@@ -34,6 +36,10 @@ enum TravioRouter {
             return "/v1/auth/register"
         case .getAllPlaces:
             return "/v1/places"
+        case .getPopularPlaces:
+            return "/v1/places/popular"
+        case .getNewPlaces:
+            return "/v1/places/last"
         case .getPlaceById(let placeId):
             return "/v1/places/\(placeId)"
         case .getGalleryByPlaceId(let placeId):
@@ -59,7 +65,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
-        case .getAllPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
+        case .getAllPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
             return .get
         case .deleteVisitById:
             return .delete
@@ -73,6 +79,10 @@ enum TravioRouter {
         case .register(let parameters):
             return parameters
         case .getAllPlaces:
+            return nil
+        case .getPopularPlaces:
+            return nil
+        case .getNewPlaces:
             return nil
         case .getPlaceById:
             return nil
@@ -97,7 +107,7 @@ enum TravioRouter {
 
     var headers: HTTPHeaders {
         switch self {
-        case .login, .register, .getAllPlaces, .getPlaceById, .getGalleryByPlaceId:
+        case .login, .register, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
         case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]

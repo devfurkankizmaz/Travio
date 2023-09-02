@@ -48,6 +48,10 @@ class VisitsViewController: UIViewController {
         setupView()
         fetchVisits()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        fetchVisits()
+    }
 
     // MARK: - Private Methods
 
