@@ -19,12 +19,14 @@ class HomeViewController: UIViewController {
     private lazy var popularPlacesHeaderView: HeaderCustomView = {
         let view = HeaderCustomView()
         view.titleView = "Popular Places"
+        view.button.addTarget(self, action: #selector(popularSeeAllTapped), for: .touchUpInside)
         return view
     }()
 
     private lazy var newPlacesHeaderView: HeaderCustomView = {
         let view = HeaderCustomView()
         view.titleView = "New Places"
+        view.button.addTarget(self, action: #selector(newSeeAllTapped), for: .touchUpInside)
         return view
     }()
 
@@ -187,6 +189,9 @@ class HomeViewController: UIViewController {
     // MARK: - Public Methods
 
     // MARK: - Actions Methods
+
+    @objc func popularSeeAllTapped() {}
+    @objc func newSeeAllTapped() {}
 }
 
 // MARK: - Extensions
@@ -200,9 +205,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let leftInset: CGFloat = 24
-        let rightInset: CGFloat = 24
-        return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
+        let inset: CGFloat = 24
+        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
     }
 }
 
