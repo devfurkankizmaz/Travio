@@ -212,13 +212,15 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == popularPlacesCollectionView {
-            return homeViewModel.numberOfPopularPlaces()
-        } else if collectionView == newPlacesCollectionView {
-            return homeViewModel.numberOfLastPlaces()
+            let maxItemsToShow = 3
+            if collectionView == popularPlacesCollectionView {
+                return min(maxItemsToShow, homeViewModel.numberOfPopularPlaces())
+            } else if collectionView == newPlacesCollectionView {
+                return min(maxItemsToShow, homeViewModel.numberOfLastPlaces())
+            }
+            
+            return 0
         }
-        return 0
-    }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == popularPlacesCollectionView {
