@@ -28,6 +28,16 @@ class HomeViewController: UIViewController {
         return view
     }()
 
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+
     private lazy var popularPlacesCollectionView: UICollectionView = {
         var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 16
@@ -56,6 +66,15 @@ class HomeViewController: UIViewController {
         return cv
     }()
 
+    private lazy var label: UILabel = {
+        let label = UILabel()
+        label.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum, ligula vitae laoreet sagittis, erat urna fermentum dui, at aliquam risus libero eget ex. Cras posuere sapien nec risus vulputate, id convallis purus tristique. Proin euismod odio id odio rhoncus bibendum. Sed bibendum, turpis id consectetur bibendum, dolor est finibus libero, ut ultricies neque sapien sit amet odio. Curabitur a auctor nisl. Fusce blandit libero justo, id egestas dui tristique sit amet. Vestibulum id eros justo. Nunc eu ullamcorper nunc, quis malesuada elit. Vestibulum id tortor neque. Fusce vulputate sapien id nisi dapibus fringilla. Duis bibendum lorem ut nibh scelerisque volutpat. Vivamus ultricies metus sit amet bibendum dapibus. Integer eu erat eget nisi malesuada dapibus. Nulla facilisi. Etiam ut quam sit amet mi sollicitudin cursus. Integer convallis orci nec libero bibendum, ut efficitur nunc pellentesque. Maecenas eleifend, sapien id lacinia vulputate, elit tortor feugiat quam, sit amet scelerisque quam ligula vel nunc. Nunc pellentesque, metus non rhoncus interdum, arcu nisi iaculis odio, eu tempus elit quam a velit. Vivamus ut lacus velit. Donec vehicula quam nec bibendum efficitur. Nullam at sapien eget nisl rhoncus cursus. Integer euismod lectus ac odio elementum, a dictum ligula eleifend. Integer euismod ante a ultricies. Integer euismod, ligula ac venenatis laoreet, tortor risus gravida lectus, ut finibus lectus odio sed risus."
+        label.textColor = AppColor.secondary.color
+        label.numberOfLines = 0
+        label.font = AppFont.poppinsRegular.withSize(12)
+        return label
+    }()
+
     private lazy var titleImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "home-logo")
@@ -73,18 +92,34 @@ class HomeViewController: UIViewController {
         fetchNewPlaces()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: contentView.frame.height)
+    }
+
     // MARK: - Private Methods
 
     private func setupView() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-
-        componentsView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView, popularPlacesHeaderView, newPlacesHeaderView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView, popularPlacesHeaderView, newPlacesHeaderView, label)
+        componentsView.addSubviews(scrollView)
         view.addSubviews(titleImageView, componentsView)
         setupLayout()
     }
 
     private func setupLayout() {
+        contentView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.width.equalToSuperview()
+            make.bottom.equalTo(label.snp.bottom).offset(100)
+        }
+
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(componentsView.snp.top)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+
         titleImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -119,6 +154,12 @@ class HomeViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(popularPlacesCollectionView.snp.bottom).offset(50)
             make.height.equalTo(180)
+        }
+
+        label.snp.makeConstraints { make in
+            make.top.equalTo(newPlacesCollectionView.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
         }
     }
 
