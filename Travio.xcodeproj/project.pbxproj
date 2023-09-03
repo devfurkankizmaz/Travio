@@ -231,8 +231,6 @@
 		0A0933682A995B3000AE9B99 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */,
-				0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -249,6 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				0AA44B352A95F1AF0070052D /* CustomTextView.swift */,
+				0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */,
+				0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */,
 				0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */,
 				0AFC1DEA2A8F680A002A55B1 /* CustomTextField.swift */,
 				0AFC1DEC2A8F8C3C002A55B1 /* CustomButton.swift */,
