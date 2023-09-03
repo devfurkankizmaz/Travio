@@ -173,7 +173,6 @@
 				0A09335D2A99580100AE9B99 /* Models */,
 				0A0933762A9A3DCE00AE9B99 /* ViewControllers */,
 				0A0933772A9A3DF900AE9B99 /* ViewModels */,
-				0A0933682A995B3000AE9B99 /* CustomViews */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -226,13 +225,6 @@
 				0A0933642A99598C00AE9B99 /* ApiResponse.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		0A0933682A995B3000AE9B99 /* CustomViews */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		0A09336A2A995B9000AE9B99 /* Views */ = {
