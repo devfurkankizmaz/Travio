@@ -19,7 +19,6 @@ class HomeViewController: UIViewController {
     private lazy var popularPlacesHeaderView: HeaderCustomView = {
         let view = HeaderCustomView()
         view.titleView = "Popular Places"
-        view.button.addTarget(self, action: #selector(popularSeeAllTapped), for: .touchUpInside)
         return view
     }()
 
@@ -95,9 +94,9 @@ class HomeViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
         scrollView.addSubview(contentView)
-        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView, popularPlacesHeaderView, newPlacesHeaderView)
+        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView)
         componentsView.addSubviews(scrollView)
-        view.addSubviews(titleImageView, componentsView)
+        view.addSubviews(titleImageView, componentsView, popularPlacesHeaderView, newPlacesHeaderView)
         setupLayout()
     }
 
@@ -175,13 +174,10 @@ class HomeViewController: UIViewController {
 
     // MARK: - Actions Methods
 
-    @objc func popularSeeAllTapped() {
-        print("deneme")
-        let popularsVc = PopularsViewController()
-        navigationController?.pushViewController(popularsVc, animated: true)
+    @objc func popularSeeAllTapped() {}
+    @objc func newSeeAllTapped() {
+        print("smt")
     }
-
-    @objc func newSeeAllTapped() {}
 }
 
 // MARK: - Extensions
