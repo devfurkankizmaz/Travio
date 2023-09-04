@@ -68,15 +68,6 @@ class HomeViewController: UIViewController {
         return cv
     }()
 
-    private lazy var label: UILabel = {
-        let label = UILabel()
-        label.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum, ligula vitae laoreet sagittis, erat urna fermentum dui, at aliquam risus libero eget ex. Cras posuere sapien nec risus vulputate, id convallis purus tristique. Proin euismod odio id odio rhoncus bibendum. Sed bibendum, turpis id consectetur bibendum, dolor est finibus libero, ut ultricies neque sapien sit amet odio. Curabitur a auctor nisl. Fusce blandit libero justo, id egestas dui tristique sit amet. Vestibulum id eros justo. Nunc eu ullamcorper nunc, quis malesuada elit. Vestibulum id tortor neque. Fusce vulputate sapien id nisi dapibus fringilla. Duis bibendum lorem ut nibh scelerisque volutpat. Vivamus ultricies metus sit amet bibendum dapibus. Integer eu erat eget nisi malesuada dapibus. Nulla facilisi. Etiam ut quam sit amet mi sollicitudin cursus. Integer convallis orci nec libero bibendum, ut efficitur nunc pellentesque. Maecenas eleifend, sapien id lacinia vulputate, elit tortor feugiat quam, sit amet scelerisque quam ligula vel nunc. Nunc pellentesque, metus non rhoncus interdum, arcu nisi iaculis odio, eu tempus elit quam a velit. Vivamus ut lacus velit. Donec vehicula quam nec bibendum efficitur. Nullam at sapien eget nisl rhoncus cursus. Integer euismod lectus ac odio elementum, a dictum ligula eleifend. Integer euismod ante a ultricies. Integer euismod, ligula ac venenatis laoreet, tortor risus gravida lectus, ut finibus lectus odio sed risus."
-        label.textColor = AppColor.secondary.color
-        label.numberOfLines = 0
-        label.font = AppFont.poppinsRegular.withSize(12)
-        return label
-    }()
-
     private lazy var titleImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "home-logo")
@@ -104,7 +95,7 @@ class HomeViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
         scrollView.addSubview(contentView)
-        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView, popularPlacesHeaderView, newPlacesHeaderView, label)
+        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView, popularPlacesHeaderView, newPlacesHeaderView)
         componentsView.addSubviews(scrollView)
         view.addSubviews(titleImageView, componentsView)
         setupLayout()
@@ -114,7 +105,7 @@ class HomeViewController: UIViewController {
         contentView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.width.equalToSuperview()
-            make.bottom.equalTo(label.snp.bottom).offset(100)
+            make.bottom.equalTo(newPlacesCollectionView.snp.bottom).offset(100)
         }
 
         scrollView.snp.makeConstraints { make in
@@ -157,12 +148,6 @@ class HomeViewController: UIViewController {
             make.top.equalTo(popularPlacesCollectionView.snp.bottom).offset(50)
             make.height.equalTo(180)
         }
-
-        label.snp.makeConstraints { make in
-            make.top.equalTo(newPlacesCollectionView.snp.bottom).offset(16)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-        }
     }
 
     private func fetchPopularPlaces() {
@@ -190,7 +175,12 @@ class HomeViewController: UIViewController {
 
     // MARK: - Actions Methods
 
-    @objc func popularSeeAllTapped() {}
+    @objc func popularSeeAllTapped() {
+        print("deneme")
+        let popularsVc = PopularsViewController()
+        navigationController?.pushViewController(popularsVc, animated: true)
+    }
+
     @objc func newSeeAllTapped() {}
 }
 
@@ -212,11 +202,13 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let maxItemsToShow = 3
         if collectionView == popularPlacesCollectionView {
-            return homeViewModel.numberOfPopularPlaces()
+            return min(maxItemsToShow, homeViewModel.numberOfPopularPlaces())
         } else if collectionView == newPlacesCollectionView {
-            return homeViewModel.numberOfLastPlaces()
+            return min(maxItemsToShow, homeViewModel.numberOfLastPlaces())
         }
+
         return 0
     }
 
