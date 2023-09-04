@@ -7,8 +7,7 @@ class MainTabBarController: UITabBarController {
     }
 
     private func setupTabBar() {
-        let homeVC = UIViewController()
-        homeVC.view.backgroundColor = AppColor.background.color
+        let homeVC = HomeViewController()
         let homeNC = createNavigationController(rootViewController: homeVC, title: "Home", imageName: "house.fill")
 
         let visitsVC = VisitsViewController()

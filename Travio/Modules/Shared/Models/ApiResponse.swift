@@ -11,3 +11,8 @@ struct ResponseModel: Codable {
     let status: String
     let message: String
 }
+
+struct CheckModel: Codable {
+    let status: String
+    let message: Bool
+}

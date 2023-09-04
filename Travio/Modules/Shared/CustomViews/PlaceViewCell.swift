@@ -122,12 +122,12 @@ class PlaceViewCell: UICollectionViewCell {
             make.height.equalTo(12)
         }
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(24)
+            make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().offset(-24)
             make.bottom.equalTo(locationStackView.snp.top).offset(-8)
         }
         locationStackView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(24)
+            make.leading.equalToSuperview().offset(12)
             make.bottom.equalToSuperview().offset(-16)
         }
     }

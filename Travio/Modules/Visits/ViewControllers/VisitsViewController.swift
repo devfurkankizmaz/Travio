@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol VisitsViewControllerDelegate: AnyObject {
+    func showDeletionAlert(message: String)
+    func reloadView()
+}
+
 class VisitsViewController: UIViewController {
     // MARK: - Properties
 
@@ -34,13 +39,17 @@ class VisitsViewController: UIViewController {
         cv.showsVerticalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(VisitViewCell.self, forCellWithReuseIdentifier: "visitIdentifier")
+        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "visitIdentifier")
         return cv
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        fetchVisits()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         fetchVisits()
     }
 
@@ -83,6 +92,16 @@ class VisitsViewController: UIViewController {
     }
 }
 
+extension VisitsViewController: VisitsViewControllerDelegate {
+    func showDeletionAlert(message: String) {
+        showAlert(title: "success", message: message)
+    }
+
+    func reloadView() {
+        fetchVisits()
+    }
+}
+
 extension VisitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = collectionView.frame.width - 48
@@ -100,7 +119,10 @@ extension VisitsViewController: UICollectionViewDelegateFlowLayout {
         let detailVC = DetailsViewController()
         if let visit = visitsViewModel.getAVisit(at: indexPath.row) {
             detailVC.placeId = visit.placeID
+            detailVC.visitId = visit.id
+            detailVC.delegate = self
             detailVC.visitButtonIsHidden = true
+            detailVC.isFromVisit = true
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }
@@ -112,12 +134,12 @@ extension VisitsViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "visitIdentifier", for: indexPath) as? VisitViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "visitIdentifier", for: indexPath) as? PlaceViewCell else {
             return UICollectionViewCell()
         }
 
         if let visit = visitsViewModel.getAVisit(at: indexPath.row) {
-            cell.configure(with: visit)
+            cell.configure(with: visit.place)
         }
 
         return cell
