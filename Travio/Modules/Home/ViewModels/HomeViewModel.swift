@@ -14,7 +14,7 @@ class HomeViewModel {
     var onDataFetch: ((Bool) -> Void)?
 
     func fetchPopularPlaces(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getPopularPlaces, responseType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
                 callback("You're fetch all popular places successfully.", true)
@@ -26,7 +26,7 @@ class HomeViewModel {
     }
 
     func fetchNewPlaces(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getNewPlaces, responseType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getNewPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
                 callback("You're fetch all new places successfully.", true)

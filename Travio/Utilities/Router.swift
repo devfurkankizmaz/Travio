@@ -12,8 +12,8 @@ enum TravioRouter {
     case login(params: Parameters)
     case register(params: Parameters)
     case getAllPlaces
-    case getPopularPlaces
-    case getNewPlaces
+    case getPopularPlaces(limit: Int)
+    case getNewPlaces(limit: Int)
     case getPlaceById(id: String)
     case getGalleryByPlaceId(id: String)
     case postGalleryByPlaceId(params: Parameters)
@@ -36,10 +36,10 @@ enum TravioRouter {
             return "/v1/auth/register"
         case .getAllPlaces:
             return "/v1/places"
-        case .getPopularPlaces:
-            return "/v1/places/popular"
-        case .getNewPlaces:
-            return "/v1/places/last"
+        case .getPopularPlaces(let limit):
+            return "/v1/places/popular?limit=\(limit)"
+        case .getNewPlaces(let limit):
+            return "/v1/places/last?limit=\(limit)"
         case .getPlaceById(let placeId):
             return "/v1/places/\(placeId)"
         case .getGalleryByPlaceId(let placeId):
