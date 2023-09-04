@@ -33,6 +33,7 @@ class HomeViewModel {
                 self.newPlaces = response.data.places
             case .failure(let error):
                 callback(error.localizedDescription, false)
+                print(error.localizedDescription)
             }
         }
     }

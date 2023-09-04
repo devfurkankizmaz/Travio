@@ -16,29 +16,6 @@ class HomeViewController: UIViewController {
         return viewModel
     }()
 
-    private lazy var popularPlacesHeaderView: HeaderCustomView = {
-        let view = HeaderCustomView()
-        view.titleView = "Popular Places"
-        return view
-    }()
-
-    private lazy var newPlacesHeaderView: HeaderCustomView = {
-        let view = HeaderCustomView()
-        view.titleView = "New Places"
-        view.button.addTarget(self, action: #selector(newSeeAllTapped), for: .touchUpInside)
-        return view
-    }()
-
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
-
-    private lazy var contentView: UIView = {
-        let view = UIView()
-        return view
-    }()
-
     private lazy var popularPlacesCollectionView: UICollectionView = {
         var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 16
@@ -84,34 +61,18 @@ class HomeViewController: UIViewController {
         fetchNewPlaces()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: contentView.frame.height)
-    }
-
     // MARK: - Private Methods
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-        scrollView.addSubview(contentView)
-        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView)
-        componentsView.addSubviews(scrollView)
-        view.addSubviews(titleImageView, componentsView, popularPlacesHeaderView, newPlacesHeaderView)
+
+        componentsView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView)
+        view.addSubviews(titleImageView, componentsView, componentsView)
         setupLayout()
     }
 
     private func setupLayout() {
-        contentView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.width.equalToSuperview()
-            make.bottom.equalTo(newPlacesCollectionView.snp.bottom).offset(100)
-        }
-
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(componentsView.snp.top)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-
         titleImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -126,20 +87,10 @@ class HomeViewController: UIViewController {
             make.top.equalTo(titleImageView.snp.bottom).offset(32)
         }
 
-        popularPlacesHeaderView.snp.makeConstraints { make in
-            make.bottom.equalTo(popularPlacesCollectionView.snp.top).offset(-16)
-            make.leading.trailing.equalToSuperview()
-        }
-
         popularPlacesCollectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalToSuperview().offset(86)
             make.height.equalTo(180)
-        }
-
-        newPlacesHeaderView.snp.makeConstraints { make in
-            make.bottom.equalTo(newPlacesCollectionView.snp.top).offset(-16)
-            make.leading.trailing.equalToSuperview()
         }
 
         newPlacesCollectionView.snp.makeConstraints { make in
@@ -160,11 +111,10 @@ class HomeViewController: UIViewController {
     }
 
     private func fetchNewPlaces() {
-        homeViewModel.fetchNewPlaces { [weak self] message, success in
+        homeViewModel.fetchNewPlaces { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
                     self?.newPlacesCollectionView.reloadData()
-                    print(message)
                 }
             }
         }
@@ -173,11 +123,6 @@ class HomeViewController: UIViewController {
     // MARK: - Public Methods
 
     // MARK: - Actions Methods
-
-    @objc func popularSeeAllTapped() {}
-    @objc func newSeeAllTapped() {
-        print("smt")
-    }
 }
 
 // MARK: - Extensions
