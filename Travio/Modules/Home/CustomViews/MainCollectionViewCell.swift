@@ -1,8 +1,14 @@
 import SnapKit
 import UIKit
 
+protocol MainCollectionViewCellDelegate: AnyObject {
+    func didSelectPlace(_ place: Place)
+}
+
 class MainCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
+
+    weak var delegate: MainCollectionViewCellDelegate?
 
     private var places: [Place] = []
     static let identifier = "MainCell"
@@ -95,6 +101,11 @@ extension MainCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let inset: CGFloat = 24
         return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedPlace = places[indexPath.row]
+        delegate?.didSelectPlace(selectedPlace)
     }
 }
 

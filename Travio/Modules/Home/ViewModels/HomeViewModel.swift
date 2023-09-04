@@ -1,7 +1,7 @@
 import Foundation
 
 class HomeViewModel {
-    typealias ResultCallback = (Bool) -> Void
+    typealias Completion = (Bool) -> Void
 
     private var popularPlaces: [Place] = []
     private var newPlaces: [Place] = []
@@ -13,7 +13,7 @@ class HomeViewModel {
         case visits = "Visits"
     }
 
-    func fetchPopularPlaces(callback: @escaping ResultCallback) {
+    func fetchPopularPlaces(callback: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
@@ -25,7 +25,7 @@ class HomeViewModel {
         }
     }
 
-    func fetchNewPlaces(callback: @escaping ResultCallback) {
+    func fetchNewPlaces(callback: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getNewPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
@@ -37,7 +37,7 @@ class HomeViewModel {
         }
     }
 
-    func fetchVisits(callback: @escaping ResultCallback) {
+    func fetchVisits(callback: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getAllVisits(page: 1, limit: 5), responseType: VisitResponse.self) { result in
             switch result {
             case .success(let response):

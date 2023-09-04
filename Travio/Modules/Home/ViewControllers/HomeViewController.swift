@@ -92,6 +92,16 @@ class HomeViewController: UIViewController {
 
 // MARK: - Extensions
 
+extension HomeViewController: MainCollectionViewCellDelegate {
+    func didSelectPlace(_ place: Place) {
+        let detailVC = DetailsViewController()
+        detailVC.placeId = place.id
+        detailVC.visitButtonIsHidden = false
+        detailVC.isFromVisit = false
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth: CGFloat = collectionView.bounds.width
@@ -101,7 +111,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let inset: CGFloat = 86
-        return UIEdgeInsets(top: inset, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
     }
 }
 
@@ -120,7 +130,7 @@ extension HomeViewController: UICollectionViewDataSource {
         let data = homeViewModel.getPlacesForSection(section)
 
         cell.configure(with: data, title: title)
-
+        cell.delegate = self
         return cell
     }
 }
