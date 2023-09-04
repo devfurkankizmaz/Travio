@@ -1,10 +1,3 @@
-//
-//  HomeViewController.swift
-//  Travio
-//
-//  Created by Furkan Kızmaz on 30.08.2023.
-//
-
 import SnapKit
 import UIKit
 
@@ -23,8 +16,9 @@ class HomeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.dataSource = self
-        collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "MainCell")
+        collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
         return collectionView
     }()
 
@@ -34,16 +28,14 @@ class HomeViewController: UIViewController {
         return imageView
     }()
 
-    private lazy var componentsView = ComponentsView()
+    private lazy var componentsView: ComponentsView = .init()
 
     // MARK: - Lifecycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        fetchPopularPlaces()
-        fetchNewPlaces()
-        fetchVisits()
+        fetchContent()
     }
 
     // MARK: - Private Methods
@@ -79,39 +71,23 @@ class HomeViewController: UIViewController {
         }
     }
 
-    private func fetchPopularPlaces() {
-        homeViewModel.fetchPopularPlaces { [weak self] _, success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.mainCollectionView.reloadData()
+    private func fetchContent() {
+        let contentFetchers = [
+            homeViewModel.fetchPopularPlaces,
+            homeViewModel.fetchNewPlaces,
+            homeViewModel.fetchVisits
+        ]
+
+        contentFetchers.forEach { content in
+            content { [weak self] confirm in
+                if confirm {
+                    DispatchQueue.main.async {
+                        self?.mainCollectionView.reloadData()
+                    }
                 }
             }
         }
     }
-
-    private func fetchVisits() {
-        homeViewModel.fetchVisits { [weak self] _, success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.mainCollectionView.reloadData()
-                }
-            }
-        }
-    }
-
-    private func fetchNewPlaces() {
-        homeViewModel.fetchNewPlaces { [weak self] _, success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.mainCollectionView.reloadData()
-                }
-            }
-        }
-    }
-
-    // MARK: - Public Methods
-
-    // MARK: - Actions Methods
 }
 
 // MARK: - Extensions
@@ -120,31 +96,30 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth: CGFloat = collectionView.bounds.width
         let cellHeight: CGFloat = 180
-
         return CGSize(width: cellWidth, height: cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        // let inset: CGFloat = 24
-        return UIEdgeInsets(top: 86, left: 0, bottom: 0, right: 0)
+        let inset: CGFloat = 86
+        return UIEdgeInsets(top: inset, left: 0, bottom: 0, right: 0)
     }
 }
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return HomeViewModel.Section.allCases.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCell", for: indexPath) as! MainCollectionViewCell
-
-        if indexPath.row == 0 {
-            cell.configure(with: homeViewModel.getAllPopularPlaces())
-        } else if indexPath.row == 1 {
-            cell.configure(with: homeViewModel.getAllLastPlaces())
-        } else if indexPath.row == 2 {
-            cell.configure(with: homeViewModel.getAllVisits())
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.identifier, for: indexPath) as? MainCollectionViewCell else {
+            return UICollectionViewCell()
         }
+
+        let section = HomeViewModel.Section.allCases[indexPath.row]
+        let title = section.rawValue
+        let data = homeViewModel.getPlacesForSection(section)
+
+        cell.configure(with: data, title: title)
 
         return cell
     }
