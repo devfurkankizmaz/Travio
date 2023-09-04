@@ -9,8 +9,10 @@ import Foundation
 
 class HomeViewModel {
     typealias Completion = (String, Bool) -> Void
-    var popularPlaces: [Place] = []
-    var newPlaces: [Place] = []
+    private var popularPlaces: [Place] = []
+    private var newPlaces: [Place] = []
+    private var visits: [Visit] = []
+
     var onDataFetch: ((Bool) -> Void)?
 
     func fetchPopularPlaces(callback: @escaping Completion) {
@@ -38,19 +40,31 @@ class HomeViewModel {
         }
     }
 
-    func numberOfPopularPlaces() -> Int {
-        return popularPlaces.count
+    func fetchVisits(callback: @escaping Completion) {
+        NetworkManager.shared.request(TravioRouter.getAllVisits(page: 1, limit: 5), responseType: VisitResponse.self) { result in
+            switch result {
+            case .success(let response):
+                callback("You're fetch all visits successfully.", true)
+                self.visits = response.data.visits
+            case .failure(let error):
+                callback(error.localizedDescription, false)
+            }
+        }
     }
 
-    func getAPopularPlace(at index: Int) -> Place? {
-        return popularPlaces[index]
+    func getAllPopularPlaces() -> [Place] {
+        return popularPlaces
     }
 
-    func numberOfLastPlaces() -> Int {
-        return newPlaces.count
+    func getAllLastPlaces() -> [Place] {
+        return newPlaces
     }
 
-    func getALastPlace(at index: Int) -> Place? {
-        return newPlaces[index]
+    func getAllVisits() -> [Place] {
+        var places: [Place] = []
+        visits.forEach { visit in
+            places.append(visit.place)
+        }
+        return places
     }
 }
