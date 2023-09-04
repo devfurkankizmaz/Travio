@@ -44,8 +44,9 @@ class HomeViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
 
+        view.addSubviews(titleImageView, componentsView)
         componentsView.addSubviews(mainCollectionView)
-        view.addSubviews(titleImageView, componentsView, componentsView)
+
         setupLayout()
     }
 
@@ -72,21 +73,26 @@ class HomeViewController: UIViewController {
     }
 
     private func fetchContent() {
+        let dispatchGroup = DispatchGroup()
         let contentFetchers = [
             homeViewModel.fetchPopularPlaces,
             homeViewModel.fetchNewPlaces,
             homeViewModel.fetchVisits
         ]
 
-        contentFetchers.forEach { content in
-            content { [weak self] confirm in
+        contentFetchers.forEach { contentFetcher in
+            dispatchGroup.enter()
+            contentFetcher { [weak self] confirm in
                 if confirm {
                     DispatchQueue.main.async {
                         self?.mainCollectionView.reloadData()
                     }
                 }
+                dispatchGroup.leave()
             }
         }
+
+        dispatchGroup.notify(queue: .main) {}
     }
 }
 
@@ -99,6 +105,11 @@ extension HomeViewController: MainCollectionViewCellDelegate {
         detailVC.visitButtonIsHidden = false
         detailVC.isFromVisit = false
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+
+    func didTapSeeAllButton() {
+        let listVC = ListViewController()
+        navigationController?.pushViewController(listVC, animated: true)
     }
 }
 

@@ -3,6 +3,7 @@ import UIKit
 
 protocol MainCollectionViewCellDelegate: AnyObject {
     func didSelectPlace(_ place: Place)
+    func didTapSeeAllButton()
 }
 
 class MainCollectionViewCell: UICollectionViewCell {
@@ -24,6 +25,7 @@ class MainCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.setTitle("See All", for: .normal)
         button.titleLabel?.font = AppFont.poppinsMedium.withSize(14)
+        button.addTarget(self, action: #selector(seeAllButtonTapped), for: .touchUpInside)
         button.setTitleColor(AppColor.primary.color, for: .normal)
         return button
     }()
@@ -86,6 +88,13 @@ class MainCollectionViewCell: UICollectionViewCell {
         titleLabel.text = title
         self.places = places
         placesCollectionView.reloadData()
+    }
+
+    // MARK: - Actions
+
+    @objc private func seeAllButtonTapped() {
+        print("See All button tapped")
+        delegate?.didTapSeeAllButton()
     }
 }
 
