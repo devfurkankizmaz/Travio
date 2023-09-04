@@ -17,7 +17,7 @@ enum TravioRouter {
     case getPlaceById(id: String)
     case getGalleryByPlaceId(id: String)
     case postGalleryByPlaceId(params: Parameters)
-    case getAllVisits
+    case getAllVisits(page: Int = 1, limit: Int = 100)
     case postPlace(params: Parameters)
     case postVisit(params: Parameters)
     case uploadImage(imageData: [Data])
@@ -90,8 +90,8 @@ enum TravioRouter {
             return nil
         case .postGalleryByPlaceId(let parameters):
             return parameters
-        case .getAllVisits:
-            return nil
+        case .getAllVisits(let page, let limit):
+            return ["page": page, "limit": limit]
         case .postPlace(let parameters):
             return parameters
         case .postVisit(let parameters):
