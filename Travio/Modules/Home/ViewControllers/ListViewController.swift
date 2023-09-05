@@ -1,7 +1,7 @@
 import SnapKit
 import UIKit
 
-class PopularsViewController: UIViewController {
+class ListViewController: UIViewController {
     // MARK: - Properties
 
     private lazy var backButton: UIButton = {
