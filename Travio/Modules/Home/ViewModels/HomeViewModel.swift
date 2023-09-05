@@ -1,55 +1,62 @@
-//
-//  HomeViewModel.swift
-//  Travio
-//
-//  Created by Furkan Kızmaz on 2.09.2023.
-//
-
 import Foundation
 
 class HomeViewModel {
-    typealias Completion = (String, Bool) -> Void
-    var popularPlaces: [Place] = []
-    var newPlaces: [Place] = []
-    var onDataFetch: ((Bool) -> Void)?
+    typealias Completion = (Bool) -> Void
+
+    private var popularPlaces: [Place] = []
+    private var newPlaces: [Place] = []
+    private var visits: [Visit] = []
+
+    enum Section: String, CaseIterable {
+        case popular = "Popular Places"
+        case new = "New Places"
+        case visits = "Visits"
+    }
 
     func fetchPopularPlaces(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getPopularPlaces, responseType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
-                callback("You're fetch all popular places successfully.", true)
                 self.popularPlaces = response.data.places
-            case .failure(let error):
-                callback(error.localizedDescription, false)
+                callback(true)
+            case .failure:
+                callback(false)
             }
         }
     }
 
     func fetchNewPlaces(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getNewPlaces, responseType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getNewPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
-                callback("You're fetch all new places successfully.", true)
                 self.newPlaces = response.data.places
-            case .failure(let error):
-                callback(error.localizedDescription, false)
+                callback(true)
+            case .failure:
+                callback(false)
             }
         }
     }
 
-    func numberOfPopularPlaces() -> Int {
-        return popularPlaces.count
+    func fetchVisits(callback: @escaping Completion) {
+        NetworkManager.shared.request(TravioRouter.getAllVisits(page: 1, limit: 5), responseType: VisitResponse.self) { result in
+            switch result {
+            case .success(let response):
+                self.visits = response.data.visits
+                callback(true)
+            case .failure:
+                callback(false)
+            }
+        }
     }
 
-    func getAPopularPlace(at index: Int) -> Place? {
-        return popularPlaces[index]
-    }
-
-    func numberOfLastPlaces() -> Int {
-        return newPlaces.count
-    }
-
-    func getALastPlace(at index: Int) -> Place? {
-        return newPlaces[index]
+    func getPlacesForSection(_ section: Section) -> [Place] {
+        switch section {
+        case .popular:
+            return popularPlaces
+        case .new:
+            return newPlaces
+        case .visits:
+            return visits.map { $0.place }
+        }
     }
 }
