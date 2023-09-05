@@ -70,14 +70,12 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        sortPlaces()
     }
 
     // MARK: - Private Methods
 
     private func sortPlaces() {
         dataSource.sort(by: { $0.title < $1.title })
-        listCollectionView.reloadData()
     }
 
     private func setupView() {
@@ -126,6 +124,7 @@ class ListViewController: UIViewController {
                 if success {
                     DispatchQueue.main.async {
                         self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
                 }
@@ -135,6 +134,7 @@ class ListViewController: UIViewController {
                 if success {
                     DispatchQueue.main.async {
                         self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
                 }
@@ -144,6 +144,7 @@ class ListViewController: UIViewController {
                 if success {
                     DispatchQueue.main.async {
                         self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
                 }
