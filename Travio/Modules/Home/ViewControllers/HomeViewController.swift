@@ -21,6 +21,22 @@ enum SectionType: Int, CaseIterable {
 class HomeViewController: UIViewController {
     // MARK: - Properties
 
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
+    }()
+
     private lazy var homeViewModel: HomeViewModel = {
         let viewModel = HomeViewModel()
         return viewModel
@@ -57,17 +73,38 @@ class HomeViewController: UIViewController {
 
     // MARK: - Private Methods
 
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
 
-        view.addSubviews(titleImageView, componentsView)
+        view.addSubviews(titleImageView, componentsView, spinnerView, spinner)
         componentsView.addSubviews(mainCollectionView)
 
         setupLayout()
     }
 
     private func setupLayout() {
+        spinnerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
         titleImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -97,6 +134,8 @@ class HomeViewController: UIViewController {
             homeViewModel.fetchVisits
         ]
 
+        showActivityIndicator()
+
         contentFetchers.forEach { contentFetcher in
             dispatchGroup.enter()
             contentFetcher { [weak self] confirm in
@@ -109,7 +148,9 @@ class HomeViewController: UIViewController {
             }
         }
 
-        dispatchGroup.notify(queue: .main) {}
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.hideActivityIndicator()
+        }
     }
 }
 
