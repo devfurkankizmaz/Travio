@@ -1,14 +1,26 @@
 import Foundation
 
-class HomeViewModel {
+class ListViewModel {
     typealias Completion = (Bool) -> Void
 
     private var popularPlaces: [Place] = []
     private var newPlaces: [Place] = []
     private var visits: [Visit] = []
 
+    func getDataSource(for sectionType: SectionType) -> [Place] {
+        switch sectionType {
+        case .popular:
+            return popularPlaces
+        case .new:
+            return newPlaces
+        case .visits:
+            let placesFromVisits = visits.map { $0.place }
+            return placesFromVisits
+        }
+    }
+
     func fetchPopularPlaces(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 5), responseType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 10), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
                 self.popularPlaces = response.data.places
@@ -20,7 +32,7 @@ class HomeViewModel {
     }
 
     func fetchNewPlaces(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getNewPlaces(limit: 5), responseType: PlacesResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getNewPlaces(limit: 10), responseType: PlacesResponse.self) { result in
             switch result {
             case .success(let response):
                 self.newPlaces = response.data.places
@@ -32,7 +44,7 @@ class HomeViewModel {
     }
 
     func fetchVisits(callback: @escaping Completion) {
-        NetworkManager.shared.request(TravioRouter.getAllVisits(page: 1, limit: 5), responseType: VisitResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getAllVisits(page: 1, limit: 10), responseType: VisitResponse.self) { result in
             switch result {
             case .success(let response):
                 self.visits = response.data.visits
@@ -40,17 +52,6 @@ class HomeViewModel {
             case .failure:
                 callback(false)
             }
-        }
-    }
-
-    func getPlacesForSection(_ section: SectionType) -> [Place] {
-        switch section {
-        case .popular:
-            return popularPlaces
-        case .new:
-            return newPlaces
-        case .visits:
-            return visits.map { $0.place }
         }
     }
 }
