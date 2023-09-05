@@ -13,7 +13,7 @@ enum SectionType: Int, CaseIterable {
         case .new:
             return "New Places"
         case .visits:
-            return "Visits"
+            return "Your Visits"
         }
     }
 }
