@@ -16,7 +16,7 @@ class MainTabBarController: UITabBarController {
         let mapVC = MapViewController()
         let mapNC = createNavigationController(rootViewController: mapVC, title: "Map", imageName: "map")
 
-        let menuVC = UIViewController()
+        let menuVC = SettingsViewController()
         menuVC.view.backgroundColor = AppColor.background.color
         let menuNC = createNavigationController(rootViewController: menuVC, title: "Menu", imageName: "menu")
 
