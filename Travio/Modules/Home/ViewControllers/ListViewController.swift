@@ -29,6 +29,19 @@ class ListViewController: UIViewController {
         return button
     }()
 
+    private lazy var sortButton: UIButton = {
+        let button = UIButton()
+        let ascendingImage = UIImage(named: "sortAtoZ")
+        let descendingImage = UIImage(named: "sortZtoA")
+        var isAscending = true
+        button.setImage(ascendingImage, for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        button.tag = isAscending ? 1 : 0
+
+        return button
+    }()
+
     private lazy var listCollectionView: UICollectionView = {
         var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 16
@@ -57,19 +70,32 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        sortPlaces()
     }
 
     // MARK: - Private Methods
 
-    func setupView() {
+    private func sortPlaces() {
+        dataSource.sort(by: { $0.title < $1.title })
+        listCollectionView.reloadData()
+    }
+
+    private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.addSubviews(componentsView, backButton, titleLabel)
         view.backgroundColor = AppColor.primary.color
-        componentsView.addSubviews(listCollectionView)
+        componentsView.addSubviews(listCollectionView, sortButton)
         setupLayout()
     }
 
-    func setupLayout() {
+    private func setupLayout() {
+        sortButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.width.equalTo(26)
+            make.height.equalTo(22)
+        }
+
         listCollectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -91,7 +117,7 @@ class ListViewController: UIViewController {
         }
     }
 
-    func updateCollectionViewData() {
+    private func updateCollectionViewData() {
         guard let selectedSectionType = selectedSectionType else { return }
 
         switch selectedSectionType {
@@ -128,6 +154,22 @@ class ListViewController: UIViewController {
     // MARK: - Public Methods
 
     // MARK: - Actions
+
+    @objc func sortButtonTapped(_ sender: UIButton) {
+        if sender.tag == 1 {
+            let descendingImage = UIImage(named: "sortZtoA")
+            sender.setImage(descendingImage, for: .normal)
+            sender.tag = 0
+            dataSource.sort(by: { $0.title > $1.title })
+            listCollectionView.reloadData()
+        } else {
+            let ascendingImage = UIImage(named: "sortAtoZ")
+            sender.setImage(ascendingImage, for: .normal)
+            sender.tag = 1
+            dataSource.sort(by: { $0.title < $1.title })
+            listCollectionView.reloadData()
+        }
+    }
 
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
