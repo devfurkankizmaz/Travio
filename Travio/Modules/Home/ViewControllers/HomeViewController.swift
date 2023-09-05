@@ -1,10 +1,3 @@
-//
-//  HomeViewController.swift
-//  Travio
-//
-//  Created by Furkan Kızmaz on 30.08.2023.
-//
-
 import SnapKit
 import UIKit
 
@@ -16,56 +9,17 @@ class HomeViewController: UIViewController {
         return viewModel
     }()
 
-    private lazy var popularPlacesHeaderView: HeaderCustomView = {
-        let view = HeaderCustomView()
-        view.titleView = "Popular Places"
-        view.button.addTarget(self, action: #selector(popularSeeAllTapped), for: .touchUpInside)
-        return view
-    }()
-
-    private lazy var newPlacesHeaderView: HeaderCustomView = {
-        let view = HeaderCustomView()
-        view.titleView = "New Places"
-        view.button.addTarget(self, action: #selector(newSeeAllTapped), for: .touchUpInside)
-        return view
-    }()
-
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
-
-    private lazy var contentView: UIView = {
-        let view = UIView()
-        return view
-    }()
-
-    private lazy var popularPlacesCollectionView: UICollectionView = {
-        var flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.minimumInteritemSpacing = 16
-        flowLayout.scrollDirection = .horizontal
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.backgroundColor = .clear
-        cv.showsHorizontalScrollIndicator = false
-        cv.delegate = self
-        cv.dataSource = self
-        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "popularIdentifier")
-        return cv
-    }()
-
-    private lazy var newPlacesCollectionView: UICollectionView = {
-        var flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.minimumInteritemSpacing = 16
-        flowLayout.scrollDirection = .horizontal
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.backgroundColor = .clear
-        cv.showsHorizontalScrollIndicator = false
-        cv.delegate = self
-        cv.dataSource = self
-        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "newIdentifier")
-        return cv
+    private lazy var mainCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 50
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.delegate = self
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.dataSource = self
+        collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.identifier)
+        return collectionView
     }()
 
     private lazy var titleImageView: UIImageView = {
@@ -74,19 +28,14 @@ class HomeViewController: UIViewController {
         return imageView
     }()
 
-    private lazy var componentsView = ComponentsView()
+    private lazy var componentsView: ComponentsView = .init()
 
     // MARK: - Lifecycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        fetchPopularPlaces()
-        fetchNewPlaces()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: contentView.frame.height)
+        fetchContent()
     }
 
     // MARK: - Private Methods
@@ -94,25 +43,14 @@ class HomeViewController: UIViewController {
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-        scrollView.addSubview(contentView)
-        contentView.addSubviews(popularPlacesCollectionView, newPlacesCollectionView, popularPlacesHeaderView, newPlacesHeaderView)
-        componentsView.addSubviews(scrollView)
+
         view.addSubviews(titleImageView, componentsView)
+        componentsView.addSubviews(mainCollectionView)
+
         setupLayout()
     }
 
     private func setupLayout() {
-        contentView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.width.equalToSuperview()
-            make.bottom.equalTo(newPlacesCollectionView.snp.bottom).offset(100)
-        }
-
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(componentsView.snp.top)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-
         titleImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -127,113 +65,85 @@ class HomeViewController: UIViewController {
             make.top.equalTo(titleImageView.snp.bottom).offset(32)
         }
 
-        popularPlacesHeaderView.snp.makeConstraints { make in
-            make.bottom.equalTo(popularPlacesCollectionView.snp.top).offset(-16)
+        mainCollectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-        }
-
-        popularPlacesCollectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(86)
-            make.height.equalTo(180)
-        }
-
-        newPlacesHeaderView.snp.makeConstraints { make in
-            make.bottom.equalTo(newPlacesCollectionView.snp.top).offset(-16)
-            make.leading.trailing.equalToSuperview()
-        }
-
-        newPlacesCollectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(popularPlacesCollectionView.snp.bottom).offset(50)
-            make.height.equalTo(180)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 
-    private func fetchPopularPlaces() {
-        homeViewModel.fetchPopularPlaces { [weak self] _, success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.popularPlacesCollectionView.reloadData()
+    private func fetchContent() {
+        let dispatchGroup = DispatchGroup()
+        let contentFetchers = [
+            homeViewModel.fetchPopularPlaces,
+            homeViewModel.fetchNewPlaces,
+            homeViewModel.fetchVisits
+        ]
+
+        contentFetchers.forEach { contentFetcher in
+            dispatchGroup.enter()
+            contentFetcher { [weak self] confirm in
+                if confirm {
+                    DispatchQueue.main.async {
+                        self?.mainCollectionView.reloadData()
+                    }
                 }
+                dispatchGroup.leave()
             }
         }
+
+        dispatchGroup.notify(queue: .main) {}
     }
-
-    private func fetchNewPlaces() {
-        homeViewModel.fetchNewPlaces { [weak self] message, success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.newPlacesCollectionView.reloadData()
-                    print(message)
-                }
-            }
-        }
-    }
-
-    // MARK: - Public Methods
-
-    // MARK: - Actions Methods
-
-    @objc func popularSeeAllTapped() {
-        print("deneme")
-        let popularsVc = PopularsViewController()
-        navigationController?.pushViewController(popularsVc, animated: true)
-    }
-
-    @objc func newSeeAllTapped() {}
 }
 
 // MARK: - Extensions
 
+extension HomeViewController: MainCollectionViewCellDelegate {
+    func didSelectPlace(_ place: Place) {
+        let detailVC = DetailsViewController()
+        detailVC.placeId = place.id
+        detailVC.visitButtonIsHidden = false
+        detailVC.isFromVisit = false
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+
+    func didTapSeeAllButton(in cell: MainCollectionViewCell) {
+        let listVC = ListViewController()
+        navigationController?.pushViewController(listVC, animated: true)
+    }
+}
+
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth: CGFloat = collectionView.bounds.width - 100
+        let cellWidth: CGFloat = collectionView.bounds.width
         let cellHeight: CGFloat = 180
-
         return CGSize(width: cellWidth, height: cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset: CGFloat = 24
-        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+        let inset: CGFloat = 86
+        return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
     }
 }
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let maxItemsToShow = 3
-        if collectionView == popularPlacesCollectionView {
-            return min(maxItemsToShow, homeViewModel.numberOfPopularPlaces())
-        } else if collectionView == newPlacesCollectionView {
-            return min(maxItemsToShow, homeViewModel.numberOfLastPlaces())
-        }
-
-        return 0
+        return HomeViewModel.Section.allCases.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == popularPlacesCollectionView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "popularIdentifier", for: indexPath) as? PlaceViewCell else {
-                return UICollectionViewCell()
-            }
-
-            if let place = homeViewModel.getAPopularPlace(at: indexPath.row) {
-                cell.configure(with: place)
-            }
-
-            return cell
-        } else if collectionView == newPlacesCollectionView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newIdentifier", for: indexPath) as? PlaceViewCell else {
-                return UICollectionViewCell()
-            }
-
-            if let place = homeViewModel.getALastPlace(at: indexPath.row) {
-                cell.configure(with: place)
-            }
-
-            return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.identifier, for: indexPath) as? MainCollectionViewCell else {
+            return UICollectionViewCell()
         }
-        return UICollectionViewCell()
+
+        let section = HomeViewModel.Section.allCases[indexPath.row]
+        let title = section.rawValue
+        let data = homeViewModel.getPlacesForSection(section)
+
+        cell.configure(with: data, title: title)
+        cell.delegate = self
+        cell.contentView.isUserInteractionEnabled = true
+
+        return cell
     }
 }

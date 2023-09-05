@@ -13,7 +13,7 @@ class VisitsViewModel {
     // var onDataFetch: ((Bool) -> Void)?
 
     func fetchVisits(callback: @escaping VisitHandler) {
-        NetworkManager.shared.request(TravioRouter.getAllVisits, responseType: VisitResponse.self) { result in
+        NetworkManager.shared.request(TravioRouter.getAllVisits(), responseType: VisitResponse.self) { result in
             switch result {
             case .success(let response):
                 callback("You're fetched all visits successfully.", true)
