@@ -49,7 +49,7 @@ class ListViewCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(24)
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.textAlignment = .left
         label.textColor = AppColor.secondary.color
         return label
@@ -75,11 +75,24 @@ class ListViewCell: UICollectionViewCell {
 
     // MARK: - Private Methods
 
+    private func addShadow() {
+        contentView.layer.shadowRadius = 8
+        contentView.layer.shadowOpacity = 0.15
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        contentView.layer.shadowColor = AppColor.secondary.color.cgColor
+    }
+
     private func setupView() {
         contentView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        contentView.clipsToBounds = true
+        contentView.clipsToBounds = false
         contentView.layer.cornerRadius = 16
+        addShadow()
+
         backgroundImageView.addSubviews(indicator)
+
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.layer.cornerRadius = 16
+        backgroundImageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
         locationStackView.addArrangedSubviews(locationImageView, locationLabel)
         contentView.addSubviews(backgroundImageView, titleLabel, locationStackView)
@@ -104,6 +117,7 @@ class ListViewCell: UICollectionViewCell {
         }
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(backgroundImageView.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().offset(-2)
             make.top.equalToSuperview().offset(16)
         }
         locationStackView.snp.makeConstraints { make in
