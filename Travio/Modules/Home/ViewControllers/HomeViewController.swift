@@ -1,6 +1,23 @@
 import SnapKit
 import UIKit
 
+enum SectionType: Int, CaseIterable {
+    case popular = 0
+    case new
+    case visits
+
+    var title: String {
+        switch self {
+        case .popular:
+            return "Popular Places"
+        case .new:
+            return "New Places"
+        case .visits:
+            return "Visits"
+        }
+    }
+}
+
 class HomeViewController: UIViewController {
     // MARK: - Properties
 
@@ -108,7 +125,13 @@ extension HomeViewController: MainCollectionViewCellDelegate {
     }
 
     func didTapSeeAllButton(in cell: MainCollectionViewCell) {
+        let sectionIndex = cell.seeAllButton.tag
+        guard let sectionType = SectionType(rawValue: sectionIndex) else {
+            return
+        }
+
         let listVC = ListViewController()
+        listVC.selectedSection = sectionType
         navigationController?.pushViewController(listVC, animated: true)
     }
 }
@@ -128,7 +151,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return HomeViewModel.Section.allCases.count
+        return SectionType.allCases.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,12 +159,13 @@ extension HomeViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        let section = HomeViewModel.Section.allCases[indexPath.row]
-        let title = section.rawValue
+        let section = SectionType.allCases[indexPath.row]
+        let title = section.title
         let data = homeViewModel.getPlacesForSection(section)
 
         cell.configure(with: data, title: title)
         cell.delegate = self
+        cell.seeAllButton.tag = indexPath.row
         cell.contentView.isUserInteractionEnabled = true
 
         return cell

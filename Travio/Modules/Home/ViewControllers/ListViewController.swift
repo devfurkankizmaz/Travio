@@ -4,6 +4,12 @@ import UIKit
 class ListViewController: UIViewController {
     // MARK: - Properties
 
+    var selectedSection: SectionType? {
+        didSet {
+            titleLabel.text = selectedSection?.title
+        }
+    }
+
     private lazy var backButton: UIButton = {
         let button = UIButton()
         let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -13,10 +19,10 @@ class ListViewController: UIViewController {
         return button
     }()
 
-    private lazy var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(32)
-        label.text = "Popular Places"
+        label.text = ""
         label.textColor = .white
         return label
     }()

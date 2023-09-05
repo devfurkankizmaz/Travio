@@ -21,7 +21,7 @@ class MainCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    private lazy var seeAllButton: UIButton = {
+    lazy var seeAllButton: UIButton = {
         let button = UIButton()
         button.setTitle("See All", for: .normal)
         button.titleLabel?.font = AppFont.poppinsMedium.withSize(14)

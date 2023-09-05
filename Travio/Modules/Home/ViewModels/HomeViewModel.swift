@@ -7,12 +7,6 @@ class HomeViewModel {
     private var newPlaces: [Place] = []
     private var visits: [Visit] = []
 
-    enum Section: String, CaseIterable {
-        case popular = "Popular Places"
-        case new = "New Places"
-        case visits = "Visits"
-    }
-
     func fetchPopularPlaces(callback: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 5), responseType: PlacesResponse.self) { result in
             switch result {
@@ -49,7 +43,7 @@ class HomeViewModel {
         }
     }
 
-    func getPlacesForSection(_ section: Section) -> [Place] {
+    func getPlacesForSection(_ section: SectionType) -> [Place] {
         switch section {
         case .popular:
             return popularPlaces
