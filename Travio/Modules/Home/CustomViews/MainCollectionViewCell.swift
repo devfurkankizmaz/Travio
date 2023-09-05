@@ -3,7 +3,7 @@ import UIKit
 
 protocol MainCollectionViewCellDelegate: AnyObject {
     func didSelectPlace(_ place: Place)
-    func didTapSeeAllButton()
+    func didTapSeeAllButton(in cell: MainCollectionViewCell)
 }
 
 class MainCollectionViewCell: UICollectionViewCell {
@@ -28,14 +28,6 @@ class MainCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(seeAllButtonTapped), for: .touchUpInside)
         button.setTitleColor(AppColor.primary.color, for: .normal)
         return button
-    }()
-
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, UIView(), seeAllButton])
-        stackView.axis = .horizontal
-        stackView.spacing = 16
-        stackView.alignment = .center
-        return stackView
     }()
 
     private lazy var placesCollectionView: UICollectionView = {
@@ -67,14 +59,18 @@ class MainCollectionViewCell: UICollectionViewCell {
     // MARK: - Private Methods
 
     private func setupView() {
-        addSubviews(placesCollectionView, stackView)
+        contentView.addSubviews(placesCollectionView, titleLabel, seeAllButton)
         setupConstraints()
     }
 
     private func setupConstraints() {
-        stackView.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.top.equalToSuperview().offset(-30)
+            make.bottom.equalTo(placesCollectionView.snp.top)
+        }
+        seeAllButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(24)
+            make.bottom.equalTo(placesCollectionView.snp.top)
         }
 
         placesCollectionView.snp.makeConstraints { make in
@@ -92,9 +88,17 @@ class MainCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Actions
 
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let buttonBounds = seeAllButton.convert(seeAllButton.bounds, to: self)
+        let expandedBounds = buttonBounds.insetBy(dx: -10, dy: -10)
+        if expandedBounds.contains(point) {
+            return seeAllButton
+        }
+        return super.hitTest(point, with: event)
+    }
+
     @objc private func seeAllButtonTapped() {
-        print("See All button tapped")
-        delegate?.didTapSeeAllButton()
+        delegate?.didTapSeeAllButton(in: self)
     }
 }
 

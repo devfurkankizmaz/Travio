@@ -107,7 +107,7 @@ extension HomeViewController: MainCollectionViewCellDelegate {
         navigationController?.pushViewController(detailVC, animated: true)
     }
 
-    func didTapSeeAllButton() {
+    func didTapSeeAllButton(in cell: MainCollectionViewCell) {
         let listVC = ListViewController()
         navigationController?.pushViewController(listVC, animated: true)
     }
@@ -142,6 +142,8 @@ extension HomeViewController: UICollectionViewDataSource {
 
         cell.configure(with: data, title: title)
         cell.delegate = self
+        cell.contentView.isUserInteractionEnabled = true
+
         return cell
     }
 }
