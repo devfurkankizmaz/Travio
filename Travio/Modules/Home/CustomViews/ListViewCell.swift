@@ -11,7 +11,6 @@ class ListViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = #imageLiteral(resourceName: "imageNotFound")
         return imageView
     }()
 
@@ -37,7 +36,6 @@ class ListViewCell: UICollectionViewCell {
         label.font = AppFont.poppinsRegular.withSize(14)
         label.textAlignment = .center
         label.textColor = AppColor.secondary.color
-        label.text = "Rome, Italy"
         return label
     }()
 
@@ -54,7 +52,6 @@ class ListViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.textAlignment = .left
         label.textColor = AppColor.secondary.color
-        label.text = "Colleseum"
         return label
     }()
 
@@ -118,8 +115,8 @@ class ListViewCell: UICollectionViewCell {
     // MARK: - Public Methods
 
     public func configure(with place: Place) {
-        locationLabel.text = "place.place"
-        titleLabel.text = "place.title"
+        locationLabel.text = place.place
+        titleLabel.text = place.title
         imageDownloader?.cancel()
 
         guard let urlStr = place.cover_image_url else {

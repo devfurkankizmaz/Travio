@@ -4,6 +4,8 @@ import UIKit
 class ListViewController: UIViewController {
     // MARK: - Properties
 
+    private var dataSource: [Place] = []
+
     var selectedSection: SectionType? {
         didSet {
             titleLabel.text = selectedSection?.title
@@ -12,18 +14,11 @@ class ListViewController: UIViewController {
 
     var selectedSectionType: SectionType? {
         didSet {
-            switch selectedSectionType {
-            case .popular:
-                fetchPopularPlaces()
-            case .new:
-                fetchNewPlaces()
-            case .visits:
-                fetchVisits()
-            default:
-                break
-            }
+            updateCollectionViewData()
         }
     }
+
+    private lazy var listViewModel: ListViewModel = .init()
 
     private lazy var backButton: UIButton = {
         let button = UIButton()
@@ -96,16 +91,38 @@ class ListViewController: UIViewController {
         }
     }
 
-    private func fetchPopularPlaces() {
-        print("Popular Places Fetching...")
-    }
+    func updateCollectionViewData() {
+        guard let selectedSectionType = selectedSectionType else { return }
 
-    private func fetchNewPlaces() {
-        print("New Places Fetching...")
-    }
-
-    private func fetchVisits() {
-        print("Visits Fetching...")
+        switch selectedSectionType {
+        case .popular:
+            listViewModel.fetchPopularPlaces { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.listCollectionView.reloadData()
+                    }
+                }
+            }
+        case .new:
+            listViewModel.fetchNewPlaces { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.listCollectionView.reloadData()
+                    }
+                }
+            }
+        case .visits:
+            listViewModel.fetchVisits { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.listCollectionView.reloadData()
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Public Methods
@@ -131,17 +148,28 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
         let topInset: CGFloat = 70
         return UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = DetailsViewController()
+        detailVC.placeId = dataSource[indexPath.row].id
+        detailVC.visitButtonIsHidden = false
+        detailVC.isFromVisit = false
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
 
 extension ListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        return dataSource.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listIdentifier", for: indexPath) as? ListViewCell else {
             return UICollectionViewCell()
         }
+        let place = dataSource[indexPath.item]
+        cell.configure(with: place)
+
         return cell
     }
 }
