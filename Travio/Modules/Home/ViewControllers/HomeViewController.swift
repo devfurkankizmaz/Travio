@@ -132,6 +132,8 @@ extension HomeViewController: MainCollectionViewCellDelegate {
 
         let listVC = ListViewController()
         listVC.selectedSection = sectionType
+        listVC.selectedSectionType = sectionType
+
         navigationController?.pushViewController(listVC, animated: true)
     }
 }
