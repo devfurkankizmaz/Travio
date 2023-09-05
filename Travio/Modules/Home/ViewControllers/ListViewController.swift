@@ -4,6 +4,22 @@ import UIKit
 class ListViewController: UIViewController {
     // MARK: - Properties
 
+    private var dataSource: [Place] = []
+
+    var selectedSection: SectionType? {
+        didSet {
+            titleLabel.text = selectedSection?.title
+        }
+    }
+
+    var selectedSectionType: SectionType? {
+        didSet {
+            updateCollectionViewData()
+        }
+    }
+
+    private lazy var listViewModel: ListViewModel = .init()
+
     private lazy var backButton: UIButton = {
         let button = UIButton()
         let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -13,10 +29,36 @@ class ListViewController: UIViewController {
         return button
     }()
 
+    private lazy var sortButton: UIButton = {
+        let button = UIButton()
+        let ascendingImage = UIImage(named: "sortAtoZ")
+        let descendingImage = UIImage(named: "sortZtoA")
+        var isAscending = true
+        button.setImage(ascendingImage, for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        button.tag = isAscending ? 1 : 0
+
+        return button
+    }()
+
+    private lazy var listCollectionView: UICollectionView = {
+        var flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumInteritemSpacing = 16
+        flowLayout.scrollDirection = .vertical
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        cv.backgroundColor = .clear
+        cv.showsVerticalScrollIndicator = false
+        cv.delegate = self
+        cv.dataSource = self
+        cv.register(ListViewCell.self, forCellWithReuseIdentifier: "listIdentifier")
+        return cv
+    }()
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(32)
-        label.text = "Popular Places"
+        label.text = ""
         label.textColor = .white
         return label
     }()
@@ -27,20 +69,35 @@ class ListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
     }
 
     // MARK: - Private Methods
 
-    func setupView() {
+    private func sortPlaces() {
+        dataSource.sort(by: { $0.title < $1.title })
+    }
+
+    private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.addSubviews(componentsView, backButton, titleLabel)
         view.backgroundColor = AppColor.primary.color
+        componentsView.addSubviews(listCollectionView, sortButton)
         setupLayout()
     }
 
-    func setupLayout() {
+    private func setupLayout() {
+        sortButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.width.equalTo(26)
+            make.height.equalTo(22)
+        }
+
+        listCollectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         backButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -58,9 +115,62 @@ class ListViewController: UIViewController {
         }
     }
 
+    private func updateCollectionViewData() {
+        guard let selectedSectionType = selectedSectionType else { return }
+
+        switch selectedSectionType {
+        case .popular:
+            listViewModel.fetchPopularPlaces { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
+                        self?.listCollectionView.reloadData()
+                    }
+                }
+            }
+        case .new:
+            listViewModel.fetchNewPlaces { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
+                        self?.listCollectionView.reloadData()
+                    }
+                }
+            }
+        case .visits:
+            listViewModel.fetchVisits { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
+                        self?.listCollectionView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+
     // MARK: - Public Methods
 
     // MARK: - Actions
+
+    @objc func sortButtonTapped(_ sender: UIButton) {
+        if sender.tag == 1 {
+            let descendingImage = UIImage(named: "sortZtoA")
+            sender.setImage(descendingImage, for: .normal)
+            sender.tag = 0
+            dataSource.sort(by: { $0.title > $1.title })
+            listCollectionView.reloadData()
+        } else {
+            let ascendingImage = UIImage(named: "sortAtoZ")
+            sender.setImage(ascendingImage, for: .normal)
+            sender.tag = 1
+            dataSource.sort(by: { $0.title < $1.title })
+            listCollectionView.reloadData()
+        }
+    }
 
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
@@ -68,3 +178,41 @@ class ListViewController: UIViewController {
 }
 
 // MARK: - Extensions
+
+extension ListViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = collectionView.frame.width - 48
+        let cellHeight: CGFloat = 90
+
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let topInset: CGFloat = 70
+        return UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = DetailsViewController()
+        detailVC.placeId = dataSource[indexPath.row].id
+        detailVC.visitButtonIsHidden = false
+        detailVC.isFromVisit = false
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
+extension ListViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listIdentifier", for: indexPath) as? ListViewCell else {
+            return UICollectionViewCell()
+        }
+        let place = dataSource[indexPath.item]
+        cell.configure(with: place)
+
+        return cell
+    }
+}

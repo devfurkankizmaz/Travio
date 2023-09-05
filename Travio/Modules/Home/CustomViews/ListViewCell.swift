@@ -2,7 +2,7 @@ import Foundation
 import Kingfisher
 import UIKit
 
-class PlaceViewCell: UICollectionViewCell {
+class ListViewCell: UICollectionViewCell {
     // MARK: - Properties
 
     private var imageDownloader: DownloadTask?
@@ -11,14 +11,6 @@ class PlaceViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        // imageView.alpha = 0.5
-        return imageView
-    }()
-
-    private lazy var gradientImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "grad")
         return imageView
     }()
 
@@ -34,7 +26,7 @@ class PlaceViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         let image = UIImage(named: "location")?.withRenderingMode(.alwaysTemplate)
         imageView.image = image
-        imageView.tintColor = .white
+        imageView.tintColor = AppColor.secondary.color
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -43,7 +35,7 @@ class PlaceViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = AppFont.poppinsRegular.withSize(14)
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = AppColor.secondary.color
         return label
     }()
 
@@ -57,9 +49,9 @@ class PlaceViewCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(24)
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.textAlignment = .left
-        label.textColor = .white
+        label.textColor = AppColor.secondary.color
         return label
     }()
 
@@ -85,22 +77,25 @@ class PlaceViewCell: UICollectionViewCell {
 
     private func addShadow() {
         contentView.layer.shadowRadius = 8
-        contentView.layer.shadowOpacity = 0.25
+        contentView.layer.shadowOpacity = 0.15
         contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
         contentView.layer.shadowColor = AppColor.secondary.color.cgColor
-        contentView.layer.masksToBounds = false
     }
 
     private func setupView() {
-        addShadow()
-        contentView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
-        contentView.clipsToBounds = true
+        contentView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        contentView.clipsToBounds = false
         contentView.layer.cornerRadius = 16
+        addShadow()
 
         backgroundImageView.addSubviews(indicator)
+
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.layer.cornerRadius = 16
+        backgroundImageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
         locationStackView.addArrangedSubviews(locationImageView, locationLabel)
-        contentView.addSubviews(backgroundImageView, gradientImageView, titleLabel, locationStackView)
+        contentView.addSubviews(backgroundImageView, titleLabel, locationStackView)
         contentView.sendSubviewToBack(backgroundImageView)
         setupLayout()
     }
@@ -110,24 +105,23 @@ class PlaceViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        gradientImageView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(110)
-        }
+
         backgroundImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.width.height.equalTo(90)
         }
+
         locationImageView.snp.makeConstraints { make in
             make.width.equalTo(9)
             make.height.equalTo(12)
         }
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
-            make.bottom.equalTo(locationStackView.snp.top).offset(-8)
+            make.leading.equalTo(backgroundImageView.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().offset(-2)
+            make.top.equalToSuperview().offset(16)
         }
         locationStackView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
+            make.leading.equalTo(backgroundImageView.snp.trailing).offset(8)
             make.bottom.equalToSuperview().offset(-16)
         }
     }
