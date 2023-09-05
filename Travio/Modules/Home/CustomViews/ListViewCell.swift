@@ -104,6 +104,7 @@ class ListViewCell: UICollectionViewCell {
         }
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(backgroundImageView.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().offset(-8)
             make.top.equalToSuperview().offset(16)
         }
         locationStackView.snp.makeConstraints { make in
