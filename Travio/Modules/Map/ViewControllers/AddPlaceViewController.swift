@@ -30,10 +30,10 @@ class AddPlaceViewController: UIViewController {
         view.isHidden = true
         return view
     }()
-
+    
+    // MARK: - Create an image picker controller for selecting photos.
     private lazy var imagePickerController: UIImagePickerController = {
         let picker = UIImagePickerController()
-        // picker.delegate = self
         picker.sourceType = .photoLibrary
         return picker
     }()
