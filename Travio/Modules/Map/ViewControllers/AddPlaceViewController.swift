@@ -234,6 +234,7 @@ class AddPlaceViewController: UIViewController {
             }
         } else {
             showAlert(title: "Validation Error", message: errorMessage)
+            hideActivityIndicator()
         }
     }
 }

@@ -44,25 +44,25 @@ class AddPlaceViewModel {
 
     func fieldValidation(_ input: PlaceInput) -> (Bool, String) {
         if input.place.isEmpty {
-            return (false, "Place name is required.")
+            return (false, "State, Country name are required.")
         }
 
         if input.title.isEmpty {
-            return (false, "Title name is required.")
+            return (false, "Place name is required.")
         }
 
         let placeLength = input.place.count
         if placeLength < 3 {
-            return (false, "Place name must have at least 3 characters.")
+            return (false, "State, Country name must have at least 3 characters.")
         } else if placeLength > 25 {
-            return (false, "Place name cannot exceed 25 characters.")
+            return (false, "State, Country name cannot exceed 25 characters.")
         }
 
         let titleLength = input.title.count
         if titleLength < 3 {
-            return (false, "Title name must have at least 3 characters.")
+            return (false, "Place name must have at least 3 characters.")
         } else if titleLength > 25 {
-            return (false, "Title name cannot exceed 25 characters.")
+            return (false, "Place name cannot exceed 25 characters.")
         }
 
         return (true, "")
