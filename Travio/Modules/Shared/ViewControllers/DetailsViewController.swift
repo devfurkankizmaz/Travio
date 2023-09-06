@@ -184,11 +184,13 @@ class DetailsViewController: UIViewController {
             navigationController?.popViewController(animated: true)
             delegate?.reloadView()
             delegate?.showDeletionAlert(message: message)
+            return
         }
         showAlert(title: "Visit deleted", message: "This place has been deleted from visits.")
         visitedButtonImageView.image = UIImage(named: "unmark")
         visitedButton.backgroundColor = AppColor.primary.color
         visitButtonIsHidden = false
+        NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
     }
 
     private func handleVisitCreation(confirm: Bool) {
@@ -196,6 +198,7 @@ class DetailsViewController: UIViewController {
             visitButtonIsHidden = true
             visitedButtonImageView.image = UIImage(named: "markasvisit")
             showAlert(title: "Visit created", message: "This place has been marked as visited.")
+            NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
         }
     }
 

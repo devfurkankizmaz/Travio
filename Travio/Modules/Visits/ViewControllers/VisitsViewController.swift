@@ -63,10 +63,11 @@ class VisitsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         fetchVisits()
+        NotificationCenterManager.shared.addObserver(observer: self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "VisitChanged"))
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        fetchVisits()
+    deinit {
+        NotificationCenterManager.shared.removeObserver(observer: self)
     }
 
     // MARK: - Private Methods
@@ -128,7 +129,15 @@ class VisitsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+
+    // MARK: - Actions
+
+    @objc func reloadCollectionView() {
+        fetchVisits()
+    }
 }
+
+// MARK: - Extensions
 
 extension VisitsViewController: VisitsViewControllerDelegate {
     func showDeletionAlert(message: String) {

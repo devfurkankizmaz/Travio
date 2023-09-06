@@ -38,6 +38,7 @@
 		0AC837392AA88E9B00425FB6 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837382AA88E9B00425FB6 /* UIView+Extension.swift */; };
 		0AC8373B2AA88F6C00425FB6 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8373A2AA88F6C00425FB6 /* UIStackView+Extension.swift */; };
 		0AC8373D2AA88F9500425FB6 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8373C2AA88F9500425FB6 /* UIViewController+Extension.swift */; };
+		0AC8373F2AA892CF00425FB6 /* NotificationCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */; };
 		0ACBC21C2A9B40C000141CB9 /* AddPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACBC21B2A9B40C000141CB9 /* AddPlaceViewController.swift */; };
 		0ACBC21E2A9B4DEE00141CB9 /* PhotoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */; };
 		0ACBC2212A9B66A600141CB9 /* VisitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACBC2202A9B66A600141CB9 /* VisitModel.swift */; };
@@ -105,6 +106,7 @@
 		0AC837382AA88E9B00425FB6 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		0AC8373A2AA88F6C00425FB6 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		0AC8373C2AA88F9500425FB6 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManager.swift; sourceTree = "<group>"; };
 		0ACBC21B2A9B40C000141CB9 /* AddPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceViewController.swift; sourceTree = "<group>"; };
 		0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewCell.swift; sourceTree = "<group>"; };
 		0ACBC2202A9B66A600141CB9 /* VisitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitModel.swift; sourceTree = "<group>"; };
@@ -442,6 +444,7 @@
 				0AFC1DE52A8F5A0B002A55B1 /* Color.swift */,
 				0A09334D2A990DFF00AE9B99 /* Router.swift */,
 				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
+				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -683,6 +686,7 @@
 				D3C24FFF2AA52F8400BA7641 /* PrivacyTVC.swift in Sources */,
 				0AA8C3972A9B088800F25219 /* VisitsViewController.swift in Sources */,
 				0AA8C3932A9A6BB600F25219 /* DetailsViewModel.swift in Sources */,
+				0AC8373F2AA892CF00425FB6 /* NotificationCenterManager.swift in Sources */,
 				0AB83DA22A9B2B8C00E9ABEB /* CustomAnnotation.swift in Sources */,
 				0AF07A062AA72E4400DB194B /* ListViewCell.swift in Sources */,
 			);
