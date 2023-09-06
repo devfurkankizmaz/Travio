@@ -17,7 +17,7 @@ class SecuritySettingsViewController: UIViewController {
     
     private lazy var backButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let arrowImage = UIImage(named: "backgo")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(arrowImage, for: .normal)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
@@ -44,7 +44,6 @@ class SecuritySettingsViewController: UIViewController {
         tableView.register(PrivacyTVC.self, forCellReuseIdentifier: PrivacyTVC().identifier)
         tableView.separatorStyle = .none
         tableView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
-        tableView.rowHeight = 74
         return tableView
     }()
     
@@ -90,21 +89,28 @@ class SecuritySettingsViewController: UIViewController {
         }
         tableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(44)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.bottom.equalTo(saveButton.snp.top).offset(-20)
         }
         saveButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
-            make.width.equalTo(342)
             make.height.equalTo(54)
-            make.bottom.equalToSuperview().offset(-18)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
         }
     }
 }
 
 extension SecuritySettingsViewController: UITableViewDelegate, UITableViewDataSource {
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//
+//        tableView.deselectRow(at: indexPath, animated: false)
+//
+//    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 84
+    }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let headerView = UIView()
@@ -124,7 +130,7 @@ extension SecuritySettingsViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20.0
+        return 20
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -147,13 +153,15 @@ extension SecuritySettingsViewController: UITableViewDelegate, UITableViewDataSo
     
                 let data = securitySettingsViewModel.tableViewArray[indexPath.section].index[indexPath.row]
                 cell.configure(model: data)
-    
+                cell.selectionStyle = .none
+
                 return cell
             } else {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: PrivacyTVC().identifier) as? PrivacyTVC else { return UITableViewCell() }
     
                 let data = securitySettingsViewModel.tableViewArray[indexPath.section].index[indexPath.row]
                 cell.configure(model: data)
+                cell.selectionStyle = .none
                 
                 return cell
             }

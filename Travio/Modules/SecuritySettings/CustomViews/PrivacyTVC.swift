@@ -20,7 +20,7 @@ class PrivacyTVC: UITableViewCell {
     
     private lazy var privacyLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFont.poppinsRegular.withSize(14)
+        label.font = AppFont.poppinsMedium.withSize(14)
         label.textAlignment = .center
         label.text = ""
         label.textColor = #colorLiteral(red: 0.2392156863, green: 0.2392156863, blue: 0.2392156863, alpha: 1)
@@ -70,7 +70,7 @@ class PrivacyTVC: UITableViewCell {
             make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview()
+            make.height.equalTo(74)
         }
         privacyLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
