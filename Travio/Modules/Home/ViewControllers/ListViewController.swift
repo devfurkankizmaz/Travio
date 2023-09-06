@@ -123,6 +123,7 @@ class ListViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
+        
         sortButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
