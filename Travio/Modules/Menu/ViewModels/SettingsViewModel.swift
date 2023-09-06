@@ -8,7 +8,7 @@
 import UIKit
 
 class SettingsViewModel {
-    typealias CompletionHandler = (String, Bool) -> Void
+    typealias CompletionHandler = (Bool) -> Void
     var profile: Profile?
 
     private let settingsItems: [SettingsItem] = [
@@ -33,9 +33,9 @@ class SettingsViewModel {
             switch result {
             case .success(let response):
                 self?.profile = response
-                completion(response.fullName, true)
-            case .failure(let error):
-                completion(error.localizedDescription, false)
+                completion(true)
+            case .failure:
+                completion(false)
             }
         }
     }

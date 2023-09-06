@@ -8,15 +8,13 @@
 import Foundation
 
 struct Profile: Codable {
-    let id: String
     let fullName: String
     let email: String
     let role: String
     let ppUrl: String
-    let createdAt: Date
+    let createdAt: String
 
     enum CodingKeys: String, CodingKey {
-        case id
         case fullName = "full_name"
         case email
         case role

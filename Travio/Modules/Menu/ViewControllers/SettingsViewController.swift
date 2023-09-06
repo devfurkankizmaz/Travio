@@ -1,3 +1,4 @@
+import Kingfisher
 import SnapKit
 import UIKit
 
@@ -78,10 +79,12 @@ class SettingsViewController: UIViewController {
     }
 
     private func fetchProfile() {
-        viewModel.fetchProfile { [weak self] fullName, success in
+        viewModel.fetchProfile { [weak self] success in
             if success {
                 DispatchQueue.main.async {
-                    self?.fullNameLabel.text = fullName
+                    self?.fullNameLabel.text = self?.viewModel.profile?.fullName
+                    let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
+                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
                 }
             }
         }
@@ -96,7 +99,7 @@ class SettingsViewController: UIViewController {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.leading.equalToSuperview().offset(20)
         }
 
