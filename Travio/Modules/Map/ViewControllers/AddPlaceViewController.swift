@@ -30,8 +30,9 @@ class AddPlaceViewController: UIViewController {
         view.isHidden = true
         return view
     }()
-    
+
     // MARK: - Create an image picker controller for selecting photos.
+
     private lazy var imagePickerController: UIImagePickerController = {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -179,6 +180,7 @@ class AddPlaceViewController: UIViewController {
 
     @objc func addPlaceButtonTapped() {
         showActivityIndicator()
+
         addPlaceViewModel.uploadImage(images: selectedImages) { [weak self] uploadResult in
             if uploadResult {
                 self?.performPostPlaceIfImagesUploaded()
@@ -216,16 +218,22 @@ class AddPlaceViewController: UIViewController {
 
         let input = PlaceInput(place: place, title: title, description: description, latitude: latitude, longitude: longitude)
 
-        addPlaceViewModel.postPlace(input) { [weak self] _, confirm in
-            if confirm {
-                self?.performPostGallery() // Gallery işleminin yapılması
-                self?.dismiss(animated: true)
-                self?.delegate?.fetchPlaces()
-                self?.delegate?.showAddedAlert()
-                self?.hideActivityIndicator()
-            } else {
-                self?.hideActivityIndicator()
+        let (isValid, errorMessage) = addPlaceViewModel.fieldValidation(input)
+
+        if isValid {
+            addPlaceViewModel.postPlace(input) { [weak self] _, confirm in
+                if confirm {
+                    self?.performPostGallery() // Gallery işleminin yapılması
+                    self?.dismiss(animated: true)
+                    self?.delegate?.fetchPlaces()
+                    self?.delegate?.showAddedAlert()
+                    self?.hideActivityIndicator()
+                } else {
+                    self?.hideActivityIndicator()
+                }
             }
+        } else {
+            showAlert(title: "Validation Error", message: errorMessage)
         }
     }
 }
