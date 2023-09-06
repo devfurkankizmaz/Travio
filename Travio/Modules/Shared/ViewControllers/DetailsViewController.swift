@@ -140,14 +140,18 @@ class DetailsViewController: UIViewController {
         button.addTarget(self, action: #selector(visitedButtonTapped), for: .touchUpInside)
 
         if visitButtonIsHidden {
-            button.labelText = "Delete"
-            button.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+            visitedButtonImageView.image = UIImage(named: "markasvisit")
+
         } else {
-            button.labelText = "Add"
-            button.backgroundColor = AppColor.primary.color
+            visitedButtonImageView.image = UIImage(named: "unmark")
         }
 
         return button
+    }()
+
+    private lazy var visitedButtonImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
     }()
 
     private lazy var descLabel: UILabel = {
@@ -180,8 +184,7 @@ class DetailsViewController: UIViewController {
         detailsViewModel.checkVisit(with: placeId, callback: { [weak self] confirm in
             DispatchQueue.main.async {
                 if confirm {
-                    self?.visitedButton.labelText = "Delete"
-                    self?.visitedButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+                    self?.visitedButtonImageView.image = UIImage(named: "markasvisit")
                     self?.visitButtonIsHidden = true
                 }
             }
@@ -254,13 +257,20 @@ class DetailsViewController: UIViewController {
         mapUIView.addSubview(mapView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(stackView, mapUIView, descLabel)
-
+        visitedButton.addSubviews(visitedButtonImageView)
         view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView, visitedButton, spinnerView, spinner)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
 
     private func setupLayout() {
+        visitedButtonImageView.snp.makeConstraints { make in
+            make.height.equalTo(25)
+            make.width.equalTo(18)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
         spinnerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -356,7 +366,7 @@ class DetailsViewController: UIViewController {
                         self.detailsViewModel.deleteVisit(with: placeId, callback: { [weak self] _ in
                             self?.delegate?.reloadView()
                             self?.showAlert(title: "Success", message: "Place deleted from visits")
-                            self?.visitedButton.labelText = "Add"
+                            self?.visitedButtonImageView.image = UIImage(named: "unmark")
                             self?.visitedButton.backgroundColor = AppColor.primary.color
                             self?.visitButtonIsHidden = false
                         })
@@ -368,8 +378,7 @@ class DetailsViewController: UIViewController {
             detailsViewModel.postVisit(placeId: placeId, callback: { [weak self] confirm in
                 if confirm {
                     self?.visitButtonIsHidden = true
-                    self?.visitedButton.labelText = "Delete"
-                    self?.visitedButton.backgroundColor = #colorLiteral(red: 1, green: 0.2919293046, blue: 0.3489926457, alpha: 1)
+                    self?.visitedButtonImageView.image = UIImage(named: "markasvisit")
                     self?.showAlert(title: "Success", message: "Visit created.")
                 }
             })
