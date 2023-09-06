@@ -94,6 +94,7 @@ class AddPlaceViewModel {
 
         dispatchGroup.notify(queue: .main) {
             callback(success ? "Gallery images posted successfully" : "Error posting gallery images", success)
+            NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
         }
     }
 }
