@@ -10,7 +10,6 @@ import Foundation
 class MapViewModel {
     typealias PlaceHandler = (String, Bool) -> Void
     var places: [Place] = []
-    var onDataFetch: ((Bool) -> Void)?
 
     func fetchPlaces(callback: @escaping PlaceHandler) {
         NetworkManager.shared.request(TravioRouter.getAllPlaces, responseType: PlacesResponse.self) { result in

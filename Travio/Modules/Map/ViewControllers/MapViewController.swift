@@ -20,6 +20,22 @@ class MapViewController: UIViewController {
 
     private var mapAnnotations: [CustomAnnotation] = []
 
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
+    }()
+
     private lazy var mapView: MKMapView = {
         let mapView = MKMapView()
         mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -55,6 +71,18 @@ class MapViewController: UIViewController {
 
     // MARK: - Private Methods
 
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+
     private func setupLongPressGesture() {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         mapView.addGestureRecognizer(longPressGesture)
@@ -82,11 +110,20 @@ class MapViewController: UIViewController {
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
-        view.addSubviews(mapView, placesCollectionView)
+        view.addSubviews(mapView, placesCollectionView, spinnerView, spinner)
         setupLayout()
     }
 
     private func setupLayout() {
+        spinnerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
         mapView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -105,30 +142,20 @@ class MapViewController: UIViewController {
     @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let addPlaceVC = AddPlaceViewController()
         if gestureRecognizer.state == .began {
-            print("Long press gesture recognized.")
+            // Long press gesture recognized
             guard let mapView = gestureRecognizer.view as? MKMapView else { return }
 
             let touchPoint = gestureRecognizer.location(in: mapView)
             let coordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
 
-            print("Long press at: Latitude \(coordinate.latitude), Longitude \(coordinate.longitude)")
-
             let geocoder = CLGeocoder()
             let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
 
-            geocoder.reverseGeocodeLocation(location) { placemarks, error in
-                if let error = error {
-                    print("Reverse geocoding error: \(error.localizedDescription)")
-                    return
-                }
-
+            geocoder.reverseGeocodeLocation(location) { placemarks, _ in
                 if let placemark = placemarks?.first {
                     if let city = placemark.locality, let country = placemark.country {
                         let address = "\(city), \(country)"
-                        print("Address: \(address)")
                         addPlaceVC.stateTextField.textField.text = address
-                    } else {
-                        print("Location information not found")
                     }
                 }
             }
@@ -156,6 +183,7 @@ extension MapViewController: MapViewControllerDelegate {
     }
 
     func fetchPlaces() {
+        showActivityIndicator()
         mapViewModel.fetchPlaces { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
@@ -163,6 +191,7 @@ extension MapViewController: MapViewControllerDelegate {
                     self?.placesCollectionView.reloadData()
                     self?.mapAnnotations = self?.createAnnotations() ?? []
                     self?.updateMapAnnotations()
+                    self?.hideActivityIndicator()
                 }
             }
         }
@@ -229,8 +258,6 @@ extension MapViewController: UICollectionViewDelegateFlowLayout {
         let detailVC = DetailsViewController()
         if let place = mapViewModel.getAPlace(at: indexPath.row) {
             detailVC.placeId = place.id
-            detailVC.visitButtonIsHidden = false
-            detailVC.isFromVisit = false
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }

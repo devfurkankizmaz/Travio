@@ -14,7 +14,7 @@ class NewPasswordTVC: UITableViewCell {
     
     private lazy var changePasswordView: TravioUIView = {
         let view = TravioUIView()
-        view.placeholderText = "*************"
+        view.placeholderText = ""
         view.titleView = ""
         return view
     }()
@@ -52,7 +52,7 @@ class NewPasswordTVC: UITableViewCell {
             make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview()
+            make.height.equalTo(74)
         }
     }
 }

@@ -1,8 +1,41 @@
 import SnapKit
 import UIKit
 
+enum SectionType: Int, CaseIterable {
+    case popular = 0
+    case new
+    case visits
+
+    var title: String {
+        switch self {
+        case .popular:
+            return "Popular Places"
+        case .new:
+            return "New Places"
+        case .visits:
+            return "Your Visits"
+        }
+    }
+}
+
 class HomeViewController: UIViewController {
     // MARK: - Properties
+
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
+    }()
 
     private lazy var homeViewModel: HomeViewModel = {
         let viewModel = HomeViewModel()
@@ -36,21 +69,47 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         fetchContent()
+        NotificationCenterManager.shared.addObserver(observer: self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "VisitChanged"))
+    }
+
+    deinit {
+        NotificationCenterManager.shared.removeObserver(observer: self)
     }
 
     // MARK: - Private Methods
+
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
 
-        view.addSubviews(titleImageView, componentsView)
+        view.addSubviews(titleImageView, componentsView, spinnerView, spinner)
         componentsView.addSubviews(mainCollectionView)
 
         setupLayout()
     }
 
     private func setupLayout() {
+        spinnerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
         titleImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -80,6 +139,8 @@ class HomeViewController: UIViewController {
             homeViewModel.fetchVisits
         ]
 
+        showActivityIndicator()
+
         contentFetchers.forEach { contentFetcher in
             dispatchGroup.enter()
             contentFetcher { [weak self] confirm in
@@ -92,7 +153,15 @@ class HomeViewController: UIViewController {
             }
         }
 
-        dispatchGroup.notify(queue: .main) {}
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.hideActivityIndicator()
+        }
+    }
+
+    // MARK: - Actions
+
+    @objc func reloadCollectionView() {
+        fetchContent()
     }
 }
 
@@ -108,7 +177,15 @@ extension HomeViewController: MainCollectionViewCellDelegate {
     }
 
     func didTapSeeAllButton(in cell: MainCollectionViewCell) {
+        let sectionIndex = cell.seeAllButton.tag
+        guard let sectionType = SectionType(rawValue: sectionIndex) else {
+            return
+        }
+
         let listVC = ListViewController()
+        listVC.selectedSection = sectionType
+        listVC.selectedSectionType = sectionType
+
         navigationController?.pushViewController(listVC, animated: true)
     }
 }
@@ -128,7 +205,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return HomeViewModel.Section.allCases.count
+        return SectionType.allCases.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,12 +213,13 @@ extension HomeViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        let section = HomeViewModel.Section.allCases[indexPath.row]
-        let title = section.rawValue
+        let section = SectionType.allCases[indexPath.row]
+        let title = section.title
         let data = homeViewModel.getPlacesForSection(section)
 
         cell.configure(with: data, title: title)
         cell.delegate = self
+        cell.seeAllButton.tag = indexPath.row
         cell.contentView.isUserInteractionEnabled = true
 
         return cell

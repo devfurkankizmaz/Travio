@@ -38,7 +38,7 @@ class RegisterViewModel {
             case .success:
                 callback("You're registered successfully.", true)
             case .failure(let error):
-                callback(error.localizedDescription, true)
+                callback(error.localizedDescription, false)
             }
         }
     }
