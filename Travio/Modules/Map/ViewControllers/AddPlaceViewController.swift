@@ -15,18 +15,20 @@ class AddPlaceViewController: UIViewController {
     var coordinate: (latitude: Double, longitude: Double)?
     private var selectedImages: [UIImage] = []
 
-    private lazy var indicatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = AppColor.background.color
-        view.isHidden = true
-        view.alpha = 0.6
-        return view
-    }()
-
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
         indicator.hidesWhenStopped = true
         return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
     }()
 
     private lazy var imagePickerController: UIImagePickerController = {
@@ -103,8 +105,7 @@ class AddPlaceViewController: UIViewController {
     // MARK: - Private Methods
 
     private func setupView() {
-        indicatorView.addSubview(activityIndicator)
-        view.addSubviews(placeNameTextField, descriptionTextView, stateTextField, rectangle, addButton, addPhotosCollectionView, indicatorView)
+        view.addSubviews(placeNameTextField, descriptionTextView, stateTextField, rectangle, addButton, addPhotosCollectionView, spinner, spinnerView)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -150,14 +151,26 @@ class AddPlaceViewController: UIViewController {
             make.height.equalTo(54)
         }
 
-        activityIndicator.snp.makeConstraints { make in
+        spinner.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
 
-        indicatorView.snp.makeConstraints { make in
+        spinnerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
     }
 
     // MARK: - Public Methods
@@ -165,14 +178,12 @@ class AddPlaceViewController: UIViewController {
     // MARK: - Actions
 
     @objc func addPlaceButtonTapped() {
-        activityIndicator.startAnimating()
-        indicatorView.isHidden = false
+        showActivityIndicator()
         addPlaceViewModel.uploadImage(images: selectedImages) { [weak self] uploadResult in
             if uploadResult {
                 self?.performPostPlaceIfImagesUploaded()
             } else {
-                self?.indicatorView.isHidden = true
-                self?.activityIndicator.stopAnimating()
+                self?.hideActivityIndicator()
             }
         }
     }
@@ -197,9 +208,7 @@ class AddPlaceViewController: UIViewController {
               let latitude = coordinate?.latitude,
               let longitude = coordinate?.longitude
         else {
-            print("Error: Missing data for postPlace")
-            activityIndicator.stopAnimating()
-            indicatorView.isHidden = true
+            hideActivityIndicator()
             return
         }
 
@@ -207,18 +216,15 @@ class AddPlaceViewController: UIViewController {
 
         let input = PlaceInput(place: place, title: title, description: description, latitude: latitude, longitude: longitude)
 
-        addPlaceViewModel.postPlace(input) { [weak self] message, confirm in
+        addPlaceViewModel.postPlace(input) { [weak self] _, confirm in
             if confirm {
                 self?.performPostGallery() // Gallery işleminin yapılması
                 self?.dismiss(animated: true)
                 self?.delegate?.fetchPlaces()
                 self?.delegate?.showAddedAlert()
-                self?.activityIndicator.stopAnimating()
-                self?.indicatorView.isHidden = true
+                self?.hideActivityIndicator()
             } else {
-                print(message)
-                self?.activityIndicator.stopAnimating()
-                self?.indicatorView.isHidden = true
+                self?.hideActivityIndicator()
             }
         }
     }
