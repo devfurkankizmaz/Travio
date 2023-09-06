@@ -132,7 +132,6 @@ class ListViewCell: UICollectionViewCell {
         locationLabel.text = place.place
         titleLabel.text = place.title
         imageDownloader?.cancel()
-
         guard let urlStr = place.coverImageUrl else {
             backgroundImageView.image = UIImage(named: "failed")
             return
