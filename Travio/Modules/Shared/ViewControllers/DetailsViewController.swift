@@ -13,8 +13,8 @@ class DetailsViewController: UIViewController {
 
     var placeId: String?
     var visitId: String?
-    var visitButtonIsHidden = Bool()
-    var isFromVisit = Bool()
+    var visitButtonIsHidden = false
+    var isFromVisit = false
     weak var delegate: VisitsViewControllerDelegate?
 
     private lazy var detailsViewModel: DetailsViewModel = {
@@ -179,16 +179,34 @@ class DetailsViewController: UIViewController {
 
     // MARK: - Private Methods
 
+    private func handleVisitDeletion(message: String) {
+        if isFromVisit {
+            navigationController?.popViewController(animated: true)
+            delegate?.reloadView()
+            delegate?.showDeletionAlert(message: message)
+        }
+        showAlert(title: "Visit deleted", message: "This place has been deleted from visits.")
+        visitedButtonImageView.image = UIImage(named: "unmark")
+        visitedButton.backgroundColor = AppColor.primary.color
+        visitButtonIsHidden = false
+    }
+
+    private func handleVisitCreation(confirm: Bool) {
+        if confirm {
+            visitButtonIsHidden = true
+            visitedButtonImageView.image = UIImage(named: "markasvisit")
+            showAlert(title: "Visit created", message: "This place has been marked as visited.")
+        }
+    }
+
     private func checkVisited() {
         guard let placeId = placeId else { return }
-        detailsViewModel.checkVisit(with: placeId, callback: { [weak self] confirm in
+        detailsViewModel.checkVisit(with: placeId) { [weak self] confirm in
             DispatchQueue.main.async {
-                if confirm {
-                    self?.visitedButtonImageView.image = UIImage(named: "markasvisit")
-                    self?.visitButtonIsHidden = true
-                }
+                self?.visitedButtonImageView.image = confirm ? UIImage(named: "markasvisit") : UIImage(named: "unmark")
+                self?.visitButtonIsHidden = confirm
             }
-        })
+        }
     }
 
     private func updateUIWithData() {
@@ -350,38 +368,24 @@ class DetailsViewController: UIViewController {
     // MARK: - Actions
 
     @objc func visitedButtonTapped() {
-        // If its hidden will be perform deletion else addition
-        if visitButtonIsHidden {
-            guard let placeId = placeId else { return }
-            showDeleteConfirmationAlert(completion: { confirm in
-                if confirm {
-                    if self.isFromVisit {
-                        self.detailsViewModel.deleteVisit(with: placeId, callback: { [weak self] message in
-                            self?.navigationController?.popViewController(animated: true)
-                            self?.delegate?.reloadView()
-                            self?.delegate?.showDeletionAlert(message: message)
+        guard let placeId = placeId else { return }
 
-                        })
-                    } else {
-                        self.detailsViewModel.deleteVisit(with: placeId, callback: { [weak self] _ in
-                            self?.delegate?.reloadView()
-                            self?.showAlert(title: "Success", message: "Place deleted from visits")
-                            self?.visitedButtonImageView.image = UIImage(named: "unmark")
-                            self?.visitedButton.backgroundColor = AppColor.primary.color
-                            self?.visitButtonIsHidden = false
-                        })
+        if visitButtonIsHidden {
+            showDeleteConfirmationAlert { [weak self] confirm in
+                if confirm {
+                    self?.detailsViewModel.deleteVisit(with: placeId) { [weak self] message in
+                        DispatchQueue.main.async {
+                            self?.handleVisitDeletion(message: message)
+                        }
                     }
                 }
-            })
+            }
         } else {
-            guard let placeId = placeId else { return }
-            detailsViewModel.postVisit(placeId: placeId, callback: { [weak self] confirm in
-                if confirm {
-                    self?.visitButtonIsHidden = true
-                    self?.visitedButtonImageView.image = UIImage(named: "markasvisit")
-                    self?.showAlert(title: "Success", message: "Visit created.")
+            detailsViewModel.postVisit(placeId: placeId) { [weak self] confirm in
+                DispatchQueue.main.async {
+                    self?.handleVisitCreation(confirm: confirm)
                 }
-            })
+            }
         }
     }
 
