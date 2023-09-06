@@ -210,7 +210,7 @@ class DetailsViewController: UIViewController {
     }
 
     private func updateUIWithData() {
-        let customFormattedDate = detailsViewModel.place?.created_at.formatISO8601ToCustomFormat()
+        let customFormattedDate = detailsViewModel.place?.createdAt.formatISO8601ToCustomFormat()
         locationLabel.text = detailsViewModel.place?.place
         descLabel.text = detailsViewModel.place?.description
         visitDateLabel.text = customFormattedDate
