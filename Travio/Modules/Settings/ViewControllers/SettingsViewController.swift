@@ -112,7 +112,6 @@ class SettingsViewController: UIViewController {
     }
 }
 
-
 extension SettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: UIScreen.main.bounds.width - 32, height: 54)
@@ -132,5 +131,15 @@ extension SettingsViewController: UICollectionViewDelegate, UICollectionViewData
         cell.configure(model: model)
         return cell
     }
-}
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            if indexPath.item == 0 {
+                let viewController = SecuritySettingsViewController()
+                navigationController?.pushViewController(viewController, animated: true)
+            }
+          }
+        }
+    }
+
 
