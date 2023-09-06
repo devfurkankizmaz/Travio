@@ -39,6 +39,12 @@ class MainTabBarController: UITabBarController {
 
     private func customizeTabBarAppearance() {
         tabBar.tintColor = AppColor.primary.color
-        tabBar.backgroundColor = AppColor.background.color
+        tabBar.backgroundColor = UIColor.white.withAlphaComponent(0.95)
+
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5)
+        topBorder.backgroundColor = UIColor.gray.cgColor
+
+        tabBar.layer.addSublayer(topBorder)
     }
 }
