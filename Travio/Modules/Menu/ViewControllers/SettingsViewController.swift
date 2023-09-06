@@ -62,6 +62,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        fetchProfile()
     }
 
     // MARK: - Private Methods
@@ -74,6 +75,16 @@ class SettingsViewController: UIViewController {
         componentsView.addSubviews(settingsCollectionView, profilePictureImageView, fullNameLabel, editProfileButton)
 
         setupLayout()
+    }
+
+    private func fetchProfile() {
+        viewModel.fetchProfile { [weak self] fullName, success in
+            if success {
+                DispatchQueue.main.async {
+                    self?.fullNameLabel.text = fullName
+                }
+            }
+        }
     }
 
     private func setupLayout() {

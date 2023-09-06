@@ -26,6 +26,7 @@
 		0A7DD9BC2AA918ED0067BED4 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9BB2AA918ED0067BED4 /* SettingsModel.swift */; };
 		0A7DD9BE2AA919080067BED4 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9BD2AA919080067BED4 /* SettingsViewModel.swift */; };
 		0A7DD9C02AA91AC40067BED4 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A7DD9BF2AA91AC40067BED4 /* Poppins-Light.ttf */; };
+		0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */; };
 		0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */; };
 		0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D20B72AA4FA2200334128 /* ListViewController.swift */; };
 		0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA44B352A95F1AF0070052D /* CustomTextView.swift */; };
@@ -90,6 +91,7 @@
 		0A7DD9BB2AA918ED0067BED4 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		0A7DD9BD2AA919080067BED4 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		0A7DD9BF2AA91AC40067BED4 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
+		0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
 		0A9D20B72AA4FA2200334128 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		0AA44B352A95F1AF0070052D /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				0A7DD9BB2AA918ED0067BED4 /* SettingsModel.swift */,
+				0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 				0AAEFAC02A9CCE1A0075B7C4 /* UploadModel.swift in Sources */,
 				0AFC1DE22A8F5666002A55B1 /* Font.swift in Sources */,
 				0AC837352AA88E2400425FB6 /* UIImage+Extension.swift in Sources */,
+				0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */,
 				0AC8373B2AA88F6C00425FB6 /* UIStackView+Extension.swift in Sources */,
 				0AF07A042AA72A3B00DB194B /* ListViewModel.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
