@@ -62,7 +62,7 @@ class LoginViewModel {
                 callback("You're logged in successfully.", true)
 
             case .failure(let error):
-                callback(error.localizedDescription, true)
+                callback(error.localizedDescription, false)
             }
         }
     }

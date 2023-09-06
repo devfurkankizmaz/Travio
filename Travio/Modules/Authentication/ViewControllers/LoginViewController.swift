@@ -10,6 +10,22 @@ import UIKit
 class LoginViewController: UIViewController {
     // MARK: - Properties
 
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
+    }()
+
     private lazy var viewModel: LoginViewModel = {
         let vm = LoginViewModel()
         return vm
@@ -91,16 +107,37 @@ class LoginViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    func setupView() {
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+
+    private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         stackView.addArrangedSubviews(signUpLabel, signUpButton)
-        view.addSubviews(logoImageView, componentsView, emailView, passwordView, loginButton, stackView)
+        view.addSubviews(logoImageView, componentsView, emailView, passwordView, loginButton, stackView, spinnerView, spinner)
         componentsView.addSubviews(welcomeLabel)
         view.backgroundColor = AppColor.primary.color
         setupLayout()
     }
 
-    func setupLayout() {
+    private func setupLayout() {
+        spinnerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
         logoImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
             make.centerX.equalToSuperview()
@@ -161,13 +198,15 @@ class LoginViewController: UIViewController {
               let password = passwordView.textField.text else { return }
 
         let input = Login(email: email, password: password)
-
+        showActivityIndicator()
         viewModel.login(input, callback: { [weak self] message, confirm in
             if confirm {
                 let mainTbc = MainTabBarController()
                 self?.navigationController?.pushViewController(mainTbc, animated: true)
+                self?.hideActivityIndicator()
             } else {
                 self?.showAlert(title: "Error", message: message)
+                self?.hideActivityIndicator()
             }
         })
     }

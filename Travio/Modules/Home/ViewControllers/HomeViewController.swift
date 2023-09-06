@@ -69,6 +69,11 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         fetchContent()
+        NotificationCenterManager.shared.addObserver(observer: self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "VisitChanged"))
+    }
+
+    deinit {
+        NotificationCenterManager.shared.removeObserver(observer: self)
     }
 
     // MARK: - Private Methods
@@ -151,6 +156,12 @@ class HomeViewController: UIViewController {
         dispatchGroup.notify(queue: .main) { [weak self] in
             self?.hideActivityIndicator()
         }
+    }
+
+    // MARK: - Actions
+
+    @objc func reloadCollectionView() {
+        fetchContent()
     }
 }
 

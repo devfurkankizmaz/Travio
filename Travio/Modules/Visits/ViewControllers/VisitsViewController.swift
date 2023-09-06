@@ -20,6 +20,22 @@ class VisitsViewController: UIViewController {
         return viewModel
     }()
 
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
+    }()
+
     private lazy var componentsView = ComponentsView()
 
     private lazy var myVisitsLabel: UILabel = {
@@ -47,19 +63,34 @@ class VisitsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         fetchVisits()
+        NotificationCenterManager.shared.addObserver(observer: self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "VisitChanged"))
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        fetchVisits()
+
+    deinit {
+        NotificationCenterManager.shared.removeObserver(observer: self)
     }
 
     // MARK: - Private Methods
 
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+
     private func fetchVisits() {
+        showActivityIndicator()
         visitsViewModel.fetchVisits { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
                     self?.visitListCollectionView.reloadData()
+                    self?.hideActivityIndicator()
                 }
             }
         }
@@ -70,11 +101,19 @@ class VisitsViewController: UIViewController {
         view.backgroundColor = AppColor.primary.color
         view.addSubviews(myVisitsLabel, componentsView)
         // view.bringSubviewToFront(indicator)
-        componentsView.addSubviews(visitListCollectionView)
+        componentsView.addSubviews(visitListCollectionView, spinnerView, spinner)
         setupLayout()
     }
 
     private func setupLayout() {
+        spinnerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
         myVisitsLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -90,7 +129,15 @@ class VisitsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+
+    // MARK: - Actions
+
+    @objc func reloadCollectionView() {
+        fetchVisits()
+    }
 }
+
+// MARK: - Extensions
 
 extension VisitsViewController: VisitsViewControllerDelegate {
     func showDeletionAlert(message: String) {
