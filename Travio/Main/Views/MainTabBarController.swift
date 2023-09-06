@@ -20,7 +20,7 @@ class MainTabBarController: UITabBarController {
         let menuNC = createNavigationController(rootViewController: menuVC, title: "Menu", imageName: "menu")
 
         viewControllers = [homeNC, visitsNC, mapNC, menuNC]
-        selectedIndex = 0 // Set the default selected tab
+        selectedIndex = 0
 
         customizeTabBarAppearance()
     }
