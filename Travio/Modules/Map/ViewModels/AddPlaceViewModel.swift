@@ -26,7 +26,6 @@ class AddPlaceViewModel {
 
         images.forEach { image in
             guard let imageData = image.convertToData(withFormat: .jpeg(compressionQuality: 0.8)) else {
-                print("Convert err.")
                 return
             }
             imagesData.append(imageData)
@@ -35,11 +34,9 @@ class AddPlaceViewModel {
         NetworkManager.shared.uploadImage(TravioRouter.uploadImage(imageData: imagesData), responseType: UploadResponse.self) { result in
             switch result {
             case .success(let response):
-                print("Image uploaded successfully. URLs: \(response.urls)")
                 self.urls = response.urls
                 callback(true)
-            case .failure(let error):
-                print("Error uploading image: \(error)")
+            case .failure:
                 callback(true)
             }
         }
@@ -61,7 +58,6 @@ class AddPlaceViewModel {
                 self.placeId = response.message
                 callback(response.message, true)
             case .failure(let error):
-                print(error.localizedDescription)
                 callback(error.localizedDescription, true)
             }
         }
@@ -87,9 +83,8 @@ class AddPlaceViewModel {
             NetworkManager.shared.request(TravioRouter.postGalleryByPlaceId(params: params), responseType: ResponseModel.self) { result in
                 switch result {
                 case .success:
-                    print("Gallery image posted successfully. URL: \(url)")
-                case .failure(let error):
-                    print("Error posting gallery image: \(error.localizedDescription)")
+                    success = true
+                case .failure:
                     success = false
                 }
 
