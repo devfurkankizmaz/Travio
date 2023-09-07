@@ -55,6 +55,42 @@ class EditProfileViewController: UIViewController {
         return button
     }()
 
+    private lazy var createdInfo: InfoView = {
+        let view = InfoView()
+        view.image = UIImage(named: "createdAtIcon")
+        view.titleView = "30 Ağustos 2023"
+        return view
+    }()
+
+    private lazy var roleInfo: InfoView = {
+        let view = InfoView()
+        view.image = UIImage(named: "roleIcon")
+        view.titleView = "Admin"
+        return view
+    }()
+
+    private lazy var infoStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 16
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+
+    private lazy var fullNameView: TravioUIView = {
+        let view = TravioUIView()
+        view.placeholderText = "Enter your new full name"
+        view.titleView = "Full Name"
+        return view
+    }()
+
+    private lazy var emailView: TravioUIView = {
+        let view = TravioUIView()
+        view.placeholderText = "Enter your new email"
+        view.titleView = "Email"
+        return view
+    }()
+
     private lazy var componentsView: ComponentsView = .init()
 
     // MARK: - Lifecycle Methods
@@ -70,8 +106,9 @@ class EditProfileViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
 
-        view.addSubviews(titleLabel, dismissButton, componentsView)
-        componentsView.addSubviews(profilePictureImageView, fullNameLabel, changePhotoButton)
+        infoStackView.addArrangedSubviews(createdInfo, roleInfo)
+        view.addSubviews(titleLabel, dismissButton, componentsView, infoStackView)
+        componentsView.addSubviews(profilePictureImageView, fullNameLabel, changePhotoButton, fullNameView, emailView)
 
         setupLayout()
     }
@@ -85,12 +122,12 @@ class EditProfileViewController: UIViewController {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
             make.leading.equalToSuperview().offset(24)
         }
 
         dismissButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.centerY.equalTo(titleLabel.snp.centerY)
             make.trailing.equalToSuperview().offset(-24)
             make.width.height.equalTo(20)
         }
@@ -107,8 +144,36 @@ class EditProfileViewController: UIViewController {
         }
 
         fullNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(changePhotoButton.snp.bottom).offset(8)
+            make.top.equalTo(changePhotoButton.snp.bottom).offset(4)
             make.centerX.equalToSuperview()
+        }
+
+        roleInfo.snp.makeConstraints { make in
+            make.height.equalTo(52)
+        }
+
+        createdInfo.snp.makeConstraints { make in
+            make.height.equalTo(52)
+        }
+
+        infoStackView.snp.makeConstraints { make in
+            make.top.equalTo(fullNameLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+        }
+
+        fullNameView.snp.makeConstraints { make in
+            make.top.equalTo(infoStackView.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(74)
+        }
+
+        emailView.snp.makeConstraints { make in
+            make.top.equalTo(fullNameView.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(74)
         }
     }
 
