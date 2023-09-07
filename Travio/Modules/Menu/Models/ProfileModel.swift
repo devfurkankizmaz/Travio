@@ -22,3 +22,9 @@ struct Profile: Codable {
         case createdAt = "created_at"
     }
 }
+
+struct ProfileInput {
+    var fullName: String
+    var email: String
+    var ppUrl: String
+}

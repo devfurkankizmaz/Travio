@@ -20,7 +20,11 @@ class EditProfileViewController: UIViewController {
     }
 
     private var selectedImage: UIImage?
-    private var protectedPPUrl: String?
+
+    private lazy var viewModel: EditProfileViewModel = {
+        let vm = EditProfileViewModel()
+        return vm
+    }()
 
     private lazy var profilePictureImageView: UIImageView = {
         let imageView = UIImageView()
@@ -127,7 +131,6 @@ class EditProfileViewController: UIViewController {
         fullNameView.textField.text = profile.fullName
         emailView.textField.text = profile.email
         fullNameLabel.text = profile.fullName
-        protectedPPUrl = profile.ppUrl
     }
 
     private func setupView() {
@@ -224,7 +227,30 @@ class EditProfileViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc func saveButtonTapped() {}
+    @objc func saveButtonTapped() {
+        guard let fullName = fullNameView.textField.text,
+              let email = emailView.textField.text,
+              let ppUrl = profile?.ppUrl else { return }
+
+        let updatedProfile = ProfileInput(fullName: fullName,
+                                          email: email,
+                                          ppUrl: ppUrl)
+
+        if let selectedImage = selectedImage {
+            viewModel.saveProfile(image: selectedImage, input: updatedProfile) { [weak self] success in
+                if success {
+                    print("User updated")
+                    self?.dismiss(animated: true)
+                } else {}
+            }
+        } else {
+            viewModel.saveProfile(image: nil, input: updatedProfile) { [weak self] success in
+                if success {
+                    self?.dismiss(animated: true)
+                } else {}
+            }
+        }
+    }
 
     @objc func dismissButtonTapped() {
         dismiss(animated: true)
