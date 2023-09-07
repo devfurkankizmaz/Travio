@@ -114,6 +114,8 @@ class SettingsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+    
+    
 
     private func fetchProfile() {
         viewModel.fetchProfile { [weak self] success in

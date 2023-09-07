@@ -23,6 +23,22 @@ class EditProfileViewController: UIViewController {
 
     private var selectedImage: UIImage?
 
+    private lazy var spinner: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .black
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var spinnerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.alpha = 0.6
+        view.isHidden = true
+        return view
+    }()
+
     private lazy var viewModel: EditProfileViewModel = {
         let vm = EditProfileViewModel()
         return vm
@@ -143,7 +159,9 @@ class EditProfileViewController: UIViewController {
 
         view.addSubviews(titleLabel,
                          dismissButton,
-                         componentsView)
+                         componentsView,
+                         spinnerView,
+                         spinner)
 
         componentsView.addSubviews(profilePictureImageView,
                                    fullNameLabel,
@@ -157,6 +175,14 @@ class EditProfileViewController: UIViewController {
     }
 
     private func setupLayout() {
+        spinnerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
         componentsView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(36)
             make.leading.equalToSuperview()
@@ -227,6 +253,18 @@ class EditProfileViewController: UIViewController {
         }
     }
 
+    private func showActivityIndicator() {
+        spinnerView.isHidden = false
+        spinner.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideActivityIndicator() {
+        spinnerView.isHidden = true
+        spinner.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+
     // MARK: - Actions
 
     @objc func saveButtonTapped() {
@@ -238,22 +276,28 @@ class EditProfileViewController: UIViewController {
                                           email: email,
                                           ppUrl: ppUrl)
 
+        showActivityIndicator()
         if let selectedImage = selectedImage {
             viewModel.saveProfile(image: selectedImage, input: updatedProfile) { [weak self] success in
                 if success {
+                    self?.hideActivityIndicator()
                     self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
                     self?.delegate?.didShowAlert()
-
-                } else {}
+                } else {
+                    self?.hideActivityIndicator()
+                }
             }
         } else {
             viewModel.saveProfile(image: nil, input: updatedProfile) { [weak self] success in
                 if success {
+                    self?.hideActivityIndicator()
                     self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
                     self?.delegate?.didShowAlert()
-                } else {}
+                } else {
+                    self?.hideActivityIndicator()
+                }
             }
         }
     }
