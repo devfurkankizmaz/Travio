@@ -12,6 +12,8 @@ import UIKit
 class EditProfileViewController: UIViewController {
     // MARK: - Properties
 
+    weak var delegate: SettingsViewControllerDelegate?
+
     var profile: Profile? {
         didSet {
             guard let profile = profile else { return }
@@ -239,14 +241,18 @@ class EditProfileViewController: UIViewController {
         if let selectedImage = selectedImage {
             viewModel.saveProfile(image: selectedImage, input: updatedProfile) { [weak self] success in
                 if success {
-                    print("User updated")
+                    self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
+                    self?.delegate?.didShowAlert()
+
                 } else {}
             }
         } else {
             viewModel.saveProfile(image: nil, input: updatedProfile) { [weak self] success in
                 if success {
+                    self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
+                    self?.delegate?.didShowAlert()
                 } else {}
             }
         }

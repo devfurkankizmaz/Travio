@@ -78,18 +78,6 @@ class SettingsViewController: UIViewController {
         setupLayout()
     }
 
-    private func fetchProfile() {
-        viewModel.fetchProfile { [weak self] success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.fullNameLabel.text = self?.viewModel.profile?.fullName
-                    let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
-                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
-                }
-            }
-        }
-    }
-
     private func setupLayout() {
         componentsView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(36)
@@ -127,17 +115,45 @@ class SettingsViewController: UIViewController {
         }
     }
 
+    private func fetchProfile() {
+        viewModel.fetchProfile { [weak self] success in
+            if success {
+                DispatchQueue.main.async {
+                    self?.fullNameLabel.text = self?.viewModel.profile?.fullName
+                    let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
+                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
+                }
+            }
+        }
+    }
+
     // MARK: - Actions
 
     @objc func editProfileButtonTapped() {
         let editProfileVc = EditProfileViewController()
         editProfileVc.modalPresentationStyle = .fullScreen
         editProfileVc.profile = viewModel.profile
+        editProfileVc.delegate = self
         present(editProfileVc, animated: true)
     }
 }
 
 // MARK: - Extensions
+
+protocol SettingsViewControllerDelegate: AnyObject {
+    func didFetchProfile()
+    func didShowAlert()
+}
+
+extension SettingsViewController: SettingsViewControllerDelegate {
+    func didFetchProfile() {
+        fetchProfile()
+    }
+
+    func didShowAlert() {
+        showAlert(title: "Success", message: "User successfully updated.")
+    }
+}
 
 extension SettingsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
