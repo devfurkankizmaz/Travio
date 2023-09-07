@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Edit Profile", for: .normal)
         button.titleLabel?.font = AppFont.poppinsMedium.withSize(12)
-        // button.addTarget(self, action: #selector(editProfileButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(editProfileButtonTapped), for: .touchUpInside)
         let color = UIColor(cgColor: #colorLiteral(red: 0, green: 0.7667202353, blue: 0.9408947229, alpha: 1))
         button.setTitleColor(color, for: .normal)
         return button
@@ -128,6 +128,12 @@ class SettingsViewController: UIViewController {
     }
 
     // MARK: - Actions
+
+    @objc func editProfileButtonTapped() {
+        let editProfileVc = EditProfileViewController()
+        editProfileVc.modalPresentationStyle = .fullScreen
+        present(editProfileVc, animated: true)
+    }
 }
 
 // MARK: - Extensions
