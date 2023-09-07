@@ -5,6 +5,7 @@ import UIKit
 class SettingsViewController: UIViewController {
     // MARK: - Properties
 
+    private var selectedViewController: UIViewController?
     private lazy var viewModel: SettingsViewModel = .init()
 
     private lazy var profilePictureImageView: UIImageView = {
@@ -57,6 +58,15 @@ class SettingsViewController: UIViewController {
         return label
     }()
 
+    private lazy var logoutButton: UIButton = {
+        let button = UIButton()
+        let arrowImage = UIImage(named: "logoutIcon")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        button.setImage(arrowImage, for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var componentsView: ComponentsView = .init()
 
     // MARK: - Lifecycle Methods
@@ -74,6 +84,7 @@ class SettingsViewController: UIViewController {
         view.backgroundColor = AppColor.primary.color
 
         view.addSubviews(titleLabel,
+                         logoutButton,
                          componentsView)
 
         componentsView.addSubviews(settingsCollectionView,
@@ -95,6 +106,12 @@ class SettingsViewController: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.leading.equalToSuperview().offset(20)
+        }
+
+        logoutButton.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.trailing.equalToSuperview().offset(-24)
+            make.width.height.equalTo(30)
         }
 
         profilePictureImageView.snp.makeConstraints { make in
@@ -142,6 +159,14 @@ class SettingsViewController: UIViewController {
         editProfileVc.delegate = self
         present(editProfileVc, animated: true)
     }
+
+    @objc func logoutButtonTapped() {
+        showLogoutConfirmationAlert(completion: {
+            KeychainHelper.deleteAccessToken()
+            let loginViewController = LoginViewController()
+            self.navigationController?.setViewControllers([loginViewController], animated: true)
+        })
+    }
 }
 
 // MARK: - Extensions
@@ -174,7 +199,18 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.row {
+            case 0:
+                selectedViewController = SecurityViewController()
+            default:
+                selectedViewController = nil
+        }
+
+        if let selectedViewController = selectedViewController {
+            navigationController?.pushViewController(selectedViewController, animated: true)
+        }
+    }
 }
 
 extension SettingsViewController: UICollectionViewDataSource {
