@@ -12,6 +12,7 @@ enum TravioRouter {
     case login(params: Parameters)
     case register(params: Parameters)
     case getProfile
+    case editProfile(params: Parameters)
     case getAllPlaces
     case getPopularPlaces(limit: Int)
     case getNewPlaces(limit: Int)
@@ -37,6 +38,8 @@ enum TravioRouter {
             return "/v1/auth/register"
         case .getProfile:
             return "/v1/me"
+        case .editProfile:
+            return "/v1/edit-profile"
         case .getAllPlaces:
             return "/v1/places"
         case .getPopularPlaces:
@@ -72,6 +75,8 @@ enum TravioRouter {
             return .get
         case .deleteVisitById:
             return .delete
+        case .editProfile:
+            return .put
         }
     }
 
@@ -83,6 +88,8 @@ enum TravioRouter {
             return parameters
         case .getProfile:
             return nil
+        case .editProfile(let parameters):
+            return parameters
         case .getAllPlaces:
             return nil
         case .getPopularPlaces(let limit):
@@ -114,7 +121,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
-        case .getProfile, .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
+        case .getProfile, .editProfile, .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
         case .uploadImage:
             return ["Content-Type": "multipart/form-data"]

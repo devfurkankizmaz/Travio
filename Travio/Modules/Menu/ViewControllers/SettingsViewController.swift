@@ -132,6 +132,7 @@ class SettingsViewController: UIViewController {
     @objc func editProfileButtonTapped() {
         let editProfileVc = EditProfileViewController()
         editProfileVc.modalPresentationStyle = .fullScreen
+        editProfileVc.profile = viewModel.profile
         present(editProfileVc, animated: true)
     }
 }

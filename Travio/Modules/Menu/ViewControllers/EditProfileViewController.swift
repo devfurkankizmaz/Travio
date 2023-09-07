@@ -12,6 +12,16 @@ import UIKit
 class EditProfileViewController: UIViewController {
     // MARK: - Properties
 
+    var profile: Profile? {
+        didSet {
+            guard let profile = profile else { return }
+            updateUIComponents(with: profile)
+        }
+    }
+
+    private var selectedImage: UIImage?
+    private var protectedPPUrl: String?
+
     private lazy var profilePictureImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 60
@@ -34,7 +44,7 @@ class EditProfileViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Change Photo", for: .normal)
         button.titleLabel?.font = AppFont.poppinsRegular.withSize(12)
-        // button.addTarget(self, action: #selector(editProfileButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(changePhotoButtonTapped), for: .touchUpInside)
         let color = UIColor(cgColor: #colorLiteral(red: 0, green: 0.7667202353, blue: 0.9408947229, alpha: 1))
         button.setTitleColor(color, for: .normal)
         return button
@@ -91,6 +101,13 @@ class EditProfileViewController: UIViewController {
         return view
     }()
 
+    private lazy var saveButton: TravioButton = {
+        let button = TravioButton()
+        button.setTitle("Save", for: .normal)
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var componentsView: ComponentsView = .init()
 
     // MARK: - Lifecycle Methods
@@ -102,13 +119,34 @@ class EditProfileViewController: UIViewController {
 
     // MARK: - Private Methods
 
+    private func updateUIComponents(with profile: Profile) {
+        let imageUrl = URL(string: profile.ppUrl)
+        profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
+        createdInfo.titleView = profile.createdAt.formatISO8601ToCustomFormat()
+        roleInfo.titleView = profile.role
+        fullNameView.textField.text = profile.fullName
+        emailView.textField.text = profile.email
+        fullNameLabel.text = profile.fullName
+        protectedPPUrl = profile.ppUrl
+    }
+
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
 
         infoStackView.addArrangedSubviews(createdInfo, roleInfo)
-        view.addSubviews(titleLabel, dismissButton, componentsView, infoStackView)
-        componentsView.addSubviews(profilePictureImageView, fullNameLabel, changePhotoButton, fullNameView, emailView)
+
+        view.addSubviews(titleLabel,
+                         dismissButton,
+                         componentsView)
+
+        componentsView.addSubviews(profilePictureImageView,
+                                   fullNameLabel,
+                                   changePhotoButton,
+                                   infoStackView,
+                                   fullNameView,
+                                   emailView,
+                                   saveButton)
 
         setupLayout()
     }
@@ -175,13 +213,44 @@ class EditProfileViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(74)
         }
+
+        saveButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-24)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
+            make.height.equalTo(54)
+        }
     }
 
     // MARK: - Actions
 
+    @objc func saveButtonTapped() {}
+
     @objc func dismissButtonTapped() {
         dismiss(animated: true)
+    }
+
+    @objc func changePhotoButtonTapped() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
     }
 }
 
 // MARK: - Extensions
+
+extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        if let pickedImage = info[.originalImage] as? UIImage {
+            selectedImage = pickedImage
+            profilePictureImageView.image = pickedImage
+        }
+
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
