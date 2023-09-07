@@ -63,6 +63,13 @@ class SecuritySettingsViewController: UIViewController {
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // Detay sayfasından geri dönerken tab bar'ı tekrar görünür yap
+        self.tabBarController?.tabBar.isHidden = false
+    }
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true

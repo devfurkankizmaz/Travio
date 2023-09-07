@@ -54,7 +54,7 @@ class SettingsViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 8
         layout.minimumInteritemSpacing = 8
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -107,7 +107,7 @@ class SettingsViewController: UIViewController {
             make.top.equalTo(editButton.snp.bottom).offset(24)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-54)
         }
     }
 }
@@ -135,6 +135,7 @@ extension SettingsViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.item == 0 {
+                self.tabBarController?.tabBar.isHidden = true
                 let viewController = SecuritySettingsViewController()
                 navigationController?.pushViewController(viewController, animated: true)
             }

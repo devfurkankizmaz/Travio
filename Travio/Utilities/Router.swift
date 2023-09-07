@@ -23,6 +23,8 @@ enum TravioRouter {
     case uploadImage(imageData: [Data])
     case deleteVisitById(id: String)
     case getVisitByPlace(id: String)
+    case getProfileInfo
+    case putEditProfile(params: Parameters)
 
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
@@ -58,6 +60,10 @@ enum TravioRouter {
             return "/v1/visits/\(visitId)"
         case .getVisitByPlace(let placeId):
             return "/v1/visits/user/\(placeId)"
+        case .getProfileInfo:
+            return "/v1/me"
+        case .putEditProfile:
+            return "/v1/edit-profile"
         }
     }
 
@@ -65,10 +71,12 @@ enum TravioRouter {
         switch self {
         case .login, .register, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
-        case .getAllPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
+        case .getAllPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace, .getProfileInfo:
             return .get
         case .deleteVisitById:
             return .delete
+        case .putEditProfile:
+            return .put
         }
     }
 
@@ -102,6 +110,10 @@ enum TravioRouter {
             return nil
         case .getVisitByPlace:
             return nil
+        case .getProfileInfo:
+            return nil
+        case .putEditProfile(let parameters):
+            return parameters
         }
     }
 
@@ -109,7 +121,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
-        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
+        case .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit, .getProfileInfo, .putEditProfile:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
         case .uploadImage:
             return ["Content-Type": "multipart/form-data"]

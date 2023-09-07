@@ -64,6 +64,10 @@
 		0AFC1DEF2A8F96A1002A55B1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFC1DEE2A8F96A1002A55B1 /* RegisterViewController.swift */; };
 		0AFC1DF12A8FA892002A55B1 /* ComponentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */; };
 		0AFD27DC2A916B5C009BEC15 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 0AFD27DB2A916B5C009BEC15 /* Kingfisher */; };
+		D30DCCCD2AA85AC400EED30F /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DCCCC2AA85AC400EED30F /* EditProfileViewController.swift */; };
+		D30DCCCF2AA8641900EED30F /* EditProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DCCCE2AA8641900EED30F /* EditProfileModel.swift */; };
+		D30DCCD12AA86A1E00EED30F /* CustomProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DCCD02AA86A1E00EED30F /* CustomProfileView.swift */; };
+		D30DCCD32AA8727D00EED30F /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DCCD22AA8727D00EED30F /* EditProfileViewModel.swift */; };
 		D3569F8D2AA0AB84000653BC /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3569F8C2AA0AB84000653BC /* SettingsViewController.swift */; };
 		D3569F902AA0ABC3000653BC /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3569F8F2AA0ABC3000653BC /* SettingsModel.swift */; };
 		D3569F932AA0ABEB000653BC /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3569F922AA0ABEB000653BC /* SettingsViewModel.swift */; };
@@ -131,6 +135,10 @@
 		0AFC1DEC2A8F8C3C002A55B1 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		0AFC1DEE2A8F96A1002A55B1 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsView.swift; sourceTree = "<group>"; };
+		D30DCCCC2AA85AC400EED30F /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		D30DCCCE2AA8641900EED30F /* EditProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileModel.swift; sourceTree = "<group>"; };
+		D30DCCD02AA86A1E00EED30F /* CustomProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProfileView.swift; sourceTree = "<group>"; };
+		D30DCCD22AA8727D00EED30F /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		D3569F8C2AA0AB84000653BC /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D3569F8F2AA0ABC3000653BC /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		D3569F922AA0ABEB000653BC /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -215,6 +223,7 @@
 		0A0933602A9958CB00AE9B99 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				D30DCCC72AA85A8500EED30F /* EditProfile */,
 				D3F4B2612AA1C97D00E6B898 /* SecuritySettings */,
 				D3569F8A2AA0AB3D000653BC /* Settings */,
 				0A35EEBF2A9FA6A2008E9299 /* Home */,
@@ -274,6 +283,7 @@
 				0AB141182A94A2B600EEE32A /* GalleryViewCell.swift */,
 				0AB83DA12A9B2B8C00E9ABEB /* CustomAnnotation.swift */,
 				0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */,
+				D30DCCD02AA86A1E00EED30F /* CustomProfileView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -460,6 +470,40 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		D30DCCC72AA85A8500EED30F /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				D30DCCCA2AA85AA300EED30F /* Model */,
+				D30DCCC92AA85A9B00EED30F /* ViewModels */,
+				D30DCCC82AA85A9100EED30F /* ViewControllers */,
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
+		D30DCCC82AA85A9100EED30F /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D30DCCCC2AA85AC400EED30F /* EditProfileViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D30DCCC92AA85A9B00EED30F /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D30DCCD22AA8727D00EED30F /* EditProfileViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D30DCCCA2AA85AA300EED30F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D30DCCCE2AA8641900EED30F /* EditProfileModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D3569F8A2AA0AB3D000653BC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -633,6 +677,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D30DCCCD2AA85AC400EED30F /* EditProfileViewController.swift in Sources */,
 				D3C24FFB2AA50D6C00BA7641 /* NewPasswordTVC.swift in Sources */,
 				0ACBC21C2A9B40C000141CB9 /* AddPlaceViewController.swift in Sources */,
 				0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */,
@@ -643,6 +688,7 @@
 				0AFC1DE82A8F5AFD002A55B1 /* LoginViewController.swift in Sources */,
 				0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */,
 				D3569F8D2AA0AB84000653BC /* SettingsViewController.swift in Sources */,
+				D30DCCD12AA86A1E00EED30F /* CustomProfileView.swift in Sources */,
 				0A56F5622A90FF3F0093BBAA /* MainTabBarController.swift in Sources */,
 				0AFC1DEF2A8F96A1002A55B1 /* RegisterViewController.swift in Sources */,
 				0AC837392AA88E9B00425FB6 /* UIView+Extension.swift in Sources */,
@@ -654,6 +700,7 @@
 				0ACBC21E2A9B4DEE00141CB9 /* PhotoViewCell.swift in Sources */,
 				D3569F902AA0ABC3000653BC /* SettingsModel.swift in Sources */,
 				0A09337A2A9A3E2B00AE9B99 /* MapViewController.swift in Sources */,
+				D30DCCD32AA8727D00EED30F /* EditProfileViewModel.swift in Sources */,
 				0ACBC2212A9B66A600141CB9 /* VisitModel.swift in Sources */,
 				D3569F932AA0ABEB000653BC /* SettingsViewModel.swift in Sources */,
 				0AB141192A94A2B600EEE32A /* GalleryViewCell.swift in Sources */,
@@ -670,6 +717,7 @@
 				0A09334E2A990DFF00AE9B99 /* Router.swift in Sources */,
 				0AFC1DD62A8F55A0002A55B1 /* KeychainHelper.swift in Sources */,
 				0A56F5412A90B8540093BBAA /* RegisterViewModel.swift in Sources */,
+				D30DCCCF2AA8641900EED30F /* EditProfileModel.swift in Sources */,
 				0ACBC2242A9B67C300141CB9 /* VisitsViewModel.swift in Sources */,
 				0AA8C3992A9B09BC00F25219 /* LoginViewModel.swift in Sources */,
 				0AAEFAC02A9CCE1A0075B7C4 /* UploadModel.swift in Sources */,
