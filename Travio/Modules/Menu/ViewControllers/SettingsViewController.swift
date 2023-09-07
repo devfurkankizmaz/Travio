@@ -12,6 +12,7 @@ class SettingsViewController: UIViewController {
         imageView.layer.cornerRadius = 60
         imageView.backgroundColor = .darkGray
         imageView.image = UIImage(named: "imageNotFound")
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -72,8 +73,13 @@ class SettingsViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
 
-        view.addSubviews(titleLabel, componentsView)
-        componentsView.addSubviews(settingsCollectionView, profilePictureImageView, fullNameLabel, editProfileButton)
+        view.addSubviews(titleLabel,
+                         componentsView)
+
+        componentsView.addSubviews(settingsCollectionView,
+                                   profilePictureImageView,
+                                   fullNameLabel,
+                                   editProfileButton)
 
         setupLayout()
     }
@@ -114,8 +120,6 @@ class SettingsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
-    
-    
 
     private func fetchProfile() {
         viewModel.fetchProfile { [weak self] success in

@@ -48,6 +48,7 @@ class EditProfileViewController: UIViewController {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 60
         imageView.backgroundColor = .darkGray
+        imageView.contentMode = .scaleAspectFill
         imageView.image = UIImage(named: "imageNotFound")
         imageView.clipsToBounds = true
         return imageView
