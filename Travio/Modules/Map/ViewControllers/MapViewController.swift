@@ -20,22 +20,6 @@ class MapViewController: UIViewController {
 
     private var mapAnnotations: [CustomAnnotation] = []
 
-    private lazy var spinner: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.style = .large
-        indicator.color = .black
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-
-    private lazy var spinnerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.alpha = 0.6
-        view.isHidden = true
-        return view
-    }()
-
     private lazy var mapView: MKMapView = {
         let mapView = MKMapView()
         mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -71,18 +55,6 @@ class MapViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    private func showActivityIndicator() {
-        spinnerView.isHidden = false
-        spinner.startAnimating()
-        view.isUserInteractionEnabled = false
-    }
-
-    private func hideActivityIndicator() {
-        spinnerView.isHidden = true
-        spinner.stopAnimating()
-        view.isUserInteractionEnabled = true
-    }
-
     private func setupLongPressGesture() {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         mapView.addGestureRecognizer(longPressGesture)
@@ -110,20 +82,11 @@ class MapViewController: UIViewController {
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
-        view.addSubviews(mapView, placesCollectionView, spinnerView, spinner)
+        view.addSubviews(mapView, placesCollectionView)
         setupLayout()
     }
 
     private func setupLayout() {
-        spinnerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        spinner.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-
         mapView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -183,7 +146,7 @@ extension MapViewController: MapViewControllerDelegate {
     }
 
     func fetchPlaces() {
-        showActivityIndicator()
+        showSpinner()
         mapViewModel.fetchPlaces { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
@@ -191,7 +154,7 @@ extension MapViewController: MapViewControllerDelegate {
                     self?.placesCollectionView.reloadData()
                     self?.mapAnnotations = self?.createAnnotations() ?? []
                     self?.updateMapAnnotations()
-                    self?.hideActivityIndicator()
+                    self?.hideSpinner()
                 }
             }
         }

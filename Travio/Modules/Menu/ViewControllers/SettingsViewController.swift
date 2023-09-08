@@ -139,6 +139,7 @@ class SettingsViewController: UIViewController {
     }
 
     private func fetchProfile() {
+        showSpinner()
         viewModel.fetchProfile { [weak self] success in
             if success {
                 DispatchQueue.main.async {
@@ -146,6 +147,8 @@ class SettingsViewController: UIViewController {
                     let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
                     self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
                 }
+            } else {
+                self?.hideSpinner()
             }
         }
     }

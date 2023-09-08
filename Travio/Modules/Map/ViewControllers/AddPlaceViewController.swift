@@ -15,24 +15,6 @@ class AddPlaceViewController: UIViewController {
     var coordinate: (latitude: Double, longitude: Double)?
     private var selectedImages: [UIImage] = []
 
-    private lazy var spinner: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.style = .large
-        indicator.color = .black
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-
-    private lazy var spinnerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.alpha = 0.6
-        view.isHidden = true
-        return view
-    }()
-
-    // MARK: - Create an image picker controller for selecting photos.
-
     private lazy var imagePickerController: UIImagePickerController = {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -106,7 +88,7 @@ class AddPlaceViewController: UIViewController {
     // MARK: - Private Methods
 
     private func setupView() {
-        view.addSubviews(placeNameTextField, descriptionTextView, stateTextField, rectangle, addButton, addPhotosCollectionView, spinner, spinnerView)
+        view.addSubviews(placeNameTextField, descriptionTextView, stateTextField, rectangle, addButton, addPhotosCollectionView)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -151,27 +133,6 @@ class AddPlaceViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-24)
             make.height.equalTo(54)
         }
-
-        spinner.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-
-        spinnerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-
-    private func showActivityIndicator() {
-        spinnerView.isHidden = false
-        spinner.startAnimating()
-        view.isUserInteractionEnabled = false
-    }
-
-    private func hideActivityIndicator() {
-        spinnerView.isHidden = true
-        spinner.stopAnimating()
-        view.isUserInteractionEnabled = true
     }
 
     // MARK: - Public Methods
@@ -179,13 +140,13 @@ class AddPlaceViewController: UIViewController {
     // MARK: - Actions
 
     @objc func addPlaceButtonTapped() {
-        showActivityIndicator()
+        showSpinner()
 
         addPlaceViewModel.uploadImage(images: selectedImages) { [weak self] uploadResult in
             if uploadResult {
                 self?.performPostPlaceIfImagesUploaded()
             } else {
-                self?.hideActivityIndicator()
+                self?.hideSpinner()
             }
         }
     }
@@ -210,7 +171,7 @@ class AddPlaceViewController: UIViewController {
               let latitude = coordinate?.latitude,
               let longitude = coordinate?.longitude
         else {
-            hideActivityIndicator()
+            hideSpinner()
             return
         }
 
@@ -227,14 +188,14 @@ class AddPlaceViewController: UIViewController {
                     self?.dismiss(animated: true)
                     self?.delegate?.fetchPlaces()
                     self?.delegate?.showAddedAlert()
-                    self?.hideActivityIndicator()
+                    self?.hideSpinner()
                 } else {
-                    self?.hideActivityIndicator()
+                    self?.hideSpinner()
                 }
             }
         } else {
             showAlert(title: "Validation Error", message: errorMessage)
-            hideActivityIndicator()
+            hideSpinner()
         }
     }
 }
