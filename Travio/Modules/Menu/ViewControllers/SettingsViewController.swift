@@ -167,6 +167,7 @@ class SettingsViewController: UIViewController {
             KeychainHelper.deleteAccessToken()
             let loginViewController = LoginViewController()
             self.navigationController?.setViewControllers([loginViewController], animated: true)
+            loginViewController.showAlert(from: self, title: "Success Logout", message: "You're successfully logged out.", completion: {})
         })
     }
 }

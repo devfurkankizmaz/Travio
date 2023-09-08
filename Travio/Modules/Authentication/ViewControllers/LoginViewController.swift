@@ -107,6 +107,10 @@ class LoginViewController: UIViewController {
 
     // MARK: - Private Methods
 
+    func showAlert(from viewController: UIViewController, title: String, message: String, completion: (() -> Void)?) {
+        showAlert(title: title, message: message)
+    }
+
     private func showActivityIndicator() {
         spinnerView.isHidden = false
         spinner.startAnimating()
