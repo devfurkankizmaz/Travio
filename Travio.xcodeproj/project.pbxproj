@@ -43,6 +43,11 @@
 		0AB141172A949DA600EEE32A /* GalleryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB141162A949DA600EEE32A /* GalleryModel.swift */; };
 		0AB141192A94A2B600EEE32A /* GalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB141182A94A2B600EEE32A /* GalleryViewCell.swift */; };
 		0AB83DA22A9B2B8C00E9ABEB /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB83DA12A9B2B8C00E9ABEB /* CustomAnnotation.swift */; };
+		0ABB1CCA2AAB03E00059A913 /* SecurityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CC92AAB03E00059A913 /* SecurityModel.swift */; };
+		0ABB1CCC2AAB04100059A913 /* SecurityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CCB2AAB04100059A913 /* SecurityViewModel.swift */; };
+		0ABB1CCE2AAB07C40059A913 /* SecuritySettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CCD2AAB07C40059A913 /* SecuritySettingCell.swift */; };
+		0ABB1CD02AAB18430059A913 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CCF2AAB18430059A913 /* PrivacyView.swift */; };
+		0ABB1CD22AAB1D5E0059A913 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CD12AAB1D5E0059A913 /* SectionHeaderView.swift */; };
 		0AC837352AA88E2400425FB6 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837342AA88E2400425FB6 /* UIImage+Extension.swift */; };
 		0AC837372AA88E5000425FB6 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837362AA88E5000425FB6 /* String+Extension.swift */; };
 		0AC837392AA88E9B00425FB6 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837382AA88E9B00425FB6 /* UIView+Extension.swift */; };
@@ -112,6 +117,11 @@
 		0AB141162A949DA600EEE32A /* GalleryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryModel.swift; sourceTree = "<group>"; };
 		0AB141182A94A2B600EEE32A /* GalleryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewCell.swift; sourceTree = "<group>"; };
 		0AB83DA12A9B2B8C00E9ABEB /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
+		0ABB1CC92AAB03E00059A913 /* SecurityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityModel.swift; sourceTree = "<group>"; };
+		0ABB1CCB2AAB04100059A913 /* SecurityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityViewModel.swift; sourceTree = "<group>"; };
+		0ABB1CCD2AAB07C40059A913 /* SecuritySettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecuritySettingCell.swift; sourceTree = "<group>"; };
+		0ABB1CCF2AAB18430059A913 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
+		0ABB1CD12AAB1D5E0059A913 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		0AC837342AA88E2400425FB6 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		0AC837362AA88E5000425FB6 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		0AC837382AA88E9B00425FB6 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -360,6 +370,7 @@
 			children = (
 				0A7DD9BD2AA919080067BED4 /* SettingsViewModel.swift */,
 				0A5B3D702AA9F6330091DFC2 /* EditProfileViewModel.swift */,
+				0ABB1CCB2AAB04100059A913 /* SecurityViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -369,6 +380,7 @@
 			children = (
 				0A7DD9BB2AA918ED0067BED4 /* SettingsModel.swift */,
 				0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */,
+				0ABB1CC92AAB03E00059A913 /* SecurityModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -378,6 +390,9 @@
 			children = (
 				0A7DD9B72AA9110D0067BED4 /* SettingsViewCell.swift */,
 				0A5B3D6E2AA9C2B90091DFC2 /* InfoView.swift */,
+				0ABB1CCD2AAB07C40059A913 /* SecuritySettingCell.swift */,
+				0ABB1CCF2AAB18430059A913 /* PrivacyView.swift */,
+				0ABB1CD12AAB1D5E0059A913 /* SectionHeaderView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -599,9 +614,11 @@
 			files = (
 				0ACBC21C2A9B40C000141CB9 /* AddPlaceViewController.swift in Sources */,
 				0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */,
+				0ABB1CCA2AAB03E00059A913 /* SecurityModel.swift in Sources */,
 				0AB141172A949DA600EEE32A /* GalleryModel.swift in Sources */,
 				0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */,
 				0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */,
+				0ABB1CCE2AAB07C40059A913 /* SecuritySettingCell.swift in Sources */,
 				0A35EEC22A9FA6BE008E9299 /* HomeViewController.swift in Sources */,
 				0A7DD9BC2AA918ED0067BED4 /* SettingsModel.swift in Sources */,
 				0AFC1DE82A8F5AFD002A55B1 /* LoginViewController.swift in Sources */,
@@ -620,9 +637,11 @@
 				0AB141192A94A2B600EEE32A /* GalleryViewCell.swift in Sources */,
 				0AC837372AA88E5000425FB6 /* String+Extension.swift in Sources */,
 				0A5B3D712AA9F6330091DFC2 /* EditProfileViewModel.swift in Sources */,
+				0ABB1CCC2AAB04100059A913 /* SecurityViewModel.swift in Sources */,
 				0AFC1DF12A8FA892002A55B1 /* ComponentsView.swift in Sources */,
 				0AA8C3902A9A6B0700F25219 /* DetailsViewController.swift in Sources */,
 				0AFC1DB62A8F54E7002A55B1 /* SceneDelegate.swift in Sources */,
+				0ABB1CD02AAB18430059A913 /* PrivacyView.swift in Sources */,
 				0A0933742A9A343100AE9B99 /* NetworkManager.swift in Sources */,
 				0A0933652A99598C00AE9B99 /* ApiResponse.swift in Sources */,
 				0A60CA242A98A51B00A8418E /* PlaceViewCell.swift in Sources */,
@@ -651,6 +670,7 @@
 				0AA8C3972A9B088800F25219 /* VisitsViewController.swift in Sources */,
 				0AA8C3932A9A6BB600F25219 /* DetailsViewModel.swift in Sources */,
 				0AC8373F2AA892CF00425FB6 /* NotificationCenterManager.swift in Sources */,
+				0ABB1CD22AAB1D5E0059A913 /* SectionHeaderView.swift in Sources */,
 				0AB83DA22A9B2B8C00E9ABEB /* CustomAnnotation.swift in Sources */,
 				0AF07A062AA72E4400DB194B /* ListViewCell.swift in Sources */,
 			);
