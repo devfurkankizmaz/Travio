@@ -17,9 +17,10 @@ class MainTabBarController: UITabBarController {
         let mapNC = createNavigationController(rootViewController: mapVC, title: "Map", imageName: "map")
 
         let menuVC = SettingsViewController()
-        let menuNC = createNavigationController(rootViewController: menuVC, title: "Menu", imageName: "menu")
+        menuVC.tabBarItem = UITabBarItem(title: "Menu", image: UIImage(named: "menu"), tag: 3)
+        // let menuNC = createNavigationController(rootViewController: menuVC, title: "Menu", imageName: "menu")
 
-        viewControllers = [homeNC, visitsNC, mapNC, menuNC]
+        viewControllers = [homeNC, visitsNC, mapNC, menuVC]
         selectedIndex = 0
 
         customizeTabBarAppearance()
