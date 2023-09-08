@@ -161,7 +161,9 @@ class SettingsViewController: UIViewController {
     }
 
     @objc func logoutButtonTapped() {
-        showLogoutConfirmationAlert(completion: {
+        let title = "Confirm Logout"
+        let message = "Are you sure you want to log out?"
+        showConfirmationAlert(title: title, message: message, completion: {
             KeychainHelper.deleteAccessToken()
             let loginViewController = LoginViewController()
             self.navigationController?.setViewControllers([loginViewController], animated: true)

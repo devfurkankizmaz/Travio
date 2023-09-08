@@ -32,10 +32,10 @@ extension UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    func showLogoutConfirmationAlert(completion: @escaping () -> Void) {
+    func showConfirmationAlert(title:String, message: String,completion: @escaping () -> Void) {
         let alertController = UIAlertController(
-            title: "Confirm Logout",
-            message: "Are you sure you want to log out?",
+            title: title,
+            message: message,
             preferredStyle: .alert
         )
 
