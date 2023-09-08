@@ -143,6 +143,7 @@ class SettingsViewController: UIViewController {
         viewModel.fetchProfile { [weak self] success in
             if success {
                 DispatchQueue.main.async {
+                    self?.hideSpinner()
                     self?.fullNameLabel.text = self?.viewModel.profile?.fullName
                     let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
                     self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
