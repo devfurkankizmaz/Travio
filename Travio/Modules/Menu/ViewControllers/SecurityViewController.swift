@@ -68,7 +68,10 @@ class SecurityViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
         componentsView.addSubviews(securityCollectionView)
-        view.addSubviews(backButton, titleLabel, componentsView, saveButton)
+        view.addSubviews(backButton,
+                         titleLabel,
+                         componentsView,
+                         saveButton)
         setupLayout()
     }
 

@@ -10,7 +10,7 @@ import UIKit
 class SecuritySettingCell: UICollectionViewCell {
     static let identifier = "SecuritySettingCell"
     
-    // MARK: - UI Elements
+    // MARK: - Properties
     
     private lazy var privacyView: PrivacyView = {
         let view = PrivacyView()

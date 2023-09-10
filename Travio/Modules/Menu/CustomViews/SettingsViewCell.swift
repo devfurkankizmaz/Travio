@@ -56,7 +56,9 @@ class SettingsViewCell: UICollectionViewCell {
         addShadow()
 
         contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
-        contentView.addSubviews(settingLabel, settingImageView, settingArrowImageView)
+        contentView.addSubviews(settingLabel,
+                                settingImageView,
+                                settingArrowImageView)
         setupLayout()
     }
 
