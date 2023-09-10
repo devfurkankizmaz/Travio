@@ -5,6 +5,7 @@
 //  Created by Furkan Kızmaz on 18.08.2023.
 //
 
+import Alamofire
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -22,7 +23,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
 
-        // Customize the NavigationBar for the whole app
         navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController.navigationBar.shadowImage = UIImage()
         navigationController.navigationBar.isTranslucent = true
@@ -31,6 +31,43 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .font: UIFont.systemFont(ofSize: 20, weight: .bold)
         ]
         navigationController.navigationBar.tintColor = .white
+
+        if let token = KeychainHelper.loadAccessToken() {
+            isTokenValid(token) { isValid in
+                if isValid {
+                    self.openMainTabBarController()
+                } else {
+                    self.redirectToLoginScreen()
+                }
+            }
+        } else {
+            redirectToLoginScreen()
+        }
+    }
+
+    func isTokenValid(_ token: String, completion: @escaping (Bool) -> Void) {
+        NetworkManager.shared.request(TravioRouter.getProfile, responseType: Profile.self) { result in
+            switch result {
+            case .success:
+                completion(true)
+            case .failure:
+                completion(false)
+            }
+        }
+    }
+
+    func openMainTabBarController() {
+        let mainTabBarController = MainTabBarController()
+        if let navigationController = window?.rootViewController as? UINavigationController {
+            navigationController.setViewControllers([mainTabBarController], animated: true)
+        }
+    }
+
+    func redirectToLoginScreen() {
+        let loginViewController = LoginViewController()
+        if let navigationController = window?.rootViewController as? UINavigationController {
+            navigationController.setViewControllers([loginViewController], animated: true)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
