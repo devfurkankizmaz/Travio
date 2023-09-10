@@ -16,7 +16,7 @@ class EditProfileViewModel {
     typealias getProfileHandler = (Bool) -> Void
     
     var profileInfos: Profile?
-    private var urls: [String] = []
+    public var urls: [String] = []
     
     func uploadImage(images: [UIImage]?, callback: @escaping UploadImageHandler) {
         var imagesData: [Data] = []
@@ -46,14 +46,15 @@ class EditProfileViewModel {
         }
     }
     
-    func getProfileInfo(callback: @escaping getProfileHandler) {
+    func getProfile(callback: @escaping getProfileHandler) {
         NetworkManager.shared.request(TravioRouter.getProfileInfo, responseType: Profile.self) { result in
             switch result {
             case .success(let response):
-                callback(true)
-                //callback("You're fetched all visits successfully.", true)
+                print(response)
                 self.profileInfos = response
+                callback(true)
             case .failure(let error):
+                print(error)
                 callback(false)
             }
         }

@@ -7,10 +7,14 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import Kingfisher
 
-class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class EditProfileViewController: UIViewController {
     
-   
+    public var selectedImages: [UIImage] = []
+    
+    weak var profileUpdateDelegate: ProfileUpdateDelegate?
     
     private lazy var editProfileViewModel: EditProfileViewModel = {
         let viewModel = EditProfileViewModel()
@@ -30,7 +34,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         let arrowImage = UIImage(named: "exit")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(arrowImage, for: .normal)
         button.contentMode = .scaleAspectFit
-        //button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -100,7 +104,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         super.viewDidLoad()
 
         setupView()
-        configure()
+        getProfile()
     }
     
     @objc private func changeButtonTapped() {
@@ -110,12 +114,40 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         present(imagePicker, animated: true)
     }
     
-    @objc private func saveButtonTapped() {
-        
+    @objc private func backButtonTapped(){
+        self.dismiss(animated: true, completion: nil)
     }
     
-    private func configure() {
-        
+    @objc private func saveButtonTapped() {
+        editProfileViewModel.uploadImage(images: selectedImages) { success in
+            if success{
+                DispatchQueue.main.async { [self] in
+                    guard let name = self.fullNameView.textField.text,
+                          let email = self.emailView.textField.text,
+                          let imageURL =  self.editProfileViewModel.urls.first else { return }
+                    let params = ["full_name": name, "email": email, "pp_url": imageURL]
+                    self.editProfileViewModel.putEditProfile(name: name, email: email, ppUrl: imageURL)
+                    self.profileUpdateDelegate?.updateProfile(name: name, image: self.selectedImages.first)
+                    
+                }
+            }
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    private func getProfile() {
+        editProfileViewModel.getProfile(callback: { success in
+            if success {
+                    guard let name = self.editProfileViewModel.profileInfos?.full_name,
+                          let createdData = self.editProfileViewModel.profileInfos?.created_at,
+                          let imageURL =  self.editProfileViewModel.profileInfos?.pp_url,
+                          let role =  self.editProfileViewModel.profileInfos?.role else { return }
+                    self.nameLabel.text = name
+                self.dateView.labelView = createdData.formatISO8601ToCustomFormat()
+                self.profileImageView.kf.setImage(with: URL(string: imageURL))
+                    self.roleView.labelView = role
+            }
+        })
     }
     
     private func setupView() {
@@ -185,5 +217,28 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             make.height.equalTo(54)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
         }
+    }
+}
+
+extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image =  info[.originalImage] as? UIImage {
+        
+            let selectedImageIndex = picker.view.tag
+            if selectedImageIndex < selectedImages.count {
+                selectedImages[selectedImageIndex] = image
+            } else {
+                selectedImages.append(image)
+            }
+            profileImageView.image = selectedImages.first
+        }
+
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+        picker.dismiss(animated: true, completion: nil)
     }
 }

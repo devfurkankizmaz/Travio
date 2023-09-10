@@ -7,8 +7,15 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
+
+protocol ProfileUpdateDelegate: AnyObject {
+    func updateProfile(name: String, image: UIImage?)
+}
 
 class SettingsViewController: UIViewController {
+    
+    
 
     private lazy var settingsViewModel: SettingsViewModel = {
         let viewModel = SettingsViewModel()
@@ -66,10 +73,27 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        getProfile()
+    }
+    
+    private func getProfile() {
+        settingsViewModel.getProfile(callback: { success in
+            if success {
+                DispatchQueue.main.async {
+                    guard let name = self.settingsViewModel.profileInfos?.full_name,
+                          let image = self.settingsViewModel.profileInfos?.pp_url else { return }
+                    self.nameLabel.text = name
+                    self.profileImageView.kf.setImage(with: URL(string: image))
+                }
+            }
+        })
     }
     
     @objc func editButtonTapped() {
-        print("Edit Butonu tıkladı")
+        let vc = EditProfileViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.profileUpdateDelegate = self
+        self.present(vc, animated: true)
     }
 
     private func setupView() {
@@ -108,6 +132,15 @@ class SettingsViewController: UIViewController {
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview().offset(-54)
+        }
+    }
+}
+
+extension SettingsViewController: ProfileUpdateDelegate {
+    func updateProfile(name: String, image: UIImage?) {
+        self.nameLabel.text = name
+        if let updatedImage = image {
+            self.profileImageView.image = updatedImage
         }
     }
 }
