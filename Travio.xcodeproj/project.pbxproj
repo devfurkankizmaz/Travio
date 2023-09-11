@@ -279,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				0AA44B352A95F1AF0070052D /* CustomTextView.swift */,
+				0AF07A052AA72E4400DB194B /* ListViewCell.swift */,
 				0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */,
 				0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */,
 				0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */,
@@ -323,7 +324,6 @@
 			isa = PBXGroup;
 			children = (
 				0A35EEC12A9FA6BE008E9299 /* HomeViewController.swift */,
-				0A9D20B72AA4FA2200334128 /* ListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -332,7 +332,6 @@
 			isa = PBXGroup;
 			children = (
 				0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */,
-				0AF07A032AA72A3B00DB194B /* ListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -341,7 +340,6 @@
 			isa = PBXGroup;
 			children = (
 				0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */,
-				0AF07A052AA72E4400DB194B /* ListViewCell.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -349,6 +347,7 @@
 		0A7DD9B22AA90E310067BED4 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				0A98112D2AAEEBE8009AB71A /* AddedPlaces */,
 				0A98111C2AAE380A009AB71A /* Settings */,
 				0A98111D2AAE3812009AB71A /* Security */,
 				0A9811262AAE3A60009AB71A /* EditProfile */,
@@ -487,9 +486,41 @@
 			path = CustomViews;
 			sourceTree = "<group>";
 		};
+		0A98112D2AAEEBE8009AB71A /* AddedPlaces */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811302AAEEBFC009AB71A /* ViewModels */,
+				0A98112F2AAEEBF5009AB71A /* ViewControllers */,
+				0A98112E2AAEEBEF009AB71A /* Models */,
+			);
+			path = AddedPlaces;
+			sourceTree = "<group>";
+		};
+		0A98112E2AAEEBEF009AB71A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0A98112F2AAEEBF5009AB71A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0A9811302AAEEBFC009AB71A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		0AA8C38E2A9A6AE700F25219 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				0A9D20B72AA4FA2200334128 /* ListViewController.swift */,
 				0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */,
 			);
 			path = ViewControllers;
@@ -499,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				0AA8C3922A9A6BB600F25219 /* DetailsViewModel.swift */,
+				0AF07A032AA72A3B00DB194B /* ListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
