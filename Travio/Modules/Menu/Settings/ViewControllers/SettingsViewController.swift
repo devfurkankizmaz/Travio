@@ -167,12 +167,20 @@ class SettingsViewController: UIViewController {
     @objc func logoutButtonTapped() {
         let title = "Confirm Logout"
         let message = "Are you sure you want to log out?"
-        showConfirmationAlert(title: title, message: message, completion: {
+
+        showConfirmationAlert(title: title, message: message) { [weak self] in
             KeychainHelper.deleteAccessToken()
             let loginViewController = LoginViewController()
-            self.navigationController?.setViewControllers([loginViewController], animated: true)
-            loginViewController.showAlert(from: self, title: "Success Logout", message: "You're successfully logged out.", completion: {})
-        })
+
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first
+            {
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    window.rootViewController = UINavigationController(rootViewController: loginViewController)
+                }, completion: nil)
+            }
+            loginViewController.showAlert(from: self!, title: "Success Logout", message: "You're successfully logged out.") {}
+        }
     }
 }
 
@@ -216,6 +224,8 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
                 if let listVC = selectedViewController as? ListViewController {
                     listVC.selectedSectionType = .added
                 }
+            case 3:
+                selectedViewController = HelpViewController()
 
             default:
                 selectedViewController = nil

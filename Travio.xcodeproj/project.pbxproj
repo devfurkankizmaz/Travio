@@ -32,6 +32,12 @@
 		0A7DD9C02AA91AC40067BED4 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A7DD9BF2AA91AC40067BED4 /* Poppins-Light.ttf */; };
 		0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */; };
 		0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */; };
+		0A9811372AAEFA5F009AB71A /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811362AAEFA5F009AB71A /* HelpViewController.swift */; };
+		0A9811392AAEFCCB009AB71A /* FAQModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811382AAEFCCB009AB71A /* FAQModel.swift */; };
+		0A98113B2AAEFD57009AB71A /* HelpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */; };
+		0A9811412AAF3D4C009AB71A /* ExpandableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */; };
+		0A9811432AAF8832009AB71A /* NavigationControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */; };
+		0A9811462AAF8861009AB71A /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9811452AAF8861009AB71A /* JWTDecode */; };
 		0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D20B72AA4FA2200334128 /* ListViewController.swift */; };
 		0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA44B352A95F1AF0070052D /* CustomTextView.swift */; };
 		0AA8C3902A9A6B0700F25219 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */; };
@@ -107,6 +113,11 @@
 		0A7DD9BF2AA91AC40067BED4 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
 		0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
+		0A9811362AAEFA5F009AB71A /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		0A9811382AAEFCCB009AB71A /* FAQModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQModel.swift; sourceTree = "<group>"; };
+		0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewModel.swift; sourceTree = "<group>"; };
+		0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCell.swift; sourceTree = "<group>"; };
+		0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerHelper.swift; sourceTree = "<group>"; };
 		0A9D20B72AA4FA2200334128 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		0AA44B352A95F1AF0070052D /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -164,6 +175,7 @@
 				0AFD27DC2A916B5C009BEC15 /* Kingfisher in Frameworks */,
 				0A7A7A4D2A937D3C000A4B43 /* IQKeyboardManagerSwift in Frameworks */,
 				0AFC1DD12A8F556F002A55B1 /* Alamofire in Frameworks */,
+				0A9811462AAF8861009AB71A /* JWTDecode in Frameworks */,
 				0AFC1DD42A8F557E002A55B1 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,6 +359,7 @@
 		0A7DD9B22AA90E310067BED4 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				0A9811312AAEFA01009AB71A /* Help */,
 				0A98111C2AAE380A009AB71A /* Settings */,
 				0A98111D2AAE3812009AB71A /* Security */,
 				0A9811262AAE3A60009AB71A /* EditProfile */,
@@ -485,6 +498,49 @@
 			path = CustomViews;
 			sourceTree = "<group>";
 		};
+		0A9811312AAEFA01009AB71A /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811352AAEFA4C009AB71A /* CustomViews */,
+				0A9811342AAEFA40009AB71A /* ViewModels */,
+				0A9811332AAEFA3A009AB71A /* ViewControllers */,
+				0A9811322AAEFA33009AB71A /* Models */,
+			);
+			path = Help;
+			sourceTree = "<group>";
+		};
+		0A9811322AAEFA33009AB71A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811382AAEFCCB009AB71A /* FAQModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0A9811332AAEFA3A009AB71A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811362AAEFA5F009AB71A /* HelpViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0A9811342AAEFA40009AB71A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0A9811352AAEFA4C009AB71A /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
 		0AA8C38E2A9A6AE700F25219 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -600,6 +656,7 @@
 				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
 				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
 				0ABB1CD32AAB4B000059A913 /* ActivityIndicator.swift */,
+				0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -637,6 +694,7 @@
 				0AFC1DD32A8F557E002A55B1 /* SnapKit */,
 				0AFD27DB2A916B5C009BEC15 /* Kingfisher */,
 				0A7A7A4C2A937D3C000A4B43 /* IQKeyboardManagerSwift */,
+				0A9811452AAF8861009AB71A /* JWTDecode */,
 			);
 			productName = Travio;
 			productReference = 0AFC1DB02A8F54E7002A55B1 /* Travio.app */;
@@ -671,6 +729,7 @@
 				0AFC1DD22A8F557E002A55B1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				0AFD27DA2A916B5C009BEC15 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				0A7A7A4B2A937D3C000A4B43 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				0A9811442AAF8861009AB71A /* XCRemoteSwiftPackageReference "JWTDecode" */,
 			);
 			productRefGroup = 0AFC1DB12A8F54E7002A55B1 /* Products */;
 			projectDirPath = "";
@@ -710,6 +769,7 @@
 				0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */,
 				0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */,
 				0ABB1CCE2AAB07C40059A913 /* SecuritySettingCell.swift in Sources */,
+				0A98113B2AAEFD57009AB71A /* HelpViewModel.swift in Sources */,
 				0A35EEC22A9FA6BE008E9299 /* HomeViewController.swift in Sources */,
 				0A7DD9BC2AA918ED0067BED4 /* SettingsModel.swift in Sources */,
 				0AFC1DE82A8F5AFD002A55B1 /* LoginViewController.swift in Sources */,
@@ -748,11 +808,15 @@
 				0ACBC2242A9B67C300141CB9 /* VisitsViewModel.swift in Sources */,
 				0AA8C3992A9B09BC00F25219 /* LoginViewModel.swift in Sources */,
 				0AAEFAC02A9CCE1A0075B7C4 /* UploadModel.swift in Sources */,
+				0A9811412AAF3D4C009AB71A /* ExpandableCell.swift in Sources */,
 				0AFC1DE22A8F5666002A55B1 /* Font.swift in Sources */,
 				0AC837352AA88E2400425FB6 /* UIImage+Extension.swift in Sources */,
 				0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */,
 				0AC8373B2AA88F6C00425FB6 /* UIStackView+Extension.swift in Sources */,
+				0A9811372AAEFA5F009AB71A /* HelpViewController.swift in Sources */,
+				0A9811392AAEFCCB009AB71A /* FAQModel.swift in Sources */,
 				0AF07A042AA72A3B00DB194B /* ListViewModel.swift in Sources */,
+				0A9811432AAF8832009AB71A /* NavigationControllerHelper.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
 				0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */,
 				0A5B3D732AAA6D340091DFC2 /* SecurityViewController.swift in Sources */,
@@ -990,6 +1054,14 @@
 				minimumVersion = 6.0.0;
 			};
 		};
+		0A9811442AAF8861009AB71A /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		0AFC1DCF2A8F556F002A55B1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1021,6 +1093,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A7A7A4B2A937D3C000A4B43 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		0A9811452AAF8861009AB71A /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A9811442AAF8861009AB71A /* XCRemoteSwiftPackageReference "JWTDecode" */;
+			productName = JWTDecode;
 		};
 		0AFC1DD02A8F556F002A55B1 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

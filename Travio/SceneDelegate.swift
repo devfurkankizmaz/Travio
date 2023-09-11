@@ -13,61 +13,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
 
-        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-
-        let viewController = LoginViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-
-        window?.rootViewController = navigationController
-        window?.windowScene = windowScene
-        window?.makeKeyAndVisible()
-
-        navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController.navigationBar.shadowImage = UIImage()
-        navigationController.navigationBar.isTranslucent = true
-        navigationController.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
-        ]
-        navigationController.navigationBar.tintColor = .white
-
-        if let token = KeychainHelper.loadAccessToken() {
-            isTokenValid(token) { isValid in
-                if isValid {
-                    self.openMainTabBarController()
-                } else {
-                    self.redirectToLoginScreen()
-                }
-            }
-        } else {
-            redirectToLoginScreen()
-        }
-    }
-
-    func isTokenValid(_ token: String, completion: @escaping (Bool) -> Void) {
-        NetworkManager.shared.request(TravioRouter.getProfile, responseType: Profile.self) { result in
-            switch result {
-            case .success:
-                completion(true)
-            case .failure:
-                completion(false)
-            }
-        }
-    }
-
-    func openMainTabBarController() {
-        let mainTabBarController = MainTabBarController()
-        if let navigationController = window?.rootViewController as? UINavigationController {
-            navigationController.setViewControllers([mainTabBarController], animated: true)
-        }
-    }
-
-    func redirectToLoginScreen() {
-        let loginViewController = LoginViewController()
-        if let navigationController = window?.rootViewController as? UINavigationController {
-            navigationController.setViewControllers([loginViewController], animated: true)
-        }
+        NavigationControllerHelper.navigateToAppropriateScreen(window: window, token: KeychainHelper.loadAccessToken())
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
