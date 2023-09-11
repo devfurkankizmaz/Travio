@@ -46,7 +46,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func isTokenValid(_ token: String, completion: @escaping (Bool) -> Void) {
-        NetworkManager.shared.request(TravioRouter.getProfile, responseType: Profile.self) { result in
+        NetworkManager.shared.request(TravioRouter.getProfileInfo, responseType: Profile.self) { result in
             switch result {
             case .success:
                 completion(true)

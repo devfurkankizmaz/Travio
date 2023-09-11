@@ -1,238 +1,176 @@
+//
+//  SettingsViewController.swift
+//  Travio
+//
+//  Created by Furkan Kızmaz on 7.09.2023.
+//
+
+
 import Kingfisher
 import SnapKit
 import UIKit
 
+protocol ProfileUpdateDelegate: AnyObject {
+    func updateProfile(name: String, image: UIImage?)
+}
+
 class SettingsViewController: UIViewController {
-    // MARK: - Properties
 
-    private var selectedViewController: UIViewController?
-    private lazy var viewModel: SettingsViewModel = .init()
-
-    private lazy var profilePictureImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 60
-        imageView.backgroundColor = .darkGray
-        imageView.image = UIImage(named: "imageNotFound")
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
+    private lazy var settingsViewModel: SettingsViewModel = {
+        let viewModel = SettingsViewModel()
+        return viewModel
     }()
 
-    private lazy var fullNameLabel: UILabel = {
+    private lazy var componentsView = ComponentsView()
+
+    private lazy var settingsLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFont.poppinsSemiBold.withSize(16)
-        label.textAlignment = .center
-        label.text = "John Doe"
-        label.textColor = AppColor.secondary.color
-        return label
-    }()
-
-    private lazy var editProfileButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Edit Profile", for: .normal)
-        button.titleLabel?.font = AppFont.poppinsMedium.withSize(12)
-        button.addTarget(self, action: #selector(editProfileButtonTapped), for: .touchUpInside)
-        let color = UIColor(cgColor: #colorLiteral(red: 0, green: 0.7667202353, blue: 0.9408947229, alpha: 1))
-        button.setTitleColor(color, for: .normal)
-        return button
-    }()
-
-    private lazy var settingsCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 8
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.delegate = self
-        cv.showsVerticalScrollIndicator = false
-        cv.dataSource = self
-        cv.register(SettingsViewCell.self, forCellWithReuseIdentifier: SettingsViewCell.identifier)
-        return cv
-    }()
-
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.poppinsSemiBold.withSize(32)
+        label.font = AppFont.poppinsSemiBold.withSize(36)
         label.text = "Settings"
         label.textColor = .white
         return label
     }()
 
-    private lazy var logoutButton: UIButton = {
+    private lazy var profileImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "imageNotFound"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 60
+        return imageView
+    }()
+
+    private lazy var nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Bruce Wills"
+        label.font = AppFont.poppinsSemiBold.withSize(16)
+        label.textColor = AppColor.secondary.color
+        return label
+    }()
+
+    private lazy var editButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "logoutIcon")?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        button.setImage(arrowImage, for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        button.setTitle("Edit Profile", for: .normal)
+        button.setTitleColor(#colorLiteral(red: 0.09019607843, green: 0.7529411765, blue: 0.9215686275, alpha: 1), for: .normal)
+        button.titleLabel?.font = AppFont.poppinsRegular.withSize(12)
+        button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         return button
     }()
 
-    private lazy var componentsView: ComponentsView = .init()
-
-    // MARK: - Lifecycle Methods
-
+    private lazy var settingsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 8
+        layout.minimumInteritemSpacing = 8
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = .clear
+        collectionView.register(SettingsViewCell.self, forCellWithReuseIdentifier: "settingsCell")
+        return collectionView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        fetchProfile()
+        getProfile()
     }
-
-    // MARK: - Private Methods
+    
+    private func getProfile() {
+        settingsViewModel.getProfile(callback: { success in
+            if success {
+                DispatchQueue.main.async {
+                    guard let name = self.settingsViewModel.profileInfos?.full_name,
+                          let image = self.settingsViewModel.profileInfos?.pp_url else { return }
+                    self.nameLabel.text = name
+                    self.profileImageView.kf.setImage(with: URL(string: image))
+                }
+            }
+        })
+    }
+    
+    @objc func editButtonTapped() {
+        let vc = EditProfileViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.profileUpdateDelegate = self
+        self.present(vc, animated: true)
+    }
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-
-        view.addSubviews(titleLabel,
-                         logoutButton,
-                         componentsView)
-
-        componentsView.addSubviews(settingsCollectionView,
-                                   profilePictureImageView,
-                                   fullNameLabel,
-                                   editProfileButton)
-
+        view.addSubviews(settingsLabel, componentsView)
+        componentsView.addSubviews(profileImageView, nameLabel, editButton, settingsCollectionView)
         setupLayout()
     }
 
     private func setupLayout() {
+        settingsLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.leading.equalToSuperview().offset(24)
+        }
         componentsView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(36)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalTo(settingsLabel.snp.bottom).offset(54)
+            make.leading.trailing.bottom.equalToSuperview()
         }
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            make.leading.equalToSuperview().offset(20)
-        }
-
-        logoutButton.snp.makeConstraints { make in
-            make.centerY.equalTo(titleLabel.snp.centerY)
-            make.trailing.equalToSuperview().offset(-24)
-            make.width.height.equalTo(30)
-        }
-
-        profilePictureImageView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+        profileImageView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(24)
-            make.width.height.equalTo(120)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(120)
+            make.height.equalTo(120)
         }
-
-        fullNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profilePictureImageView.snp.bottom).offset(8)
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
-
-        editProfileButton.snp.makeConstraints { make in
-            make.top.equalTo(fullNameLabel.snp.bottom)
+        editButton.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
-
         settingsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(editProfileButton.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalTo(editButton.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview().offset(-54)
         }
     }
+}
 
-    private func fetchProfile() {
-        showSpinner()
-        viewModel.fetchProfile { [weak self] success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.hideSpinner()
-                    self?.fullNameLabel.text = self?.viewModel.profile?.fullName
-                    let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
-                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
-                }
-            } else {
-                self?.hideSpinner()
-            }
+extension SettingsViewController: ProfileUpdateDelegate {
+    func updateProfile(name: String, image: UIImage?) {
+        self.nameLabel.text = name
+        if let updatedImage = image {
+            self.profileImageView.image = updatedImage
         }
     }
-
-    // MARK: - Actions
-
-    @objc func editProfileButtonTapped() {
-        let editProfileVc = EditProfileViewController()
-        editProfileVc.modalPresentationStyle = .fullScreen
-        editProfileVc.profile = viewModel.profile
-        editProfileVc.delegate = self
-        present(editProfileVc, animated: true)
-    }
-
-    @objc func logoutButtonTapped() {
-        let title = "Confirm Logout"
-        let message = "Are you sure you want to log out?"
-        showConfirmationAlert(title: title, message: message, completion: {
-            KeychainHelper.deleteAccessToken()
-            let loginViewController = LoginViewController()
-            self.navigationController?.setViewControllers([loginViewController], animated: true)
-            loginViewController.showAlert(from: self, title: "Success Logout", message: "You're successfully logged out.", completion: {})
-        })
-    }
 }
 
-// MARK: - Extensions
-
-protocol SettingsViewControllerDelegate: AnyObject {
-    func didFetchProfile()
-    func didShowAlert()
-}
-
-extension SettingsViewController: SettingsViewControllerDelegate {
-    func didFetchProfile() {
-        fetchProfile()
-    }
-
-    func didShowAlert() {
-        showAlert(title: "Success", message: "User successfully updated.")
-    }
-}
-
-extension SettingsViewController: UICollectionViewDelegateFlowLayout {
+extension SettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = collectionView.frame.width - 32
-        let cellHeight: CGFloat = 54
-
-        return CGSize(width: cellWidth, height: cellHeight)
+        return CGSize(width: UIScreen.main.bounds.width - 32, height: 54)
     }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset: CGFloat = 12
-        return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch indexPath.row {
-            case 0:
-                selectedViewController = SecurityViewController()
-            default:
-                selectedViewController = nil
-        }
-
-        if let selectedViewController = selectedViewController {
-            navigationController?.pushViewController(selectedViewController, animated: true)
-        }
-    }
-}
-
-extension SettingsViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfItems()
+        return settingsViewModel.settingsParametres.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingsViewCell.identifier, for: indexPath) as? SettingsViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "settingsCell", for: indexPath) as? SettingsViewCell
+        else {
             return UICollectionViewCell()
         }
-
-        let item = viewModel.item(at: indexPath.row)
-        cell.configure(with: item)
-
+        
+        let model = settingsViewModel.settingsParametres[indexPath.item]
+        cell.configure(model: model)
         return cell
     }
-}
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            if indexPath.item == 0 {
+                self.tabBarController?.tabBar.isHidden = true
+                let viewController = SecurityViewController()
+                navigationController?.pushViewController(viewController, animated: true)
+            }
+          }
+        }
+    }

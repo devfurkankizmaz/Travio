@@ -10,160 +10,162 @@ import SnapKit
 import UIKit
 
 class SecurityViewController: UIViewController {
-    // MARK: - Properties
-
-    private lazy var viewModel: SecurityViewModel = .init()
-
-    private lazy var componentsView: ComponentsView = .init()
-
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.poppinsSemiBold.withSize(32)
-        label.text = "Security Settings"
-        label.textColor = .white
-        return label
+    
+    private lazy var securitySettingsViewModel: SecurityViewModel = {
+        let viewModel = SecurityViewModel()
+        return viewModel
     }()
-
+    
     private lazy var backButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let arrowImage = UIImage(named: "back_go")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(arrowImage, for: .normal)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return button
     }()
-
-    private lazy var securityCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 8
-        layout.headerReferenceSize = CGSizeMake(self.view.frame.width, 36)
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.delegate = self
-        cv.showsVerticalScrollIndicator = false
-        cv.dataSource = self
-        cv.register(SecuritySettingCell.self, forCellWithReuseIdentifier: SecuritySettingCell.identifier)
-        cv.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.identifier)
-        return cv
+    
+    private lazy var securitySettingsLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFont.poppinsSemiBold.withSize(32)
+        label.textAlignment = .center
+        label.text = "Security Settings"
+        label.textColor = .white
+        return label
     }()
 
+    private lazy var componentsView = ComponentsView()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(NewPasswordViewCell.self, forCellReuseIdentifier: NewPasswordViewCell().identifier)
+        tableView.register(PrivacyViewCell.self, forCellReuseIdentifier: PrivacyViewCell().identifier)
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
+        return tableView
+    }()
+    
     private lazy var saveButton: TravioButton = {
         let button = TravioButton()
         button.setTitle("Save", for: .normal)
-        // button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+       // button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
 
-    // MARK: - Lifecycle Methods
-
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupView()
     }
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
 
-    // MARK: - Private Methods
+        self.tabBarController?.tabBar.isHidden = false
+    }
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-        componentsView.addSubviews(securityCollectionView)
-        view.addSubviews(backButton,
-                         titleLabel,
-                         componentsView,
-                         saveButton)
+        view.addSubviews(backButton ,securitySettingsLabel ,componentsView)
+        componentsView.addSubviews(tableView, saveButton)
         setupLayout()
     }
 
     private func setupLayout() {
+        
         backButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
             make.width.height.equalTo(32)
         }
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.top).offset(-6)
-            make.leading.equalTo(backButton.snp.trailing).offset(24)
+        securitySettingsLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+            make.centerX.equalToSuperview()
         }
         componentsView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(125)
+            make.top.equalTo(securitySettingsLabel.snp.bottom).offset(58)
+            make.leading.trailing.bottom.equalToSuperview()
         }
-        securityCollectionView.snp.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(44)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(saveButton.snp.top).offset(-24)
-            make.top.equalToSuperview().offset(32)
+            make.bottom.equalTo(saveButton.snp.top).offset(-20)
         }
         saveButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-24)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(54)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
         }
-    }
-
-    // MARK: - Actions
-
-    @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
     }
 }
 
-// MARK: - Extensions
-
-extension SecurityViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = collectionView.frame.width - 48
-        let cellHeight: CGFloat = 74
-
-        return CGSize(width: cellWidth, height: cellHeight)
+extension SecurityViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 84
     }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset: CGFloat = 24
-        return UIEdgeInsets(top: 0, left: 0, bottom: inset, right: 0)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
-}
-
-extension SecurityViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.sections.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.sections[section].items.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SecuritySettingCell.identifier, for: indexPath) as? SecuritySettingCell else {
-            return UICollectionViewCell()
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let headerView = UIView()
+        
+        let label = UILabel()
+        label.text = securitySettingsViewModel.tableViewArray[section].type
+        label.textColor = #colorLiteral(red: 0.2196078431, green: 0.6784313725, blue: 0.662745098, alpha: 1)
+        label.font = AppFont.poppinsSemiBold.withSize(16)
+        headerView.addSubview(label)
+        
+        label.snp.makeConstraints { make in
+            make.leading.equalTo(headerView.snp.leading).offset(16)
+            make.centerY.equalToSuperview()
         }
-
-        let section = viewModel.sections[indexPath.section]
-        let item = section.items[indexPath.row]
-
-        cell.configure(with: item)
-
-        return cell
+        
+        return headerView
     }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        return securitySettingsViewModel.tableViewArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return securitySettingsViewModel.tableViewArray[section].index.count
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeaderView.identifier, for: indexPath) as? SectionHeaderView else {
-                return UICollectionReusableView()
+    }
+    
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+              let section = indexPath.section
+    
+            if section == 0 {
+    
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: NewPasswordViewCell().identifier) as? NewPasswordViewCell else { return UITableViewCell() }
+    
+                let data = securitySettingsViewModel.tableViewArray[indexPath.section].index[indexPath.row]
+                cell.configure(model: data)
+                cell.selectionStyle = .none
+
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: PrivacyViewCell().identifier) as? PrivacyViewCell else { return UITableViewCell() }
+    
+                let data = securitySettingsViewModel.tableViewArray[indexPath.section].index[indexPath.row]
+                cell.configure(model: data)
+                cell.selectionStyle = .none
+                
+                return cell
             }
-
-            let section = viewModel.sections[indexPath.section]
-            headerView.configure(with: section.title)
-
-            return headerView
-        }
-
-        return UICollectionReusableView()
     }
 }
