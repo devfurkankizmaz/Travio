@@ -123,7 +123,7 @@ class PlaceViewCell: UICollectionViewCell {
         }
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-24)
+            make.trailing.equalToSuperview().offset(-12)
             make.bottom.equalTo(locationStackView.snp.top).offset(-8)
         }
         locationStackView.snp.makeConstraints { make in
@@ -139,7 +139,7 @@ class PlaceViewCell: UICollectionViewCell {
         titleLabel.text = place.title
         imageDownloader?.cancel()
 
-        guard let urlStr = place.cover_image_url else {
+        guard let urlStr = place.coverImageUrl else {
             backgroundImageView.image = UIImage(named: "failed")
             return
         }

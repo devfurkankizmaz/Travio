@@ -8,18 +8,18 @@
 import Foundation
 
 class VisitsViewModel {
-    typealias VisitHandler = (String, Bool) -> Void
+    typealias CompletionHandler = (String, Bool) -> Void
     var visits: [Visit] = []
-    // var onDataFetch: ((Bool) -> Void)?
 
-    func fetchVisits(callback: @escaping VisitHandler) {
-        NetworkManager.shared.request(TravioRouter.getAllVisits, responseType: VisitResponse.self) { result in
+    // Fetch visits and handle the result using a completion handler
+    func fetchVisits(completion: @escaping CompletionHandler) {
+        NetworkManager.shared.request(TravioRouter.getAllVisits(), responseType: VisitResponse.self) { [weak self] result in
             switch result {
             case .success(let response):
-                callback("You're fetched all visits successfully.", true)
-                self.visits = response.data.visits
+                self?.visits = response.data.visits
+                completion("You've fetched all visits successfully.", true)
             case .failure(let error):
-                callback(error.localizedDescription, false)
+                completion(error.localizedDescription, false)
             }
         }
     }

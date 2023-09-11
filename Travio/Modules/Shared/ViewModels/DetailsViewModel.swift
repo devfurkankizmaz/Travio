@@ -78,7 +78,7 @@ class DetailsViewModel {
     }
 
     func checkVisit(with placeId: String, callback: @escaping DetailHandler) {
-        NetworkManager.shared.request(TravioRouter.getVisitByPlace(id: placeId), responseType: CheckModel.self) { result in
+        NetworkManager.shared.request(TravioRouter.getVisitByPlace(id: placeId), responseType: ResponseModel.self) { result in
             switch result {
             case .success:
                 callback(true)

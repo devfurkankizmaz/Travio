@@ -15,23 +15,8 @@ class AddPlaceViewController: UIViewController {
     var coordinate: (latitude: Double, longitude: Double)?
     private var selectedImages: [UIImage] = []
 
-    private lazy var indicatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = AppColor.background.color
-        view.isHidden = true
-        view.alpha = 0.6
-        return view
-    }()
-
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-
     private lazy var imagePickerController: UIImagePickerController = {
         let picker = UIImagePickerController()
-        // picker.delegate = self
         picker.sourceType = .photoLibrary
         return picker
     }()
@@ -103,8 +88,7 @@ class AddPlaceViewController: UIViewController {
     // MARK: - Private Methods
 
     private func setupView() {
-        indicatorView.addSubview(activityIndicator)
-        view.addSubviews(placeNameTextField, descriptionTextView, stateTextField, rectangle, addButton, addPhotosCollectionView, indicatorView)
+        view.addSubviews(placeNameTextField, descriptionTextView, stateTextField, rectangle, addButton, addPhotosCollectionView)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -149,15 +133,6 @@ class AddPlaceViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-24)
             make.height.equalTo(54)
         }
-
-        activityIndicator.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-
-        indicatorView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
 
     // MARK: - Public Methods
@@ -165,14 +140,13 @@ class AddPlaceViewController: UIViewController {
     // MARK: - Actions
 
     @objc func addPlaceButtonTapped() {
-        activityIndicator.startAnimating()
-        indicatorView.isHidden = false
+        showSpinner()
+
         addPlaceViewModel.uploadImage(images: selectedImages) { [weak self] uploadResult in
             if uploadResult {
                 self?.performPostPlaceIfImagesUploaded()
             } else {
-                self?.indicatorView.isHidden = true
-                self?.activityIndicator.stopAnimating()
+                self?.hideSpinner()
             }
         }
     }
@@ -197,9 +171,7 @@ class AddPlaceViewController: UIViewController {
               let latitude = coordinate?.latitude,
               let longitude = coordinate?.longitude
         else {
-            print("Error: Missing data for postPlace")
-            activityIndicator.stopAnimating()
-            indicatorView.isHidden = true
+            hideSpinner()
             return
         }
 
@@ -207,19 +179,23 @@ class AddPlaceViewController: UIViewController {
 
         let input = PlaceInput(place: place, title: title, description: description, latitude: latitude, longitude: longitude)
 
-        addPlaceViewModel.postPlace(input) { [weak self] message, confirm in
-            if confirm {
-                self?.performPostGallery() // Gallery işleminin yapılması
-                self?.dismiss(animated: true)
-                self?.delegate?.fetchPlaces()
-                self?.delegate?.showAddedAlert()
-                self?.activityIndicator.stopAnimating()
-                self?.indicatorView.isHidden = true
-            } else {
-                print(message)
-                self?.activityIndicator.stopAnimating()
-                self?.indicatorView.isHidden = true
+        let (isValid, errorMessage) = addPlaceViewModel.fieldValidation(input)
+
+        if isValid {
+            addPlaceViewModel.postPlace(input) { [weak self] _, confirm in
+                if confirm {
+                    self?.performPostGallery() // Gallery işleminin yapılması
+                    self?.dismiss(animated: true)
+                    self?.delegate?.fetchPlaces()
+                    self?.delegate?.showAddedAlert()
+                    self?.hideSpinner()
+                } else {
+                    self?.hideSpinner()
+                }
             }
+        } else {
+            showAlert(title: "Validation Error", message: errorMessage)
+            hideSpinner()
         }
     }
 }

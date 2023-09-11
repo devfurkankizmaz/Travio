@@ -91,7 +91,11 @@ class LoginViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    func setupView() {
+    func showAlert(from viewController: UIViewController, title: String, message: String, completion: (() -> Void)?) {
+        showAlert(title: title, message: message)
+    }
+
+    private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         stackView.addArrangedSubviews(signUpLabel, signUpButton)
         view.addSubviews(logoImageView, componentsView, emailView, passwordView, loginButton, stackView)
@@ -100,7 +104,7 @@ class LoginViewController: UIViewController {
         setupLayout()
     }
 
-    func setupLayout() {
+    private func setupLayout() {
         logoImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
             make.centerX.equalToSuperview()
@@ -161,13 +165,15 @@ class LoginViewController: UIViewController {
               let password = passwordView.textField.text else { return }
 
         let input = Login(email: email, password: password)
-
+        showSpinner()
         viewModel.login(input, callback: { [weak self] message, confirm in
             if confirm {
                 let mainTbc = MainTabBarController()
                 self?.navigationController?.pushViewController(mainTbc, animated: true)
+                self?.hideSpinner()
             } else {
                 self?.showAlert(title: "Error", message: message)
+                self?.hideSpinner()
             }
         })
     }

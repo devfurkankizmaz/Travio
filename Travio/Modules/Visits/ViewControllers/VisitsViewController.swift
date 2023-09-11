@@ -32,7 +32,6 @@ class VisitsViewController: UIViewController {
 
     private lazy var visitListCollectionView: UICollectionView = {
         var flowLayout = UICollectionViewFlowLayout()
-        // flowLayout.minimumLineSpacing = 16
         flowLayout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         cv.backgroundColor = .clear
@@ -47,19 +46,22 @@ class VisitsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         fetchVisits()
+        NotificationCenterManager.shared.addObserver(observer: self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "VisitChanged"))
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        fetchVisits()
+
+    deinit {
+        NotificationCenterManager.shared.removeObserver(observer: self)
     }
 
     // MARK: - Private Methods
 
     private func fetchVisits() {
+        showSpinner()
         visitsViewModel.fetchVisits { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
                     self?.visitListCollectionView.reloadData()
+                    self?.hideSpinner()
                 }
             }
         }
@@ -69,7 +71,6 @@ class VisitsViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
         view.addSubviews(myVisitsLabel, componentsView)
-        // view.bringSubviewToFront(indicator)
         componentsView.addSubviews(visitListCollectionView)
         setupLayout()
     }
@@ -90,7 +91,15 @@ class VisitsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+
+    // MARK: - Actions
+
+    @objc func reloadCollectionView() {
+        fetchVisits()
+    }
 }
+
+// MARK: - Extensions
 
 extension VisitsViewController: VisitsViewControllerDelegate {
     func showDeletionAlert(message: String) {

@@ -91,7 +91,7 @@ class RegisterViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    func setupView() {
+    private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         componentsView.addSubviews(usernameView,
                                    emailView,
@@ -107,7 +107,7 @@ class RegisterViewController: UIViewController {
         setupLayout()
     }
 
-    func setupLayout() {
+    private func setupLayout() {
         backButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -176,12 +176,16 @@ class RegisterViewController: UIViewController {
 
         let input = Register(fullName: username, email: email, password: password)
 
+        showSpinner()
+
         viewModel.register(input, passConfirm: passwordConfirm, callback: { [weak self] message, confirm in
             if confirm {
                 self?.backButtonTapped()
                 self?.delegate?.registrationSuccessAlert(title: "Success", message: message)
+                self?.hideSpinner()
             } else {
                 self?.showAlert(title: "Error", message: message)
+                self?.hideSpinner()
             }
         })
     }
