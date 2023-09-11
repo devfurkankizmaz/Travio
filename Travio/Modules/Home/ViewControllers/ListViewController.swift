@@ -20,22 +20,6 @@ class ListViewController: UIViewController {
 
     private lazy var listViewModel: ListViewModel = .init()
 
-    private lazy var spinner: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.style = .large
-        indicator.color = .black
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-
-    private lazy var spinnerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.alpha = 0.6
-        view.isHidden = true
-        return view
-    }()
-
     private lazy var backButton: UIButton = {
         let button = UIButton()
         let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -90,40 +74,19 @@ class ListViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    private func showActivityIndicator() {
-        spinnerView.isHidden = false
-        spinner.startAnimating()
-        view.isUserInteractionEnabled = false
-    }
-
-    private func hideActivityIndicator() {
-        spinnerView.isHidden = true
-        spinner.stopAnimating()
-        view.isUserInteractionEnabled = true
-    }
-
     private func sortPlaces() {
         dataSource.sort(by: { $0.title < $1.title })
     }
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
-        view.addSubviews(componentsView, backButton, titleLabel, spinnerView, spinner)
+        view.addSubviews(componentsView, backButton, titleLabel)
         view.backgroundColor = AppColor.primary.color
         componentsView.addSubviews(listCollectionView, sortButton)
         setupLayout()
     }
 
     private func setupLayout() {
-        spinnerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        spinner.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        
         sortButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
@@ -154,14 +117,14 @@ class ListViewController: UIViewController {
 
     private func updateCollectionViewData() {
         guard let selectedSectionType = selectedSectionType else { return }
-        showActivityIndicator()
+        showSpinner()
 
         switch selectedSectionType {
         case .popular:
             listViewModel.fetchPopularPlaces { [weak self] success in
                 if success {
                     DispatchQueue.main.async {
-                        self?.hideActivityIndicator()
+                        self?.hideSpinner()
                         self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
@@ -172,7 +135,7 @@ class ListViewController: UIViewController {
             listViewModel.fetchNewPlaces { [weak self] success in
                 if success {
                     DispatchQueue.main.async {
-                        self?.hideActivityIndicator()
+                        self?.hideSpinner()
                         self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
@@ -183,7 +146,7 @@ class ListViewController: UIViewController {
             listViewModel.fetchVisits { [weak self] success in
                 if success {
                     DispatchQueue.main.async {
-                        self?.hideActivityIndicator()
+                        self?.hideSpinner()
                         self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
