@@ -210,6 +210,13 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.row {
             case 0:
                 selectedViewController = SecurityViewController()
+            case 2:
+                selectedViewController = ListViewController()
+
+                if let listVC = selectedViewController as? ListViewController {
+                    listVC.selectedSectionType = .added
+                }
+
             default:
                 selectedViewController = nil
         }

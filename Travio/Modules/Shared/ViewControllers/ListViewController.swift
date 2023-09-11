@@ -6,14 +6,9 @@ class ListViewController: UIViewController {
 
     private var dataSource: [Place] = []
 
-    var selectedSection: SectionType? {
-        didSet {
-            titleLabel.text = selectedSection?.title
-        }
-    }
-
     var selectedSectionType: SectionType? {
         didSet {
+            titleLabel.text = selectedSectionType?.title
             updateCollectionViewData()
         }
     }
@@ -116,8 +111,8 @@ class ListViewController: UIViewController {
     }
 
     private func updateCollectionViewData() {
-        guard let selectedSectionType = selectedSectionType else { return }
         showSpinner()
+        guard let selectedSectionType = selectedSectionType else { return }
 
         switch selectedSectionType {
         case .popular:
@@ -129,7 +124,7 @@ class ListViewController: UIViewController {
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
-                }
+                } else { self?.hideSpinner() }
             }
         case .new:
             listViewModel.fetchNewPlaces { [weak self] success in
@@ -140,7 +135,7 @@ class ListViewController: UIViewController {
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
-                }
+                } else { self?.hideSpinner() }
             }
         case .visits:
             listViewModel.fetchVisits { [weak self] success in
@@ -151,7 +146,18 @@ class ListViewController: UIViewController {
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
-                }
+                } else { self?.hideSpinner() }
+            }
+        case .added:
+            listViewModel.fetchUserPlaces { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.hideSpinner()
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
+                        self?.listCollectionView.reloadData()
+                    }
+                } else { self?.hideSpinner() }
             }
         }
     }

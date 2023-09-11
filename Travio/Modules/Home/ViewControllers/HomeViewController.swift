@@ -1,23 +1,6 @@
 import SnapKit
 import UIKit
 
-enum SectionType: Int, CaseIterable {
-    case popular = 0
-    case new
-    case visits
-
-    var title: String {
-        switch self {
-        case .popular:
-            return "Popular Places"
-        case .new:
-            return "New Places"
-        case .visits:
-            return "Your Visits"
-        }
-    }
-}
-
 class HomeViewController: UIViewController {
     // MARK: - Properties
 
@@ -146,7 +129,6 @@ extension HomeViewController: MainCollectionViewCellDelegate {
         }
 
         let listVC = ListViewController()
-        listVC.selectedSection = sectionType
         listVC.selectedSectionType = sectionType
 
         navigationController?.pushViewController(listVC, animated: true)
@@ -168,7 +150,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return SectionType.allCases.count
+        let filteredCases = SectionType.allCases.filter { $0 != .added }
+        return filteredCases.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -176,14 +159,15 @@ extension HomeViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        let section = SectionType.allCases[indexPath.row]
+        let filteredCases = SectionType.allCases.filter { $0 != .added }
+
+        let section = filteredCases[indexPath.row]
         let title = section.title
         let data = homeViewModel.getPlacesForSection(section)
 
         cell.configure(with: data, title: title)
         cell.delegate = self
         cell.seeAllButton.tag = indexPath.row
-        cell.contentView.isUserInteractionEnabled = true
 
         return cell
     }
