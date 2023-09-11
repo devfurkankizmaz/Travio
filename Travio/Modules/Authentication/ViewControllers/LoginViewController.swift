@@ -34,7 +34,7 @@ class LoginViewController: UIViewController {
     private lazy var emailView: TravioUIView = {
         let view = TravioUIView()
         view.placeholderText = "developer@bilgeadam.com"
-        view.textField.text = "furk@nik.com"
+        view.textField.text = "furkanikb@gmail.com"
         view.titleView = "Email"
         return view
     }()
