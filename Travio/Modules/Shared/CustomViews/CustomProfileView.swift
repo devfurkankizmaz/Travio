@@ -1,45 +1,36 @@
 //
-//  InfoView.swift
+//  CustomProfileView.swift
 //  Travio
 //
-//  Created by Furkan Kızmaz on 7.09.2023.
+//  Created by Muhammet on 10.09.2023.
 //
 
+import Foundation
 import UIKit
 
-class InfoView: UIView {
-    var titleView: String = "Default" {
+class CustomProfileView: UIView {
+    var labelView: String = "Default" {
         didSet {
             updateLabel()
         }
     }
 
-    var image: UIImage? = nil {
-        didSet {
-            updateImage()
-        }
-    }
-
     private func updateLabel() {
-        infoLabel.text = titleView
+        label.text = labelView
     }
 
-    private func updateImage() {
-        infoImageView.image = image
-    }
-
-    private lazy var infoLabel: UILabel = {
+    private let label: UILabel = {
         let label = UILabel()
         label.textColor = AppColor.secondary.color
         label.font = AppFont.poppinsMedium.withSize(12)
         label.text = "Default"
         return label
     }()
-
-    private lazy var infoImageView: UIImageView = {
+    
+    public let leftImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
-        imageView.alpha = 0.7
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
@@ -58,9 +49,11 @@ class InfoView: UIView {
 
     private func setupViews() {
         backgroundColor = .white
+        clipsToBounds = true
         layer.cornerRadius = 16
+        layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner]
         addShadow()
-        addSubviews(infoLabel, infoImageView)
+        addSubviews(label, leftImageView)
         setupConstraints()
     }
 
@@ -69,17 +62,20 @@ class InfoView: UIView {
         layer.shadowOpacity = 0.15
         layer.shadowOffset = CGSize(width: 0, height: 0)
         layer.shadowColor = AppColor.secondary.color.cgColor
+        layer.masksToBounds = false
     }
 
     private func setupConstraints() {
-        infoImageView.snp.makeConstraints { make in
+        leftImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(20)
+            make.height.equalTo(12)
+            make.width.equalTo(20)
         }
-        infoLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(infoImageView.snp.trailing).offset(8)
+        label.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.leading.equalTo(leftImageView.snp.leading).offset(32)
         }
     }
 }
+
