@@ -226,6 +226,20 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
                 }
             case 3:
                 selectedViewController = HelpViewController()
+            case 4:
+                selectedViewController = WebViewController()
+
+                if let webVC = selectedViewController as? WebViewController {
+                    webVC.titleWeb = "About"
+                    webVC.url = "https://api.iosclass.live/about"
+                }
+            case 5:
+                selectedViewController = WebViewController()
+
+                if let webVC = selectedViewController as? WebViewController {
+                    webVC.titleWeb = "Terms of Use"
+                    webVC.url = "https://api.iosclass.live/terms"
+                }
 
             default:
                 selectedViewController = nil

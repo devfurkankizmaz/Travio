@@ -9,10 +9,11 @@ import UIKit
 
 class ExpandableCell: UICollectionViewCell {
     // MARK: - Properties
-
-    weak var collectionView: UICollectionView?
+    
     static let identifier = "ExpandableCell"
-    private var isExpanded = false
+    var isExpanded: Bool = false
+    var collectionView: UICollectionView?
+    var indexPath: IndexPath?
 
     private lazy var questionLabel: UILabel = {
         let label = UILabel()
@@ -20,23 +21,20 @@ class ExpandableCell: UICollectionViewCell {
         label.textColor = AppColor.secondary.color
         label.numberOfLines = 0
         return label
-        
     }()
     
     private lazy var answerLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsLight.withSize(10)
         label.textColor = AppColor.secondary.color
-        label.isHidden = true
         label.numberOfLines = 0
         return label
     }()
     
-    private lazy var expandButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(expandButtonTapped), for: .touchUpInside)
-        button.setImage(UIImage(named: "expandIcon"), for: .normal)
-        return button
+    private lazy var expandImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "expandIcon")
+        return imageView
     }()
     
     // MARK: - Initialization
@@ -44,11 +42,15 @@ class ExpandableCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        addGestureRecognizer(tapGesture)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        addGestureRecognizer(tapGesture)
     }
     
     // MARK: - Private Methods
@@ -59,7 +61,7 @@ class ExpandableCell: UICollectionViewCell {
         layer.cornerRadius = 16
         layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
         addShadow()
-        addSubviews(questionLabel, answerLabel, expandButton)
+        addSubviews(questionLabel, answerLabel, expandImageView)
         setupLayout()
     }
     
@@ -78,7 +80,7 @@ class ExpandableCell: UICollectionViewCell {
             make.trailing.equalToSuperview().offset(-46)
         }
         
-        expandButton.snp.makeConstraints { make in
+        expandImageView.snp.makeConstraints { make in
             make.centerY.equalTo(questionLabel.snp.centerY)
             make.leading.equalTo(questionLabel.snp.trailing).offset(16)
             make.width.equalTo(16)
@@ -97,24 +99,14 @@ class ExpandableCell: UICollectionViewCell {
     
     func configure(with item: FAQItem) {
         questionLabel.text = item.question
-        answerLabel.text = item.answer
+        answerLabel.text = isExpanded ? item.answer : nil
     }
     
     // MARK: - Actions
     
-    @objc func expandButtonTapped() {
+    @objc func handleTap() {
         isExpanded.toggle()
-        updateLabel()
-        collectionView?.performBatchUpdates(nil, completion: nil)
-    }
-
-    private func updateLabel() {
-        if isExpanded {
-            expandButton.setImage(UIImage(named: "expandIcon")?.rotate180Degrees(), for: .normal)
-            answerLabel.isHidden = false
-        } else {
-            expandButton.setImage(UIImage(named: "expandIcon"), for: .normal)
-            answerLabel.isHidden = true
-        }
+        print("deneme")
+        collectionView?.reloadItems(at: [indexPath!])
     }
 }

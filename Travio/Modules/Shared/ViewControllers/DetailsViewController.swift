@@ -334,21 +334,23 @@ class DetailsViewController: UIViewController {
     // MARK: - Actions
 
     @objc func visitedButtonTapped() {
+        showSpinner()
         guard let placeId = placeId else { return }
-
         if visitButtonIsHidden {
             showDeleteConfirmationAlert { [weak self] confirm in
                 if confirm {
                     self?.detailsViewModel.deleteVisit(with: placeId) { [weak self] message in
                         DispatchQueue.main.async {
+                            self?.hideSpinner()
                             self?.handleVisitDeletion(message: message)
                         }
                     }
-                }
+                } else { self?.hideSpinner() }
             }
         } else {
             detailsViewModel.postVisit(placeId: placeId) { [weak self] confirm in
                 DispatchQueue.main.async {
+                    self?.hideSpinner()
                     self?.handleVisitCreation(confirm: confirm)
                 }
             }

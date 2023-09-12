@@ -38,13 +38,16 @@ class NavigationControllerHelper {
 
     static func showMainTabBarScreen(window: UIWindow?) {
         let mainTabBarController = MainTabBarController()
-        window?.rootViewController = mainTabBarController
+        let navigationController = UINavigationController(rootViewController: mainTabBarController)
+        navigationController.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 
     static func showLoginScreen(window: UIWindow?) {
         let loginViewController = LoginViewController()
         let navigationController = UINavigationController(rootViewController: loginViewController)
+        navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }

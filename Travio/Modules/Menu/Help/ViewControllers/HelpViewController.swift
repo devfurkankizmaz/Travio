@@ -12,7 +12,6 @@ class HelpViewController: UIViewController {
     // MARK: - Properties
 
     private lazy var viewModel: HelpViewModel = .init()
-
     private lazy var componentsView: ComponentsView = .init()
 
     private lazy var titleLabel: UILabel = {
@@ -121,6 +120,7 @@ extension HelpViewController: UICollectionViewDelegateFlowLayout {
 
         let width = collectionView.frame.width - 48
         let questionHeight = heightForText(item.question, font: AppFont.poppinsMedium.withSize(14), width: width - 58)
+
         let answerHeight = heightForText(item.answer, font: AppFont.poppinsLight.withSize(10), width: width - 24)
 
         let cellHeight = 16 + questionHeight + 12 + answerHeight + 16
@@ -150,10 +150,13 @@ extension HelpViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        let item = viewModel.item(at: indexPath)
-        guard let item = item else { return UICollectionViewCell() }
+        guard let item = viewModel.item(at: indexPath) else {
+            return UICollectionViewCell()
+        }
+
         cell.configure(with: item)
         cell.collectionView = collectionView
+        cell.indexPath = indexPath
 
         return cell
     }
