@@ -11,10 +11,7 @@ class ExpandableCell: UICollectionViewCell {
     // MARK: - Properties
     
     static let identifier = "ExpandableCell"
-    var isExpanded: Bool = false
-    var collectionView: UICollectionView?
-    var indexPath: IndexPath?
-
+    
     private lazy var questionLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsMedium.withSize(14)
@@ -23,11 +20,12 @@ class ExpandableCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var answerLabel: UILabel = {
+    lazy var answerLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsLight.withSize(10)
         label.textColor = AppColor.secondary.color
         label.numberOfLines = 0
+        label.text = nil
         return label
     }()
     
@@ -42,15 +40,11 @@ class ExpandableCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        addGestureRecognizer(tapGesture)
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        addGestureRecognizer(tapGesture)
     }
     
     // MARK: - Private Methods
@@ -99,14 +93,15 @@ class ExpandableCell: UICollectionViewCell {
     
     func configure(with item: FAQItem) {
         questionLabel.text = item.question
-        answerLabel.text = isExpanded ? item.answer : nil
+        if item.isExpanded {
+            answerLabel.text = item.answer
+            expandImageView.image = UIImage(named: "expandIcon")?.rotate180Degrees()
+
+        } else {
+            answerLabel.text = nil
+            expandImageView.image = UIImage(named: "expandIcon")
+        }
     }
     
     // MARK: - Actions
-    
-    @objc func handleTap() {
-        isExpanded.toggle()
-        print("deneme")
-        collectionView?.reloadItems(at: [indexPath!])
-    }
 }

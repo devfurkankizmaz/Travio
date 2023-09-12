@@ -65,6 +65,7 @@ class WebViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
         componentsView.addSubviews(webView)
+        componentsView.backgroundColor = .white
         view.addSubviews(backButton,
                          titleLabel,
                          componentsView)
@@ -111,7 +112,7 @@ extension WebViewController: WKNavigationDelegate {
 
         let jsCode = """
             var style = document.createElement('style');
-            style.innerHTML = 'body { font-family: "Poppins", sans-serif; }';
+            style.innerHTML = 'body { font-family: "Poppins", sans-serif; padding-top: 24px; }';
             document.head.appendChild(style);
         """
         webView.evaluateJavaScript(jsCode)

@@ -90,7 +90,10 @@ class ListViewController: UIViewController {
         }
 
         listCollectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(sortButton.snp.bottom).offset(12)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
 
         backButton.snp.makeConstraints { make in
@@ -198,8 +201,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let topInset: CGFloat = 70
-        return UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

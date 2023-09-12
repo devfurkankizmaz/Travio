@@ -119,19 +119,25 @@ extension HelpViewController: UICollectionViewDelegateFlowLayout {
         }
 
         let width = collectionView.frame.width - 48
-        let questionHeight = heightForText(item.question, font: AppFont.poppinsMedium.withSize(14), width: width - 58)
+        let questionHeight = viewModel.heightForText(item.question, font: AppFont.poppinsMedium.withSize(14), width: width - 58)
 
-        let answerHeight = heightForText(item.answer, font: AppFont.poppinsLight.withSize(10), width: width - 24)
+        var answerHeight: CGFloat = 0.0
+
+        if item.isExpanded {
+            answerHeight = viewModel.heightForText(item.answer, font: AppFont.poppinsLight.withSize(10), width: width - 24)
+        }
 
         let cellHeight = 16 + questionHeight + 12 + answerHeight + 16
 
         return CGSize(width: width, height: cellHeight)
     }
 
-    private func heightForText(_ text: String, font: UIFont, width: CGFloat) -> CGFloat {
-        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
-        return ceil(boundingBox.height)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.toggleItemExpansion(at: indexPath)
+
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
+            collectionView.reloadItems(at: [indexPath])
+        }, completion: nil)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -155,9 +161,6 @@ extension HelpViewController: UICollectionViewDataSource {
         }
 
         cell.configure(with: item)
-        cell.collectionView = collectionView
-        cell.indexPath = indexPath
-
         return cell
     }
 }
