@@ -55,6 +55,16 @@ class SettingsViewController: UIViewController {
         button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var logoutButton: UIButton = {
+        let button = UIButton()
+        let arrowImage = UIImage(named: "logoutIcon")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        button.setImage(arrowImage, for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        return button
+    }()
 
     private lazy var settingsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -75,6 +85,20 @@ class SettingsViewController: UIViewController {
         getProfile()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        
+        self.tabBarController?.tabBar.isHidden = true
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     private func getProfile() {
         settingsViewModel.getProfile(callback: { success in
             if success {
@@ -88,6 +112,16 @@ class SettingsViewController: UIViewController {
         })
     }
     
+    @objc func logoutButtonTapped() {
+        let title = "Confirm Logout"
+        let message = "Are you sure you want to log out?"
+        showConfirmationAlert(title: title, message: message) {
+            KeychainHelper.deleteAccessToken()
+            let vc = LoginViewController()
+            self.navigationController?.setViewControllers([vc], animated: true)
+        }
+    }
+    
     @objc func editButtonTapped() {
         let vc = EditProfileViewController()
         vc.modalPresentationStyle = .fullScreen
@@ -98,7 +132,7 @@ class SettingsViewController: UIViewController {
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-        view.addSubviews(settingsLabel, componentsView)
+        view.addSubviews(settingsLabel, logoutButton, componentsView)
         componentsView.addSubviews(profileImageView, nameLabel, editButton, settingsCollectionView)
         setupLayout()
     }
@@ -107,6 +141,11 @@ class SettingsViewController: UIViewController {
         settingsLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
             make.leading.equalToSuperview().offset(24)
+        }
+        logoutButton.snp.makeConstraints { make in
+            make.centerY.equalTo(settingsLabel.snp.centerY)
+            make.trailing.equalToSuperview().offset(-24)
+            make.width.height.equalTo(30)
         }
         componentsView.snp.makeConstraints { make in
             make.top.equalTo(settingsLabel.snp.bottom).offset(54)
