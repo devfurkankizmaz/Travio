@@ -51,7 +51,7 @@ class SecurityViewController: UIViewController {
     private lazy var saveButton: TravioButton = {
         let button = TravioButton()
         button.setTitle("Save", for: .normal)
-       // button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -65,10 +65,35 @@ class SecurityViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    func performPasswordChange(newPassword: String) {
+        // Yeni şifrelerin geçerliliğini ve uyuşup uyuşmadığını kontrol edin
+        if newPassword.isEmpty {
+            print("Şifre boş olamaz.")
+        } else {
+            // Şifre değiştirme işlemini çağırın
+            securitySettingsViewModel.changePasswordInfos = ChangePassword(new_password: newPassword)
+            securitySettingsViewModel.putChangePassword(change_password: newPassword)
+        }
+    }
+    
+    @objc func saveButtonTapped() {
+        // İlgili indeksleri önceden alın
+        guard let changePasswordSection = securitySettingsViewModel.tableViewArray.first(where: { $0.type == "Change Password" }),
+              let newPasswordIndex = changePasswordSection.index.firstIndex(of: "New Password"),
+              let newPasswordConfirmIndex = changePasswordSection.index.firstIndex(of: "New Password Confirm"),
+              let newPasswordCell = tableView.cellForRow(at: IndexPath(row: newPasswordIndex, section: 0)) as? NewPasswordViewCell,
+              let newPasswordConfirmCell = tableView.cellForRow(at: IndexPath(row: newPasswordConfirmIndex, section: 0)) as? NewPasswordViewCell else {
+            // Hata durumunda çık
+            return
+        }
 
-        self.tabBarController?.tabBar.isHidden = false
+        // TextField değerlerini alın
+        let newPassword = newPasswordCell.changePasswordView.textField.text ?? ""
+        let newPasswordConfirm = newPasswordConfirmCell.changePasswordView.textField.text ?? ""
+
+        // Şifre değiştirme işlemini çağırın
+        performPasswordChange(newPassword: newPassword)
+        
     }
 
     private func setupView() {

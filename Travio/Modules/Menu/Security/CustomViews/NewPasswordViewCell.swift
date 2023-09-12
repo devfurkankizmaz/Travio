@@ -12,7 +12,7 @@ class NewPasswordViewCell: UITableViewCell {
 
     public var identifier = "newPassowrdCell"
     
-    private lazy var changePasswordView: TravioUIView = {
+    public lazy var changePasswordView: TravioUIView = {
         let view = TravioUIView()
         view.placeholderText = ""
         view.titleView = ""

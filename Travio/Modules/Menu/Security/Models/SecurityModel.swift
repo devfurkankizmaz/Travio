@@ -10,4 +10,9 @@ import Foundation
 struct SecurityModel {
     let type: String
     let index: [String]
+    
+}
+
+struct ChangePassword {
+    let new_password: String
 }
