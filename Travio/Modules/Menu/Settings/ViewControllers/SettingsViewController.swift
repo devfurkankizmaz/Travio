@@ -218,22 +218,22 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.row {
             case 0:
                 selectedViewController = SecurityViewController()
-            case 2:
+            case 1:
                 selectedViewController = ListViewController()
 
                 if let listVC = selectedViewController as? ListViewController {
                     listVC.selectedSectionType = .added
                 }
-            case 3:
+            case 2:
                 selectedViewController = HelpViewController()
-            case 4:
+            case 3:
                 selectedViewController = WebViewController()
 
                 if let webVC = selectedViewController as? WebViewController {
                     webVC.titleWeb = "About"
                     webVC.url = "https://api.iosclass.live/about"
                 }
-            case 5:
+            case 4:
                 selectedViewController = WebViewController()
 
                 if let webVC = selectedViewController as? WebViewController {
