@@ -103,7 +103,7 @@ class VisitsViewController: UIViewController {
 
 extension VisitsViewController: VisitsViewControllerDelegate {
     func showDeletionAlert(message: String) {
-        showAlert(title: "success", message: message)
+        showAlert(title: "Success", message: message)
     }
 
     func reloadView() {
