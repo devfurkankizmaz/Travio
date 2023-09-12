@@ -40,15 +40,15 @@ class MainTabBarController: UITabBarController {
     private func customizeTabBarAppearance() {
         tabBar.tintColor = AppColor.primary.color
         tabBar.unselectedItemTintColor = AppColor.secondary.color.withAlphaComponent(0.3)
-        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffect = UIBlurEffect(style: .extraLight)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = tabBar.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         tabBar.insertSubview(blurView, at: 0)
 
-        blurView.alpha = 0.75
-        blurView.backgroundColor = .white
+        blurView.alpha = 0.95
+        blurView.backgroundColor = .clear
 
         let topBorder = CALayer()
         topBorder.frame = CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5)
