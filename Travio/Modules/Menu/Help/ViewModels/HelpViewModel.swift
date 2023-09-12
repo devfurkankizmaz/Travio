@@ -34,12 +34,6 @@ class HelpViewModel {
         return faqItems.count
     }
 
-    func heightForText(_ text: String, font: UIFont, width: CGFloat) -> CGFloat {
-        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
-        return ceil(boundingBox.height)
-    }
-
     func item(at indexPath: IndexPath) -> FAQItem? {
         guard indexPath.row < faqItems.count else {
             return nil
@@ -52,5 +46,11 @@ class HelpViewModel {
             return
         }
         faqItems[indexPath.row].isExpanded.toggle()
+    }
+
+    func heightForText(_ text: String, font: UIFont, width: CGFloat) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
+        return ceil(boundingBox.height)
     }
 }

@@ -41,14 +41,6 @@ class SettingsViewCell: UICollectionViewCell {
 
     // MARK: - Private Methods
 
-    private func addShadow() {
-        layer.shadowRadius = 8
-        layer.shadowOpacity = 0.15
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        layer.shadowColor = AppColor.secondary.color.cgColor
-        layer.masksToBounds = false
-    }
-
     private func setupView() {
         contentView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         contentView.clipsToBounds = false
@@ -56,6 +48,7 @@ class SettingsViewCell: UICollectionViewCell {
         addShadow()
 
         contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+
         contentView.addSubviews(settingLabel,
                                 settingImageView,
                                 settingArrowImageView)

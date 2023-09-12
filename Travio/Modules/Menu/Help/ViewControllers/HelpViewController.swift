@@ -12,6 +12,7 @@ class HelpViewController: UIViewController {
     // MARK: - Properties
 
     private lazy var viewModel: HelpViewModel = .init()
+
     private lazy var componentsView: ComponentsView = .init()
 
     private lazy var titleLabel: UILabel = {
