@@ -29,6 +29,7 @@ class WebViewController: UIViewController {
             let request = URLRequest(url: url)
             webView.load(request)
         }
+        webView.backgroundColor = AppColor.background.color
         webView.navigationDelegate = self
 
         return webView
@@ -106,26 +107,14 @@ class WebViewController: UIViewController {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let backgroundColorCode = "document.body.style.backgroundColor = '#FFFFFF';"
-        webView.evaluateJavaScript(backgroundColorCode) { _, error in
-            if let error = error {
-                print("JavaScript error: \(error)")
-            } else {
-                print("Background color set to white")
-            }
-        }
+        webView.evaluateJavaScript(backgroundColorCode)
 
         let jsCode = """
             var style = document.createElement('style');
             style.innerHTML = 'body { font-family: "Poppins", sans-serif; }';
             document.head.appendChild(style);
         """
-        webView.evaluateJavaScript(jsCode) { _, error in
-            if let error = error {
-                print("JavaScript error: \(error)")
-            } else {
-                print("JavaScript executed successfully")
-            }
-        }
+        webView.evaluateJavaScript(jsCode)
 
         let h1Styles = """
             var h1Elements = document.querySelectorAll('h1');
@@ -135,13 +124,7 @@ extension WebViewController: WKNavigationDelegate {
                 h1Elements[i].style.color = 'black';
             }
         """
-        webView.evaluateJavaScript(h1Styles) { _, error in
-            if let error = error {
-                print("JavaScript error: \(error)")
-            } else {
-                print("JavaScript executed successfully for H1 elements")
-            }
-        }
+        webView.evaluateJavaScript(h1Styles)
 
         let pStyles = """
             var pElements = document.querySelectorAll('p');
@@ -151,12 +134,6 @@ extension WebViewController: WKNavigationDelegate {
                 pElements[i].style.color = 'black';
             }
         """
-        webView.evaluateJavaScript(pStyles) { _, error in
-            if let error = error {
-                print("JavaScript error: \(error)")
-            } else {
-                print("JavaScript executed successfully for P elements")
-            }
-        }
+        webView.evaluateJavaScript(pStyles)
     }
 }
