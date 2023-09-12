@@ -67,33 +67,16 @@ class ListViewCell: UICollectionViewCell {
         setupView()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        backgroundImageView.kf.cancelDownloadTask()
-        backgroundImageView.image = nil
-    }
-
     // MARK: - Private Methods
 
-    private func addShadow() {
-        contentView.layer.shadowRadius = 8
-        contentView.layer.shadowOpacity = 0.15
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowColor = AppColor.secondary.color.cgColor
-    }
-
     private func setupView() {
-        contentView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        contentView.clipsToBounds = false
-        contentView.layer.cornerRadius = 16
-        addShadow()
+        contentView.roundCornersWithShadow([.bottomLeft, .topLeft, .topRight], radius: 16)
+        contentView.backgroundColor = .white
 
-        backgroundImageView.addSubviews(indicator)
-
-        backgroundImageView.clipsToBounds = true
         backgroundImageView.layer.cornerRadius = 16
         backgroundImageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        backgroundImageView.addSubviews(indicator)
         locationStackView.addArrangedSubviews(locationImageView, locationLabel)
         contentView.addSubviews(backgroundImageView, titleLabel, locationStackView)
         contentView.sendSubviewToBack(backgroundImageView)

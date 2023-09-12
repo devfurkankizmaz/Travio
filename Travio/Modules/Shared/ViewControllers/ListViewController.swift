@@ -93,7 +93,7 @@ class ListViewController: UIViewController {
             make.top.equalTo(sortButton.snp.bottom).offset(12)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalToSuperview()
         }
 
         backButton.snp.makeConstraints { make in
