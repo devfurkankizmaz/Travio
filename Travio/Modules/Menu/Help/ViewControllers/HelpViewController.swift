@@ -136,9 +136,10 @@ extension HelpViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel.toggleItemExpansion(at: indexPath)
 
-        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
+        collectionView.performBatchUpdates({}) { _ in
             collectionView.reloadItems(at: [indexPath])
-        }, completion: nil)
+            collectionView.layoutIfNeeded()
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
