@@ -156,13 +156,7 @@ class AddPlaceViewController: UIViewController {
             return
         }
 
-        addPlaceViewModel.postGallery(with: placeId, urls: urls) { message, confirm in
-            if confirm {
-                print(message)
-            } else {
-                print(message)
-            }
-        }
+        addPlaceViewModel.postGallery(with: placeId, urls: urls) { _, _ in }
     }
 
     private func performPostPlaceIfImagesUploaded() {
@@ -185,10 +179,10 @@ class AddPlaceViewController: UIViewController {
             addPlaceViewModel.postPlace(input) { [weak self] _, confirm in
                 if confirm {
                     self?.performPostGallery() // Gallery işleminin yapılması
+                    self?.hideSpinner()
                     self?.dismiss(animated: true)
                     self?.delegate?.fetchPlaces()
                     self?.delegate?.showAddedAlert()
-                    self?.hideSpinner()
                 } else {
                     self?.hideSpinner()
                 }
