@@ -33,6 +33,7 @@ class DetailsViewController: UIViewController {
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = UIColor(white: 1, alpha: 0.5)
         pageControl.backgroundStyle = .prominent
+        pageControl.isEnabled = false
         return pageControl
     }()
 
@@ -42,12 +43,11 @@ class DetailsViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.backgroundColor = AppColor.background.color
+        cv.backgroundColor = .clear
         cv.delegate = self
         cv.dataSource = self
         cv.isDirectionalLockEnabled = true
         cv.isPagingEnabled = true
-        cv.backgroundView = UIImageView(image: UIImage(named: "imageNotFound"))
         cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: "galleryIdentifier")
         return cv
     }()
@@ -112,13 +112,6 @@ class DetailsViewController: UIViewController {
         return sv
     }()
 
-    private lazy var gradientImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "gradientwhite")
-        return imageView
-    }()
-
     private lazy var visitedButton: DetailButton = {
         let button = DetailButton()
         button.addTarget(self, action: #selector(visitedButtonTapped), for: .touchUpInside)
@@ -151,6 +144,7 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+
         setupView()
         fetchPlace()
         fetchGallery()
@@ -250,7 +244,7 @@ class DetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubviews(stackView, mapUIView, descLabel)
         visitedButton.addSubviews(visitedButtonImageView)
-        view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView, visitedButton)
+        view.addSubviews(scrollView, galleryCollectionView, backButton, pageControl, visitedButton)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -270,16 +264,9 @@ class DetailsViewController: UIViewController {
             make.height.equalTo(300)
         }
 
-        gradientImageView.snp.makeConstraints { make in
-            make.leading.equalTo(galleryCollectionView.snp.leading)
-            make.trailing.equalTo(galleryCollectionView.snp.trailing)
-            make.bottom.equalTo(galleryCollectionView.snp.bottom)
-            make.height.equalTo(120)
-        }
-
         pageControl.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(gradientImageView.snp.bottom).offset(-10)
+            make.bottom.equalTo(galleryCollectionView.snp.bottom).offset(-10)
         }
 
         scrollView.snp.makeConstraints { make in

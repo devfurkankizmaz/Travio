@@ -11,14 +11,6 @@ class PlaceViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        // imageView.alpha = 0.5
-        return imageView
-    }()
-
-    private lazy var gradientImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "grad")
         return imageView
     }()
 
@@ -28,6 +20,11 @@ class PlaceViewCell: UICollectionViewCell {
         indicator.color = .white
         indicator.style = .medium
         return indicator
+    }()
+
+    private lazy var gradientView: UIView = {
+        let view = UIView()
+        return view
     }()
 
     private lazy var locationImageView: UIImageView = {
@@ -93,16 +90,17 @@ class PlaceViewCell: UICollectionViewCell {
 
     private func setupView() {
         addShadow()
-        contentView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
+        contentView.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 16
 
         backgroundImageView.addSubviews(indicator)
         contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
         locationStackView.addArrangedSubviews(locationImageView, locationLabel)
-        contentView.addSubviews(backgroundImageView, gradientImageView, titleLabel, locationStackView)
+        contentView.addSubviews(backgroundImageView, gradientView, titleLabel, locationStackView)
         contentView.sendSubviewToBack(backgroundImageView)
         setupLayout()
+        gradientView.applyGradient(type: .dark, view: contentView)
     }
 
     private func setupLayout() {
@@ -110,10 +108,11 @@ class PlaceViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        gradientImageView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(110)
+
+        gradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

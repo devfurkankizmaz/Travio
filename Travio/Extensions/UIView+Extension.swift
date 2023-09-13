@@ -14,6 +14,32 @@ extension UIView {
         }
     }
 
+    enum GradientType {
+        case dark
+        case light
+    }
+
+    func applyGradient(type: GradientType, view: UIView?) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: view!.bounds.width, height: view!.bounds.height)
+        gradientLayer.locations = [0.0, 0.5]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
+
+        switch type {
+        case .dark:
+            let startColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0).cgColor
+            let endColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.0).cgColor
+            gradientLayer.colors = [startColor, endColor]
+        case .light:
+            let startColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0).cgColor
+            let endColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 0.0).cgColor
+            gradientLayer.colors = [startColor, endColor]
+        }
+
+        self.layer.insertSublayer(gradientLayer, at: 0)
+    }
+
     func roundCorners(corners: UIRectCorner, radius: CGFloat) {
         let maskPath = UIBezierPath(
             roundedRect: bounds,
