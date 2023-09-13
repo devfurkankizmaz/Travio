@@ -23,6 +23,7 @@
 		0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E190B2A98430B00895386 /* PlaceModel.swift */; };
 		0A60CA242A98A51B00A8418E /* PlaceViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */; };
 		0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */; };
+		0A741BA82AB1AD7B00A1AC1C /* FAQHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A741BA72AB1AD7B00A1AC1C /* FAQHeaderView.swift */; };
 		0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */; };
 		0A7A7A4D2A937D3C000A4B43 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7A7A4C2A937D3C000A4B43 /* IQKeyboardManagerSwift */; };
 		0A7DD9B82AA9110D0067BED4 /* SettingsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9B72AA9110D0067BED4 /* SettingsViewCell.swift */; };
@@ -106,6 +107,7 @@
 		0A5E190B2A98430B00895386 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
 		0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewCell.swift; sourceTree = "<group>"; };
 		0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		0A741BA72AB1AD7B00A1AC1C /* FAQHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQHeaderView.swift; sourceTree = "<group>"; };
 		0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDetailButton.swift; sourceTree = "<group>"; };
 		0A7DD9B72AA9110D0067BED4 /* SettingsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewCell.swift; sourceTree = "<group>"; };
 		0A7DD9B92AA914260067BED4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -540,6 +542,7 @@
 			isa = PBXGroup;
 			children = (
 				0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */,
+				0A741BA72AB1AD7B00A1AC1C /* FAQHeaderView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -783,6 +786,7 @@
 				0A98113B2AAEFD57009AB71A /* HelpViewModel.swift in Sources */,
 				0A35EEC22A9FA6BE008E9299 /* HomeViewController.swift in Sources */,
 				0A7DD9BC2AA918ED0067BED4 /* SettingsModel.swift in Sources */,
+				0A741BA82AB1AD7B00A1AC1C /* FAQHeaderView.swift in Sources */,
 				0AFC1DE82A8F5AFD002A55B1 /* LoginViewController.swift in Sources */,
 				0A7DD9BE2AA919080067BED4 /* SettingsViewModel.swift in Sources */,
 				0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */,

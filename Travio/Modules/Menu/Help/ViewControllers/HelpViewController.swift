@@ -23,14 +23,6 @@ class HelpViewController: UIViewController {
         return label
     }()
 
-    private lazy var cvHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.poppinsSemiBold.withSize(24)
-        label.text = "FAQ"
-        label.textColor = AppColor.primary.color
-        return label
-    }()
-
     private lazy var backButton: UIButton = {
         let button = UIButton()
         let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -44,12 +36,15 @@ class HelpViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
+        layout.headerReferenceSize = CGSizeMake(self.view.frame.width, 80)
+
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
         cv.delegate = self
         cv.showsVerticalScrollIndicator = false
         cv.dataSource = self
         cv.register(ExpandableCell.self, forCellWithReuseIdentifier: ExpandableCell.identifier)
+        cv.register(FAQHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: FAQHeaderView.identifier)
         return cv
     }()
 
@@ -65,7 +60,7 @@ class HelpViewController: UIViewController {
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-        componentsView.addSubviews(cvHeaderLabel, helpCollectionView)
+        componentsView.addSubviews(helpCollectionView)
         view.addSubviews(backButton,
                          titleLabel,
                          componentsView)
@@ -91,16 +86,8 @@ class HelpViewController: UIViewController {
             make.top.equalTo(titleLabel.snp.bottom).offset(24)
         }
 
-        cvHeaderLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(24)
-            make.top.equalTo(componentsView.snp.top).offset(32)
-        }
-
         helpCollectionView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.top.equalTo(cvHeaderLabel.snp.bottom)
+            make.edges.equalToSuperview()
         }
     }
 
@@ -136,15 +123,14 @@ extension HelpViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel.toggleItemExpansion(at: indexPath)
 
-        collectionView.performBatchUpdates({}) { _ in
+        collectionView.performBatchUpdates {
             collectionView.reloadItems(at: [indexPath])
-            collectionView.layoutIfNeeded()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let inset: CGFloat = 16
-        return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
+        return UIEdgeInsets(top: -16, left: 0, bottom: inset, right: 0)
     }
 }
 
@@ -164,5 +150,17 @@ extension HelpViewController: UICollectionViewDataSource {
 
         cell.configure(with: item)
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FAQHeaderView.identifier, for: indexPath) as? FAQHeaderView else {
+                return UICollectionReusableView()
+            }
+
+            return headerView
+        }
+
+        return UICollectionReusableView()
     }
 }

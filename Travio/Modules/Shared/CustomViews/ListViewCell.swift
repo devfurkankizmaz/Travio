@@ -72,6 +72,7 @@ class ListViewCell: UICollectionViewCell {
     private func setupView() {
         contentView.roundCornersWithShadow([.bottomLeft, .topLeft, .topRight], radius: 16)
         contentView.backgroundColor = .white
+        contentView.layer.shadowPath = UIBezierPath(rect: contentView.bounds).cgPath
 
         backgroundImageView.layer.cornerRadius = 16
         backgroundImageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
@@ -91,7 +92,9 @@ class ListViewCell: UICollectionViewCell {
 
         backgroundImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.width.height.equalTo(90)
+            make.width.equalTo(90)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
 
         locationImageView.snp.makeConstraints { make in
