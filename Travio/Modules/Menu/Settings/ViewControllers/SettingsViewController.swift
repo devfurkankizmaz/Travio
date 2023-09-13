@@ -8,12 +8,17 @@ class SettingsViewController: UIViewController {
     private var selectedViewController: UIViewController?
     private lazy var viewModel: SettingsViewModel = .init()
 
+    private lazy var placeHolderImage: UIImage = {
+        let image = UIImage(systemName: "person.circle.fill")
+        return image ?? UIImage()
+    }()
+
     private lazy var profilePictureImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 60
-        imageView.backgroundColor = .darkGray
-        imageView.image = UIImage(named: "imageNotFound")
         imageView.contentMode = .scaleAspectFill
+        imageView.image = placeHolderImage
+        imageView.tintColor = AppColor.primary.color
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -146,7 +151,7 @@ class SettingsViewController: UIViewController {
                     self?.hideSpinner()
                     self?.fullNameLabel.text = self?.viewModel.profile?.fullName
                     let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
-                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
+                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: self?.placeHolderImage)
                 }
             } else {
                 self?.hideSpinner()

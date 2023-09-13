@@ -28,12 +28,17 @@ class EditProfileViewController: UIViewController {
         return vm
     }()
 
+    private lazy var placeHolderImage: UIImage = {
+        let image = UIImage(systemName: "person.circle.fill")
+        return image ?? UIImage()
+    }()
+
     private lazy var profilePictureImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 60
-        imageView.backgroundColor = .darkGray
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "imageNotFound")
+        imageView.image = placeHolderImage
+        imageView.tintColor = AppColor.primary.color
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -128,7 +133,7 @@ class EditProfileViewController: UIViewController {
 
     private func updateUIComponents(with profile: Profile) {
         let imageUrl = URL(string: profile.ppUrl)
-        profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
+        profilePictureImageView.kf.setImage(with: imageUrl, placeholder: placeHolderImage)
         createdInfo.titleView = profile.createdAt.formatISO8601ToCustomFormat()
         roleInfo.titleView = profile.role
         fullNameView.textField.text = profile.fullName
@@ -295,7 +300,6 @@ class EditProfileViewController: UIViewController {
 
         present(alertController, animated: true, completion: nil)
     }
-
 }
 
 // MARK: - Extensions
@@ -309,8 +313,6 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
 
         picker.dismiss(animated: true, completion: nil)
     }
-    
-    
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
