@@ -90,7 +90,7 @@ class PlaceViewCell: UICollectionViewCell {
 
     private func setupView() {
         addShadow()
-        contentView.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        contentView.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 0.7474273036)
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 16
 
@@ -137,13 +137,18 @@ class PlaceViewCell: UICollectionViewCell {
         locationLabel.text = place.place
         titleLabel.text = place.title
         imageDownloader?.cancel()
+        gradientView.isHidden = true
 
         guard let urlStr = place.coverImageUrl else {
             backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.contentMode = .center
+
             return
         }
         if !urlStr.isValidURL {
             backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.contentMode = .center
+
             return
         }
 
@@ -155,11 +160,15 @@ class PlaceViewCell: UICollectionViewCell {
 
                 indicator?.stopAnimating()
                 indicator?.removeFromSuperview()
+                self.gradientView.isHidden = false
+
                 switch result {
                 case .success:
-                    break
+                    self.gradientView.isHidden = false
                 case .failure:
                     self.backgroundImageView.image = UIImage(named: "failed")
+                    self.backgroundImageView.contentMode = .center
+                    self.gradientView.isHidden = true
                 }
             }
         )

@@ -43,10 +43,14 @@ class DetailsViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.backgroundColor = .clear
+        cv.backgroundColor = .white
         cv.delegate = self
         cv.dataSource = self
         cv.isDirectionalLockEnabled = true
+        cv.showsHorizontalScrollIndicator = false
+        let bgView = UIImageView(image: UIImage(named: "failed"))
+        bgView.contentMode = .center
+        cv.backgroundView = bgView
         cv.isPagingEnabled = true
         cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: "galleryIdentifier")
         return cv
@@ -244,7 +248,7 @@ class DetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubviews(stackView, mapUIView, descLabel)
         visitedButton.addSubviews(visitedButtonImageView)
-        view.addSubviews(scrollView, galleryCollectionView, backButton, pageControl, visitedButton)
+        view.addSubviews(galleryCollectionView, backButton, pageControl, visitedButton, scrollView)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -258,10 +262,10 @@ class DetailsViewController: UIViewController {
         }
 
         galleryCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(-30)
+            make.top.equalToSuperview().offset(-24)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(300)
+            make.height.equalTo(276)
         }
 
         pageControl.snp.makeConstraints { make in

@@ -75,15 +75,15 @@ class ListViewController: UIViewController {
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
-        view.addSubviews(componentsView, backButton, titleLabel)
+        view.addSubviews(componentsView, listCollectionView, sortButton, backButton, titleLabel)
         view.backgroundColor = AppColor.primary.color
-        componentsView.addSubviews(listCollectionView, sortButton)
+
         setupLayout()
     }
 
     private func setupLayout() {
         sortButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(24)
+            make.top.equalTo(componentsView.snp.top).offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.width.equalTo(26)
             make.height.equalTo(22)
