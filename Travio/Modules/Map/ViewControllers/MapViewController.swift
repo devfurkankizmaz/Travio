@@ -178,6 +178,11 @@ extension MapViewController: MKMapViewDelegate {
             if let index = mapViewModel.places.firstIndex(where: { $0.title == annotation.title }) {
                 let indexPath = IndexPath(item: index, section: 0)
                 placesCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+
+                let regionRadius: CLLocationDistance = 2500
+                let coordinate = CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
+                let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+                mapView.setRegion(region, animated: true)
             }
         }
     }
