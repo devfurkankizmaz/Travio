@@ -10,11 +10,6 @@ import Foundation
 class VisitsViewModel {
     typealias CompletionHandler = (String, Bool) -> Void
     var visits: [Visit] = []
-    var didNotificationTriggered: Bool = false
-
-    func handleNotification() {
-        didNotificationTriggered = true
-    }
 
     func fetchVisits(completion: @escaping CompletionHandler) {
         NetworkManager.shared.request(TravioRouter.getAllVisits(), responseType: VisitResponse.self) { [weak self] result in
