@@ -5,6 +5,12 @@ class HomeViewModel {
     private var newPlaces: [Place] = []
     private var visits: [Visit] = []
 
+    var didNotificationTriggered: Bool = false
+
+    func handleNotification() {
+        didNotificationTriggered = true
+    }
+
     func fetchPopularPlaces(callback: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getPopularPlaces(limit: 5), responseType: PlacesResponse.self) { [weak self] result in
             switch result {

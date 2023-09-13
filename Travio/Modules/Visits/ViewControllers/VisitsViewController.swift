@@ -56,12 +56,17 @@ class VisitsViewController: UIViewController {
     // MARK: - Private Methods
 
     private func fetchVisits() {
-        showSpinner()
+        if !visitsViewModel.didNotificationTriggered {
+            showSpinner()
+        }
+
         visitsViewModel.fetchVisits { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
                     self?.visitListCollectionView.reloadData()
-                    self?.hideSpinner()
+                    if !(self?.visitsViewModel.didNotificationTriggered)! {
+                        self?.hideSpinner()
+                    }
                 }
             }
         }
@@ -95,6 +100,7 @@ class VisitsViewController: UIViewController {
     // MARK: - Actions
 
     @objc func reloadCollectionView() {
+        visitsViewModel.handleNotification()
         fetchVisits()
     }
 }

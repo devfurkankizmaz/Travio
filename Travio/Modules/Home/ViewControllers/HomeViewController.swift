@@ -85,7 +85,9 @@ class HomeViewController: UIViewController {
             homeViewModel.fetchVisits
         ]
 
-        showSpinner()
+        if !homeViewModel.didNotificationTriggered {
+            showSpinner()
+        }
 
         contentFetchers.forEach { contentFetcher in
             dispatchGroup.enter()
@@ -100,13 +102,16 @@ class HomeViewController: UIViewController {
         }
 
         dispatchGroup.notify(queue: .main) { [weak self] in
-            self?.hideSpinner()
+            if !(self?.homeViewModel.didNotificationTriggered)! {
+                self?.hideSpinner()
+            }
         }
     }
 
     // MARK: - Actions
 
     @objc func reloadCollectionView() {
+        homeViewModel.handleNotification()
         fetchContent()
     }
 }

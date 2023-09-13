@@ -171,18 +171,17 @@ class DetailsViewController: UIViewController {
             return
         }
         showAlert(title: "Visit deleted", message: "This place has been deleted from visits.")
-        visitedButtonImageView.image = UIImage(named: "unmark")
-        visitedButton.backgroundColor = AppColor.primary.color
-        visitButtonIsHidden = false
         NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
+        visitButtonIsHidden = false
+        visitedButtonImageView.image = UIImage(named: "unmark")
     }
 
     private func handleVisitCreation(confirm: Bool) {
         if confirm {
-            visitButtonIsHidden = true
-            visitedButtonImageView.image = UIImage(named: "markasvisit")
             showAlert(title: "Visit created", message: "This place has been marked as visited.")
             NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
+            visitedButtonImageView.image = UIImage(named: "markasvisit")
+            visitButtonIsHidden = true
         }
     }
 
@@ -345,7 +344,7 @@ class DetailsViewController: UIViewController {
                             self?.handleVisitDeletion(message: message)
                         }
                     }
-                } else { self?.hideSpinner() }
+                }
             }
         } else {
             detailsViewModel.postVisit(placeId: placeId) { [weak self] confirm in
