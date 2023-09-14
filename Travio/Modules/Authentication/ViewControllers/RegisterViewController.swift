@@ -153,7 +153,7 @@ class RegisterViewController: UIViewController {
         }
 
         registerButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(56)
