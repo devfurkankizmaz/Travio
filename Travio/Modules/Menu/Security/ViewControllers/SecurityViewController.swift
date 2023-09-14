@@ -94,7 +94,7 @@ class SecurityViewController: UIViewController {
         securityCollectionView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(saveButton.snp.top).offset(-24)
+            make.bottom.equalTo(saveButton.snp.top)
             make.top.equalToSuperview().offset(32)
         }
         saveButton.snp.makeConstraints { make in
