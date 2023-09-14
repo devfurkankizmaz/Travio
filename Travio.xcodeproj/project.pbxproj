@@ -663,14 +663,14 @@
 		0AFC1DCC2A8F5541002A55B1 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
+				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
+				0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */,
+				0ABB1CD32AAB4B000059A913 /* ActivityIndicatorHelper.swift */,
 				0AFC1DD52A8F55A0002A55B1 /* KeychainHelper.swift */,
 				0AFC1DE12A8F5666002A55B1 /* Font.swift */,
 				0AFC1DE52A8F5A0B002A55B1 /* Color.swift */,
 				0A09334D2A990DFF00AE9B99 /* Router.swift */,
-				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
-				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
-				0ABB1CD32AAB4B000059A913 /* ActivityIndicatorHelper.swift */,
-				0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
