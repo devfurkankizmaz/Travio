@@ -138,6 +138,7 @@ class PlaceViewCell: UICollectionViewCell {
         titleLabel.text = place.title
         imageDownloader?.cancel()
         gradientView.isHidden = true
+        backgroundImageView.contentMode = .scaleAspectFill
 
         guard let urlStr = place.coverImageUrl else {
             backgroundImageView.image = UIImage(named: "failed")
@@ -156,19 +157,19 @@ class PlaceViewCell: UICollectionViewCell {
 
         backgroundImageView.kf.setImage(
             with: URL(string: urlStr),
-            completionHandler: { [weak indicator] result in
+            completionHandler: { [weak self] result in
 
-                indicator?.stopAnimating()
-                indicator?.removeFromSuperview()
-                self.gradientView.isHidden = false
+                self?.indicator.stopAnimating()
+                self?.indicator.removeFromSuperview()
+                self?.gradientView.isHidden = false
 
                 switch result {
                 case .success:
-                    self.gradientView.isHidden = false
+                    self?.gradientView.isHidden = false
                 case .failure:
-                    self.backgroundImageView.image = UIImage(named: "failed")
-                    self.backgroundImageView.contentMode = .center
-                    self.gradientView.isHidden = true
+                    self?.backgroundImageView.image = UIImage(named: "failed")
+                    self?.backgroundImageView.contentMode = .center
+                    self?.gradientView.isHidden = true
                 }
             }
         )

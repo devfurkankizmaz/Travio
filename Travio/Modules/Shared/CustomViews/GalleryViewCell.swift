@@ -22,6 +22,14 @@ class GalleryViewCell: UICollectionViewCell {
         return imageView
     }()
 
+    private lazy var indicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.hidesWhenStopped = true
+        indicator.color = AppColor.secondary.color
+        indicator.style = .large
+        return indicator
+    }()
+
     private lazy var gradientView: UIView = {
         let view = UIView()
         return view
@@ -48,12 +56,18 @@ class GalleryViewCell: UICollectionViewCell {
     // MARK: - Private Methods
 
     private func setupView() {
+        galleryImageView.addSubviews(indicator)
         contentView.addSubviews(galleryImageView, gradientView)
         setupLayout()
         gradientView.applyGradient(type: .light, view: contentView)
     }
 
     private func setupLayout() {
+        indicator.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
         galleryImageView.snp.makeConstraints { make in
             make.edges.equalTo(contentView.snp.edges)
         }
@@ -73,9 +87,13 @@ class GalleryViewCell: UICollectionViewCell {
             return
         }
 
+        indicator.startAnimating()
+
         galleryImageView.kf.setImage(
             with: URL(string: url),
             completionHandler: { [weak self] result in
+                self?.indicator.stopAnimating()
+                self?.indicator.removeFromSuperview()
                 switch result {
                 case .success:
                     break
