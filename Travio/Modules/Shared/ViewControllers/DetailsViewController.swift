@@ -43,13 +43,13 @@ class DetailsViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.backgroundColor = .white
+        cv.backgroundColor = AppColor.primary.color.withAlphaComponent(0.6)
         cv.delegate = self
         cv.dataSource = self
         cv.isDirectionalLockEnabled = true
         cv.showsHorizontalScrollIndicator = false
         let bgView = UIImageView(image: UIImage(named: "placeholderImage"))
-        bgView.contentMode = .center
+        bgView.contentMode = .scaleAspectFit
         cv.backgroundView = bgView
         cv.isPagingEnabled = true
         cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: GalleryViewCell.reuseIdentifier)

@@ -19,6 +19,7 @@ class GalleryViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.backgroundColor = AppColor.primary.color.withAlphaComponent(0.6)
         imageView.image = UIImage(named: "placeholderImage")
         return imageView
     }()

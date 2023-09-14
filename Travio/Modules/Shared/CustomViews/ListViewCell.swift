@@ -11,6 +11,7 @@ class ListViewCell: UICollectionViewCell {
     private lazy var backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = AppColor.primary.color
         imageView.clipsToBounds = true
         return imageView
     }()

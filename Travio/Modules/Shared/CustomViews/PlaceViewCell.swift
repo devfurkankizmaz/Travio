@@ -83,7 +83,7 @@ class PlaceViewCell: UICollectionViewCell {
 
     private func setupView() {
         contentView.addShadow()
-        contentView.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 0.7474273036)
+        contentView.backgroundColor = AppColor.primary.color.withAlphaComponent(0.7)
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 16
 
@@ -135,13 +135,13 @@ class PlaceViewCell: UICollectionViewCell {
 
         guard let urlStr = place.coverImageUrl else {
             backgroundImageView.image = UIImage(named: "placeholderImage")
-            backgroundImageView.contentMode = .center
+            backgroundImageView.contentMode = .scaleAspectFit
 
             return
         }
         if !urlStr.isValidURL {
             backgroundImageView.image = UIImage(named: "placeholderImage")
-            backgroundImageView.contentMode = .center
+            backgroundImageView.contentMode = .scaleAspectFit
 
             return
         }
