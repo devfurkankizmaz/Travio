@@ -175,6 +175,7 @@ class SettingsViewController: UIViewController {
 
         showConfirmationAlert(title: title, message: message) { [weak self] in
             KeychainHelper.deleteAccessToken()
+            KeychainHelper.deleteRefreshToken()
             let loginViewController = LoginViewController()
 
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

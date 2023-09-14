@@ -38,7 +38,6 @@
 		0A98113B2AAEFD57009AB71A /* HelpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */; };
 		0A9811412AAF3D4C009AB71A /* ExpandableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */; };
 		0A9811432AAF8832009AB71A /* NavigationControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */; };
-		0A9811462AAF8861009AB71A /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9811452AAF8861009AB71A /* JWTDecode */; };
 		0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D20B72AA4FA2200334128 /* ListViewController.swift */; };
 		0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA44B352A95F1AF0070052D /* CustomTextView.swift */; };
 		0AA8C3902A9A6B0700F25219 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */; };
@@ -179,7 +178,6 @@
 				0AFD27DC2A916B5C009BEC15 /* Kingfisher in Frameworks */,
 				0A7A7A4D2A937D3C000A4B43 /* IQKeyboardManagerSwift in Frameworks */,
 				0AFC1DD12A8F556F002A55B1 /* Alamofire in Frameworks */,
-				0A9811462AAF8861009AB71A /* JWTDecode in Frameworks */,
 				0AFC1DD42A8F557E002A55B1 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -708,7 +706,6 @@
 				0AFC1DD32A8F557E002A55B1 /* SnapKit */,
 				0AFD27DB2A916B5C009BEC15 /* Kingfisher */,
 				0A7A7A4C2A937D3C000A4B43 /* IQKeyboardManagerSwift */,
-				0A9811452AAF8861009AB71A /* JWTDecode */,
 			);
 			productName = Travio;
 			productReference = 0AFC1DB02A8F54E7002A55B1 /* Travio.app */;
@@ -743,7 +740,6 @@
 				0AFC1DD22A8F557E002A55B1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				0AFD27DA2A916B5C009BEC15 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				0A7A7A4B2A937D3C000A4B43 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				0A9811442AAF8861009AB71A /* XCRemoteSwiftPackageReference "JWTDecode" */,
 			);
 			productRefGroup = 0AFC1DB12A8F54E7002A55B1 /* Products */;
 			projectDirPath = "";
@@ -1070,14 +1066,6 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		0A9811442AAF8861009AB71A /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 		0AFC1DCF2A8F556F002A55B1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1109,11 +1097,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A7A7A4B2A937D3C000A4B43 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
-		};
-		0A9811452AAF8861009AB71A /* JWTDecode */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0A9811442AAF8861009AB71A /* XCRemoteSwiftPackageReference "JWTDecode" */;
-			productName = JWTDecode;
 		};
 		0AFC1DD02A8F556F002A55B1 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
