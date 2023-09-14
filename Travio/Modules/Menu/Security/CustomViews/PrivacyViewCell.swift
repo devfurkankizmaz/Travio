@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import AVFoundation
+import Photos
+import CoreLocation
 
 class PrivacyViewCell: UITableViewCell {
 
@@ -26,7 +29,7 @@ class PrivacyViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var toggle:UISwitch = {
+    public lazy var toggle:UISwitch = {
         let s = UISwitch()
 
         s.isOn = false
@@ -51,7 +54,7 @@ class PrivacyViewCell: UITableViewCell {
         self.contentView.frame = self.contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
     }
     
-    public func configure(model: String) {
+    public func configure(model: String, permissionType: PermissionType) {
         privacyLabel.text = model
         
     }
