@@ -6,6 +6,7 @@ class ListViewCell: UICollectionViewCell {
     // MARK: - Properties
 
     private var imageDownloader: DownloadTask?
+    static let reuseIdentifier = "ListIdentifier"
 
     private lazy var backgroundImageView: UIImageView = {
         let imageView = UIImageView()
@@ -119,11 +120,11 @@ class ListViewCell: UICollectionViewCell {
         titleLabel.text = place.title
         imageDownloader?.cancel()
         guard let urlStr = place.coverImageUrl else {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
             return
         }
         if !urlStr.isValidURL {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
             return
         }
 
@@ -139,13 +140,9 @@ class ListViewCell: UICollectionViewCell {
                 case .success:
                     break
                 case .failure:
-                    self.backgroundImageView.image = UIImage(named: "failed")
+                    self.backgroundImageView.image = UIImage(named: "placeholderImage")
                 }
             }
         )
     }
-
-    // MARK: - Actions
 }
-
-// MARK: - Extensions

@@ -13,12 +13,13 @@ class GalleryViewCell: UICollectionViewCell {
     // MARK: - Properties
 
     private var imageDownloader: DownloadTask?
+    static let reuseIdentifier = "GalleryIdentifier"
 
     private lazy var galleryImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "failed")
+        imageView.image = UIImage(named: "placeholderImage")
         return imageView
     }()
 
@@ -83,7 +84,7 @@ class GalleryViewCell: UICollectionViewCell {
         imageDownloader?.cancel()
         let url = image.imageURL
         if !url.isValidURL {
-            galleryImageView.image = UIImage(named: "failed")
+            galleryImageView.image = UIImage(named: "placeholderImage")
             return
         }
 
@@ -98,13 +99,9 @@ class GalleryViewCell: UICollectionViewCell {
                 case .success:
                     break
                 case .failure:
-                    self?.galleryImageView.image = UIImage(named: "failed")
+                    self?.galleryImageView.image = UIImage(named: "placeholderImage")
                 }
             }
         )
     }
-
-    // MARK: - Actions
 }
-
-// MARK: - Extensions

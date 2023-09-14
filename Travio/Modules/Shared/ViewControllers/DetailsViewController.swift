@@ -48,11 +48,11 @@ class DetailsViewController: UIViewController {
         cv.dataSource = self
         cv.isDirectionalLockEnabled = true
         cv.showsHorizontalScrollIndicator = false
-        let bgView = UIImageView(image: UIImage(named: "failed"))
+        let bgView = UIImageView(image: UIImage(named: "placeholderImage"))
         bgView.contentMode = .center
         cv.backgroundView = bgView
         cv.isPagingEnabled = true
-        cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: "galleryIdentifier")
+        cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: GalleryViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -86,7 +86,6 @@ class DetailsViewController: UIViewController {
 
     private lazy var locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "İstanbul"
         label.font = AppFont.poppinsSemiBold.withSize(30)
         label.textColor = AppColor.secondary.color
         return label
@@ -94,7 +93,6 @@ class DetailsViewController: UIViewController {
 
     private lazy var visitDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "24 Nisan 2023"
         label.font = AppFont.poppinsRegular.withSize(14)
         label.textColor = AppColor.secondary.color
         return label
@@ -102,7 +100,6 @@ class DetailsViewController: UIViewController {
 
     private lazy var creatorLabel: UILabel = {
         let label = UILabel()
-        label.text = "added by @furkankizmaz"
         label.font = AppFont.poppinsRegular.withSize(10)
         label.textColor = #colorLiteral(red: 0.6642268896, green: 0.6642268896, blue: 0.6642268896, alpha: 1)
         return label
@@ -401,7 +398,7 @@ extension DetailsViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryIdentifier", for: indexPath) as? GalleryViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryViewCell.reuseIdentifier, for: indexPath) as? GalleryViewCell else {
             return UICollectionViewCell()
         }
 

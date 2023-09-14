@@ -83,10 +83,8 @@ class ListViewModel {
             switch result {
             case .success(let response):
                 self.userPlaces = response.data.places
-                print("success")
                 callback(true)
             case .failure:
-                print("error")
                 callback(false)
             }
         }

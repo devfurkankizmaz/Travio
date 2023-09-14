@@ -81,16 +81,8 @@ class PlaceViewCell: UICollectionViewCell {
 
     // MARK: - Private Methods
 
-    private func addShadow() {
-        contentView.layer.shadowRadius = 8
-        contentView.layer.shadowOpacity = 0.25
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowColor = AppColor.secondary.color.cgColor
-        contentView.layer.masksToBounds = false
-    }
-
     private func setupView() {
-        addShadow()
+        contentView.addShadow()
         contentView.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 0.7474273036)
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 16
@@ -142,13 +134,13 @@ class PlaceViewCell: UICollectionViewCell {
         backgroundImageView.contentMode = .scaleAspectFill
 
         guard let urlStr = place.coverImageUrl else {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
             backgroundImageView.contentMode = .center
 
             return
         }
         if !urlStr.isValidURL {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
             backgroundImageView.contentMode = .center
 
             return
@@ -168,15 +160,11 @@ class PlaceViewCell: UICollectionViewCell {
                 case .success:
                     self?.gradientView.isHidden = false
                 case .failure:
-                    self?.backgroundImageView.image = UIImage(named: "failed")
+                    self?.backgroundImageView.image = UIImage(named: "placeholderImage")
                     self?.backgroundImageView.contentMode = .center
                     self?.gradientView.isHidden = true
                 }
             }
         )
     }
-
-    // MARK: - Actions
 }
-
-// MARK: - Extensions

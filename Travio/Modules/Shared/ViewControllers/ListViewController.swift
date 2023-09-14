@@ -46,14 +46,13 @@ class ListViewController: UIViewController {
         cv.showsVerticalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(ListViewCell.self, forCellWithReuseIdentifier: "listIdentifier")
+        cv.register(ListViewCell.self, forCellWithReuseIdentifier: ListViewCell.reuseIdentifier)
         return cv
     }()
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(32)
-        label.text = ""
         label.textColor = .white
         return label
     }()
@@ -217,7 +216,7 @@ extension ListViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listIdentifier", for: indexPath) as? ListViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListViewCell.reuseIdentifier, for: indexPath) as? ListViewCell else {
             return UICollectionViewCell()
         }
         let place = dataSource[indexPath.item]

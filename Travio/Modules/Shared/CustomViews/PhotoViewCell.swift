@@ -15,6 +15,7 @@ class PhotoViewCell: UICollectionViewCell {
     weak var delegate: PhotoCellDelegate?
     var collectionViewIndexPath: IndexPath?
     private var imageDownloader: DownloadTask?
+    static let reuseIdentifier = "PhotoIdentifier"
 
     private lazy var photoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -33,8 +34,8 @@ class PhotoViewCell: UICollectionViewCell {
 
     private lazy var removeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        button.tintColor = .red
+        button.setImage(UIImage(systemName: "xmark.square.fill"), for: .normal)
+        button.tintColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
         button.addTarget(self, action: #selector(removeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -51,15 +52,13 @@ class PhotoViewCell: UICollectionViewCell {
         setupView()
     }
 
-    // MARK: - Private Methods
-
-    private func addShadow() {
-        contentView.layer.shadowRadius = 8
-        contentView.layer.shadowOpacity = 0.25
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowColor = AppColor.secondary.color.cgColor
-        contentView.layer.masksToBounds = false
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        photoImageView.kf.cancelDownloadTask()
+        photoImageView.image = nil
     }
+
+    // MARK: - Private Methods
 
     private func setupView() {
         contentView.backgroundColor = .white
@@ -69,7 +68,7 @@ class PhotoViewCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 16
         imageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
         contentView.addSubviews(photoImageView, imageView, removeButton)
-        addShadow()
+        contentView.addShadow()
         setupLayout()
     }
 
@@ -112,5 +111,3 @@ class PhotoViewCell: UICollectionViewCell {
         }
     }
 }
-
-// MARK: - Extensions
