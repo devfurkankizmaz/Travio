@@ -39,14 +39,14 @@ class RegisterViewController: UIViewController {
 
     private lazy var usernameView: TravioUIView = {
         let view = TravioUIView()
-        view.placeholderText = "bilge_adam"
-        view.titleView = "Username"
+        view.placeholderText = "Enter your full name"
+        view.titleView = "Full Name"
         return view
     }()
 
     private lazy var emailView: TravioUIView = {
         let view = TravioUIView()
-        view.placeholderText = "developer@bilgeadam.com"
+        view.placeholderText = "Enter your email address"
         view.titleView = "Email"
         return view
     }()
