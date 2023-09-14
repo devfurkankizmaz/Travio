@@ -52,12 +52,6 @@ class PhotoViewCell: UICollectionViewCell {
         setupView()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        photoImageView.kf.cancelDownloadTask()
-        photoImageView.image = nil
-    }
-
     // MARK: - Private Methods
 
     private func setupView() {

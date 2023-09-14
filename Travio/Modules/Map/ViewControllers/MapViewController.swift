@@ -38,7 +38,7 @@ class MapViewController: UIViewController {
         cv.showsHorizontalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "placeIdentifier")
+        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: PlaceViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -66,7 +66,6 @@ class MapViewController: UIViewController {
         for place in mapViewModel.places {
             let latitude = place.latitude
             let longitude = place.longitude
-            // let id = place.id
             let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             let annotation = CustomAnnotation(coordinate: coordinate)
             annotation.title = place.title
@@ -98,16 +97,12 @@ class MapViewController: UIViewController {
         }
     }
 
-    // MARK: - Public Methods
-
     // MARK: - Actions
 
     @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let addPlaceVC = AddPlaceViewController()
         if gestureRecognizer.state == .began {
-            // Long press gesture recognized
             guard let mapView = gestureRecognizer.view as? MKMapView else { return }
-
             let touchPoint = gestureRecognizer.location(in: mapView)
             let coordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
 
@@ -237,7 +232,7 @@ extension MapViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "placeIdentifier", for: indexPath) as? PlaceViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceViewCell.reuseIdentifier, for: indexPath) as? PlaceViewCell else {
             return UICollectionViewCell()
         }
 
