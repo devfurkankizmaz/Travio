@@ -11,6 +11,7 @@ import UIKit
 class NavigationControllerHelper {
     static func navigateToAppropriateScreen(window: UIWindow?, token: String?) {
         if let token = token, !token.isEmpty {
+            showLaunchScreen(window: window)
             checkTokenValidity { confirm in
                 if confirm {
                     showMainTabBarScreen(window: window)
@@ -52,6 +53,14 @@ class NavigationControllerHelper {
             case .failure:
                 callback(false)
             }
+        }
+    }
+
+    private static func showLaunchScreen(window: UIWindow?) {
+        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        if let launchViewController = launchStoryboard.instantiateInitialViewController() {
+            window?.rootViewController = launchViewController
+            window?.makeKeyAndVisible()
         }
     }
 
