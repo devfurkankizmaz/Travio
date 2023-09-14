@@ -38,7 +38,7 @@ class VisitsViewController: UIViewController {
         cv.showsVerticalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "visitIdentifier")
+        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: PlaceViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -145,7 +145,7 @@ extension VisitsViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "visitIdentifier", for: indexPath) as? PlaceViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceViewCell.reuseIdentifier, for: indexPath) as? PlaceViewCell else {
             return UICollectionViewCell()
         }
 

@@ -6,6 +6,7 @@ class PlaceViewCell: UICollectionViewCell {
     // MARK: - Properties
 
     private var imageDownloader: DownloadTask?
+    static let reuseIdentifier = "PlaceIdentifier"
 
     private lazy var backgroundImageView: UIImageView = {
         let imageView = UIImageView()

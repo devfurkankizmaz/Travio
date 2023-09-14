@@ -8,10 +8,10 @@
 import Foundation
 
 class VisitsViewModel {
-    typealias CompletionHandler = (String, Bool) -> Void
+    typealias Completion = (String, Bool) -> Void
     var visits: [Visit] = []
 
-    func fetchVisits(completion: @escaping CompletionHandler) {
+    func fetchVisits(completion: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getAllVisits(), responseType: VisitResponse.self) { [weak self] result in
             switch result {
             case .success(let response):
