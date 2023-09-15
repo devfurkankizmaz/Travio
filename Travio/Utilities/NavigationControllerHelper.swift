@@ -42,7 +42,11 @@ class NavigationControllerHelper {
     }
 
     private static func refreshAccessToken(callback: @escaping (Bool) -> Void) {
-        let param: Parameters = ["refresh_token": KeychainHelper.loadRefreshToken()!]
+        guard let refreshToken = KeychainHelper.loadRefreshToken() else {
+            callback(false)
+            return
+        }
+        let param: Parameters = ["refresh_token": refreshToken]
         NetworkManager.shared.request(TravioRouter.refresh(params: param), responseType: LoginResponse.self) { result in
             switch result {
             case .success(let result):
