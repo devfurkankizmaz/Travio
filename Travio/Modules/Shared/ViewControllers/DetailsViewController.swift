@@ -259,10 +259,10 @@ class DetailsViewController: UIViewController {
         }
 
         galleryCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(-24)
+            make.top.equalToSuperview().offset(-30)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(276)
+            make.height.equalTo(270)
         }
 
         pageControl.snp.makeConstraints { make in
