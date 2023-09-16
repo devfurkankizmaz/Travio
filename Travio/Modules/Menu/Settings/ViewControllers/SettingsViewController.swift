@@ -5,17 +5,15 @@
 //  Created by Furkan Kızmaz on 7.09.2023.
 //
 
-
 import Kingfisher
 import SnapKit
 import UIKit
 
-protocol ProfileUpdateDelegate: AnyObject {
+protocol SettingsViewControllerDelegate: AnyObject {
     func updateProfile(name: String, image: UIImage?)
 }
 
 class SettingsViewController: UIViewController {
-
     private lazy var settingsViewModel: SettingsViewModel = {
         let viewModel = SettingsViewModel()
         return viewModel
@@ -56,14 +54,14 @@ class SettingsViewController: UIViewController {
         button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var logoutButton: UIButton = {
         let button = UIButton()
         let arrowImage = UIImage(named: "logoutIcon")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(arrowImage, for: .normal)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
-        
+
         return button
     }()
 
@@ -80,13 +78,13 @@ class SettingsViewController: UIViewController {
         collectionView.register(SettingsViewCell.self, forCellWithReuseIdentifier: "settingsCell")
         return collectionView
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         getProfile()
     }
-    
+
     private func getProfile() {
         showSpinner()
         settingsViewModel.getProfile(callback: { success in
@@ -101,7 +99,7 @@ class SettingsViewController: UIViewController {
             }
         })
     }
-    
+
     @objc func logoutButtonTapped() {
         let title = "Confirm Logout"
         let message = "Are you sure you want to log out?"
@@ -111,12 +109,12 @@ class SettingsViewController: UIViewController {
             self.navigationController?.setViewControllers([vc], animated: true)
         }
     }
-    
+
     @objc func editButtonTapped() {
         let vc = EditProfileViewController()
         vc.modalPresentationStyle = .fullScreen
         vc.profileUpdateDelegate = self
-        self.present(vc, animated: true)
+        present(vc, animated: true)
     }
 
     private func setupView() {
@@ -166,9 +164,9 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController: ProfileUpdateDelegate {
     func updateProfile(name: String, image: UIImage?) {
-        self.nameLabel.text = name
+        nameLabel.text = name
         if let updatedImage = image {
-            self.profileImageView.image = updatedImage
+            profileImageView.image = updatedImage
         }
     }
 }
@@ -177,12 +175,12 @@ extension SettingsViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width - 32, height: 54)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            let inset: CGFloat = 12
-            return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
-        }
-    
+        let inset: CGFloat = 12
+        return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return settingsViewModel.settingsParametres.count
     }
@@ -192,18 +190,18 @@ extension SettingsViewController: UICollectionViewDelegate, UICollectionViewData
         else {
             return UICollectionViewCell()
         }
-        
+
         let model = settingsViewModel.settingsParametres[indexPath.item]
         cell.configure(model: model)
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.item == 0 {
                 let viewController = SecurityViewController()
                 navigationController?.pushViewController(viewController, animated: true)
             }
-          }
         }
     }
+}
