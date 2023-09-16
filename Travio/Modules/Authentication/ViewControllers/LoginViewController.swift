@@ -33,8 +33,8 @@ class LoginViewController: UIViewController {
 
     private lazy var emailView: TravioUIView = {
         let view = TravioUIView()
-        view.placeholderText = "developer@bilgeadam.com"
-        view.textField.text = "furk@nik.com"
+        view.placeholderText = "Enter your email address"
+        view.textField.text = "furkanikb@gmail.com"
         view.titleView = "Email"
         return view
     }()
@@ -106,7 +106,7 @@ class LoginViewController: UIViewController {
 
     private func setupLayout() {
         logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
             make.centerX.equalToSuperview()
             make.height.equalTo(178)
             make.width.equalTo(149)
@@ -119,12 +119,12 @@ class LoginViewController: UIViewController {
         }
 
         welcomeLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(64)
+            make.top.equalToSuperview().offset(32)
             make.centerX.equalToSuperview()
         }
 
         emailView.snp.makeConstraints { make in
-            make.top.equalTo(welcomeLabel.snp.bottom).offset(41)
+            make.top.equalTo(welcomeLabel.snp.bottom).offset(42)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(74)
@@ -145,7 +145,7 @@ class LoginViewController: UIViewController {
         }
 
         stackView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-8)
             make.centerX.equalToSuperview()
         }
     }

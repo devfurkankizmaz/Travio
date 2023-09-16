@@ -45,7 +45,7 @@ class AddPlaceViewController: UIViewController {
         cv.delegate = self
         cv.dataSource = self
         cv.showsHorizontalScrollIndicator = false
-        cv.register(PhotoViewCell.self, forCellWithReuseIdentifier: "photoIdentifier")
+        cv.register(PhotoViewCell.self, forCellWithReuseIdentifier: PhotoViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -130,7 +130,7 @@ class AddPlaceViewController: UIViewController {
         addButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
-            make.bottom.equalToSuperview().offset(-24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-8)
             make.height.equalTo(54)
         }
     }
@@ -156,13 +156,7 @@ class AddPlaceViewController: UIViewController {
             return
         }
 
-        addPlaceViewModel.postGallery(with: placeId, urls: urls) { message, confirm in
-            if confirm {
-                print(message)
-            } else {
-                print(message)
-            }
-        }
+        addPlaceViewModel.postGallery(with: placeId, urls: urls) { _, _ in }
     }
 
     private func performPostPlaceIfImagesUploaded() {
@@ -184,11 +178,11 @@ class AddPlaceViewController: UIViewController {
         if isValid {
             addPlaceViewModel.postPlace(input) { [weak self] _, confirm in
                 if confirm {
-                    self?.performPostGallery() // Gallery işleminin yapılması
+                    self?.performPostGallery()
+                    self?.hideSpinner()
                     self?.dismiss(animated: true)
                     self?.delegate?.fetchPlaces()
                     self?.delegate?.showAddedAlert()
-                    self?.hideSpinner()
                 } else {
                     self?.hideSpinner()
                 }
@@ -260,7 +254,7 @@ extension AddPlaceViewController: UICollectionViewDelegateFlowLayout {
 
 extension AddPlaceViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoIdentifier", for: indexPath) as! PhotoViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoViewCell.reuseIdentifier, for: indexPath) as! PhotoViewCell
         cell.delegate = self
         cell.collectionViewIndexPath = indexPath
         if indexPath.row < selectedImages.count {

@@ -46,7 +46,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
 
     private lazy var backButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "back_go")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(arrowImage, for: .normal)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
@@ -71,7 +71,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         tableView.register(NewPasswordViewCell.self, forCellReuseIdentifier: NewPasswordViewCell().identifier)
         tableView.register(PrivacyViewCell.self, forCellReuseIdentifier: PrivacyViewCell().identifier)
         tableView.separatorStyle = .none
-        tableView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
+        tableView.backgroundColor = .clear //#colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
         return tableView
     }()
 
@@ -363,7 +363,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
 
 extension SecurityViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 84
+        return 76
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
@@ -380,7 +380,7 @@ extension SecurityViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return 32
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

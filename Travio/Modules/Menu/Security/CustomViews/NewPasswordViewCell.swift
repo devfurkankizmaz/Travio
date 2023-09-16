@@ -21,18 +21,13 @@ class NewPasswordViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        setupView()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         setupView()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.contentView.frame = self.contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
     }
     
     public func configure(model: String) {
@@ -52,7 +47,7 @@ class NewPasswordViewCell: UITableViewCell {
             make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(74)
+            make.bottom.equalToSuperview().offset(-8)
         }
     }
 }

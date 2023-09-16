@@ -3,38 +3,31 @@ import Kingfisher
 import UIKit
 
 class SettingsViewCell: UICollectionViewCell {
-    private lazy var bView: UIView = {
-            let view = UIView()
-           view.backgroundColor = .white
-            view.layer.cornerRadius = 16
-            view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOffset = CGSize(width: 0, height: 0)
-           view.layer.shadowOpacity = 0.15
-            view.layer.shadowRadius = 4
-            return view
-        }()
-    
-    private let leftImageView: UIImageView = {
+    // MARK: - Properties
+
+    static let identifier = "SettingsCell"
+
+    private lazy var settingImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleToFill
+        imageView.alpha = 0.7
         return imageView
     }()
 
-    private let label: UILabel = {
+    private lazy var settingArrowImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "settingsArrow"))
+        return imageView
+    }()
+
+    private lazy var settingLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = #colorLiteral(red: 0.2392156863, green: 0.2392156863, blue: 0.2392156863, alpha: 1)
+        label.font = AppFont.poppinsLight.withSize(14)
+        label.textAlignment = .left
+        label.textColor = AppColor.secondary.color
         return label
     }()
 
-    private let rightImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "settingsArrow"))
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+    // MARK: - Initializers
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,43 +36,52 @@ class SettingsViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+        setupView()
     }
 
+    // MARK: - Private Methods
+
     private func setupView() {
-        addSubview(bView)
-        bView.addSubviews(leftImageView, label, rightImageView)
-        setupLayouts()
+        contentView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        contentView.clipsToBounds = false
+        contentView.layer.cornerRadius = 16
+        addShadow()
+
+        contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        contentView.addSubviews(settingLabel,
+                                settingImageView,
+                                settingArrowImageView)
+        setupLayout()
     }
-    
-    func setupLayouts() {
-        
-        bView.snp.makeConstraints { make in
-                  make.leading.top.equalToSuperview().offset(2)
-                  make.trailing.bottom.equalToSuperview().offset(-2)
-              }
-      
-              leftImageView.snp.makeConstraints { make in
-                  make.centerY.equalToSuperview()
-                  make.leading.equalToSuperview().offset(17)
-                  make.height.width.equalTo(20)
-              }
-      
-              label.snp.makeConstraints { make in
-                  make.centerY.equalToSuperview()
-                  make.leading.equalTo(leftImageView.snp.trailing).offset(9)
-              }
-      
-              rightImageView.snp.makeConstraints { make in
-                  make.centerY.equalToSuperview()
-                  make.trailing.equalToSuperview().offset(-17)
-                  make.height.equalTo(15.5)
-                  make.width.equalTo(10.5)
-              }
+
+    private func setupLayout() {
+        settingImageView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(20)
+        }
+        settingLabel.snp.makeConstraints { make in
+            make.leading.equalTo(settingImageView.snp.trailing).offset(8)
+            make.centerY.equalToSuperview()
+        }
+
+        settingArrowImageView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-16)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(10)
+            make.height.equalTo(16)
+        }
     }
-    
-    func configure(model: SettingsModel) {
-        leftImageView.image = UIImage(named: model.leftImage)
-        label.text = model.text
+
+    // MARK: - Public Methods
+
+    public func configure(with item: SettingsItem) {
+        settingLabel.text = item.title
+        settingImageView.image = item.image
     }
+
+    // MARK: - Actions
 }
+
+// MARK: - Extensions

@@ -9,62 +9,55 @@ import Alamofire
 import UIKit
 
 class EditProfileViewModel {
-    
-    typealias UploadImageHandler = (Bool) -> Void
-    typealias getProfileHandler = (Bool) -> Void
-    
-    var profileInfos: Profile?
-    public var urls: [String] = []
-    
-    func uploadImage(images: [UIImage]?, callback: @escaping UploadImageHandler) {
-        var imagesData: [Data] = []
-        guard let images = images, !images.isEmpty else {
-            callback(true)
-            return
-        }
+    typealias CompletionHandler = (Bool) -> Void
 
-        images.forEach { image in
-            guard let imageData = image.convertToData(withFormat: .jpeg(compressionQuality: 0.8)) else {
-                print("Convert err.")
-                return
-            }
-            imagesData.append(imageData)
-        }
+    var ppUrl: String?
 
-        NetworkManager.shared.uploadImage(TravioRouter.uploadImage(imageData: imagesData), responseType: UploadResponse.self) { result in
-            switch result {
-            case .success(let response):
-                print("Image uploaded successfully. URLs: \(response.urls)")
-                self.urls = response.urls
-                callback(true)
-            case .failure(let error):
-                print("Error uploading image: \(error)")
-                callback(true)
+    func saveProfile(image: UIImage?, input: ProfileInput, callback: @escaping CompletionHandler) {
+        var updatedInput = input
+        if let image = image {
+            uploadImage(image: image) { [weak self] success in
+                if success, let imageUrl = self?.ppUrl {
+                    updatedInput.ppUrl = imageUrl
+                }
+
+                self?.editProfile(input: updatedInput, callback: callback)
             }
+        } else {
+            editProfile(input: updatedInput, callback: callback)
         }
     }
-    
-    func getProfile(callback: @escaping getProfileHandler) {
-        NetworkManager.shared.request(TravioRouter.getProfileInfo, responseType: Profile.self) { result in
+
+    private func editProfile(input: ProfileInput, callback: @escaping CompletionHandler) {
+        let params: Parameters = ["full_name": input.fullName, "email": input.email, "pp_url": input.ppUrl]
+        NetworkManager.shared.request(TravioRouter.putEditProfile(params: params), responseType: ResponseModel.self) { result in
             switch result {
-            case .success(let response):
-                print(response)
-                self.profileInfos = response
+            case .success:
                 callback(true)
-            case .failure(let error):
-                print(error)
+            case .failure:
                 callback(false)
             }
         }
     }
-    
-    func putEditProfile(name: String, email: String, ppUrl: String) {
-        NetworkManager.shared.request(TravioRouter.putEditProfile(params: ["full_name": name, "email": email, "pp_url": ppUrl]), responseType: ResponseModel.self) { result in
+
+    private func uploadImage(image: UIImage?, callback: @escaping CompletionHandler) {
+        guard let image = image else {
+            callback(false)
+            return
+        }
+
+        guard let imageData = image.convertToData(withFormat: .jpeg(compressionQuality: 0.8)) else {
+            callback(false)
+            return
+        }
+
+        NetworkManager.shared.uploadImage(TravioRouter.uploadImage(imageData: [imageData]), responseType: UploadResponse.self) { result in
             switch result {
             case .success(let response):
-                print("Edit profile \(response)")
-            case .failure(let error):
-                print("Edit profile Error: \(error.localizedDescription)")
+                self.ppUrl = response.urls.first
+                callback(true)
+            case .failure:
+                callback(false)
             }
         }
     }

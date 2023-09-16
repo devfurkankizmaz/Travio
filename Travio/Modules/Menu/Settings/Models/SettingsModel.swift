@@ -5,9 +5,9 @@
 //  Created by Furkan Kızmaz on 6.09.2023.
 //
 
-import Foundation
+import UIKit
 
-struct SettingsModel {
-    var leftImage: String
-    var text: String
+struct SettingsItem {
+    let title: String
+    let image: UIImage
 }

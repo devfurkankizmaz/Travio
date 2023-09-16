@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 import Photos
 import CoreLocation
+import SnapKit
 
 class PrivacyViewCell: UITableViewCell {
 
@@ -16,7 +17,7 @@ class PrivacyViewCell: UITableViewCell {
     
     private lazy var privacyView: UIView = {
         let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        view.backgroundColor = .white
         return view
     }()
     
@@ -39,7 +40,7 @@ class PrivacyViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        setupView()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -51,7 +52,6 @@ class PrivacyViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         privacyView.roundCorners(corners: [.topLeft, .topRight, .bottomLeft], radius: 16)
-        self.contentView.frame = self.contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
     }
     
     public func configure(model: String, permissionType: PermissionType) {
@@ -64,7 +64,16 @@ class PrivacyViewCell: UITableViewCell {
         contentView.addSubviews(privacyView)
         privacyView.addSubviews(privacyLabel, toggle)
         setupLayout()
+        addShadow()
     }
+    
+    private func addShadow() {
+            layer.shadowRadius = 8
+            layer.shadowOpacity = 0.15
+            layer.shadowOffset = CGSize(width: 0, height: 0)
+            layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.15)
+            layer.masksToBounds = false
+        }
     
     private func setupLayout() {
         
@@ -72,7 +81,7 @@ class PrivacyViewCell: UITableViewCell {
             make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(74)
+            make.bottom.equalToSuperview().offset(-8)
         }
         privacyLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
