@@ -41,6 +41,7 @@
 		0AAEFAC02A9CCE1A0075B7C4 /* UploadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAEFABF2A9CCE1A0075B7C4 /* UploadModel.swift */; };
 		0AB141172A949DA600EEE32A /* GalleryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB141162A949DA600EEE32A /* GalleryModel.swift */; };
 		0AB141192A94A2B600EEE32A /* GalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB141182A94A2B600EEE32A /* GalleryViewCell.swift */; };
+		0AB5FC302AB5C898001400C2 /* NavigationControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB5FC2F2AB5C898001400C2 /* NavigationControllerHelper.swift */; };
 		0AB83DA22A9B2B8C00E9ABEB /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB83DA12A9B2B8C00E9ABEB /* CustomAnnotation.swift */; };
 		0ABB1CCA2AAB03E00059A913 /* SecurityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CC92AAB03E00059A913 /* SecurityModel.swift */; };
 		0ABB1CCC2AAB04100059A913 /* SecurityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CCB2AAB04100059A913 /* SecurityViewModel.swift */; };
@@ -115,6 +116,7 @@
 		0AAEFABF2A9CCE1A0075B7C4 /* UploadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadModel.swift; sourceTree = "<group>"; };
 		0AB141162A949DA600EEE32A /* GalleryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryModel.swift; sourceTree = "<group>"; };
 		0AB141182A94A2B600EEE32A /* GalleryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewCell.swift; sourceTree = "<group>"; };
+		0AB5FC2F2AB5C898001400C2 /* NavigationControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerHelper.swift; sourceTree = "<group>"; };
 		0AB83DA12A9B2B8C00E9ABEB /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 		0ABB1CC92AAB03E00059A913 /* SecurityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityModel.swift; sourceTree = "<group>"; };
 		0ABB1CCB2AAB04100059A913 /* SecurityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityViewModel.swift; sourceTree = "<group>"; };
@@ -589,6 +591,7 @@
 				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
 				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
 				0ABB1CD32AAB4B000059A913 /* ActivityIndicatorHelper.swift */,
+				0AB5FC2F2AB5C898001400C2 /* NavigationControllerHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -740,6 +743,7 @@
 				0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */,
 				0AC8373B2AA88F6C00425FB6 /* UIStackView+Extension.swift in Sources */,
 				D33E9CFC2AAE5AF800606247 /* PrivacyViewCell.swift in Sources */,
+				0AB5FC302AB5C898001400C2 /* NavigationControllerHelper.swift in Sources */,
 				0AF07A042AA72A3B00DB194B /* ListViewModel.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
 				0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */,
