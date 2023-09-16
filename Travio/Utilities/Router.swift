@@ -11,6 +11,7 @@ import Foundation
 enum TravioRouter {
     case login(params: Parameters)
     case register(params: Parameters)
+    case refresh(params: Parameters)
     case getAllPlaces
     case getPopularPlaces(limit: Int)
     case getNewPlaces(limit: Int)
@@ -27,7 +28,6 @@ enum TravioRouter {
     case putEditProfile(params: Parameters)
     case putChangePassword(params: Parameters)
 
-
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
     }
@@ -38,6 +38,8 @@ enum TravioRouter {
             return "/v1/auth/login"
         case .register:
             return "/v1/auth/register"
+        case .refresh:
+            return "/v1/auth/refresh"
         case .getAllPlaces:
             return "/v1/places"
         case .getPopularPlaces:
@@ -68,13 +70,12 @@ enum TravioRouter {
             return "/v1/edit-profile"
         case .putChangePassword:
             return "/v1/change-password"
-
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .login, .register, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
+        case .login, .register, .refresh, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
         case .getAllPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace, .getProfileInfo:
             return .get
@@ -90,6 +91,8 @@ enum TravioRouter {
         case .login(let parameters):
             return parameters
         case .register(let parameters):
+            return parameters
+        case .refresh(let parameters):
             return parameters
         case .getProfileInfo:
             return nil
@@ -126,7 +129,7 @@ enum TravioRouter {
 
     var headers: HTTPHeaders {
         switch self {
-        case .login, .register, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
+        case .login, .register, .refresh, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
         case .getProfileInfo, .putEditProfile, .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit, .putChangePassword:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
