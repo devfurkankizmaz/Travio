@@ -12,7 +12,7 @@ import UIKit
 class EditProfileViewController: UIViewController {
     // MARK: - Properties
 
-    weak var profileUpdateDelegate: SettingsViewControllerDelegate?
+    weak var delegate: SettingsViewControllerDelegate?
 
     var profile: Profile? {
         didSet {
