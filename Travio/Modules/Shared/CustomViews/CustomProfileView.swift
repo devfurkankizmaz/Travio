@@ -75,6 +75,7 @@ class CustomProfileView: UIView {
         label.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(20)
             make.leading.equalTo(leftImageView.snp.leading).offset(32)
+            make.height.equalTo(12)
         }
     }
 }

@@ -6,13 +6,9 @@ class SettingsViewCell: UICollectionViewCell {
     private lazy var bView: UIView = {
             let view = UIView()
            view.backgroundColor = .white
-            view.layer.cornerRadius = 16
-            view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOffset = CGSize(width: 0, height: 0)
-           view.layer.shadowOpacity = 0.15
-            view.layer.shadowRadius = 4
-            return view
+           view.layer.cornerRadius = 16
+           view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+           return view
         }()
     
     private let leftImageView: UIImageView = {
@@ -25,7 +21,8 @@ class SettingsViewCell: UICollectionViewCell {
     private let label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = #colorLiteral(red: 0.2392156863, green: 0.2392156863, blue: 0.2392156863, alpha: 1)
+        label.font = AppFont.poppinsLight.withSize(14)
+        label.textColor = AppColor.secondary.color
         return label
     }()
 
@@ -43,20 +40,30 @@ class SettingsViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+        setupView()
     }
 
     private func setupView() {
         addSubview(bView)
         bView.addSubviews(leftImageView, label, rightImageView)
         setupLayouts()
+        contentView.clipsToBounds = false
+        addShadow()
+    }
+    
+    func addShadow() {
+        layer.shadowRadius = 8
+        layer.shadowOpacity = 0.15
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowColor = AppColor.secondary.color.cgColor
+        layer.masksToBounds = false
     }
     
     func setupLayouts() {
         
         bView.snp.makeConstraints { make in
-                  make.leading.top.equalToSuperview().offset(2)
-                  make.trailing.bottom.equalToSuperview().offset(-2)
+                  make.leading.top.equalToSuperview()
+                  make.trailing.bottom.equalToSuperview()
               }
       
               leftImageView.snp.makeConstraints { make in

@@ -36,6 +36,7 @@ class SettingsViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 60
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -51,7 +52,7 @@ class SettingsViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Edit Profile", for: .normal)
         button.setTitleColor(#colorLiteral(red: 0.09019607843, green: 0.7529411765, blue: 0.9215686275, alpha: 1), for: .normal)
-        button.titleLabel?.font = AppFont.poppinsRegular.withSize(12)
+        button.titleLabel?.font = AppFont.poppinsMedium.withSize(12)
         button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -74,6 +75,7 @@ class SettingsViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = .clear
         collectionView.register(SettingsViewCell.self, forCellWithReuseIdentifier: "settingsCell")
         return collectionView
@@ -85,21 +87,8 @@ class SettingsViewController: UIViewController {
         getProfile()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
-        self.tabBarController?.tabBar.isHidden = true
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-        self.tabBarController?.tabBar.isHidden = false
-    }
-    
     private func getProfile() {
+        showSpinner()
         settingsViewModel.getProfile(callback: { success in
             if success {
                 DispatchQueue.main.async {
@@ -107,6 +96,7 @@ class SettingsViewController: UIViewController {
                           let image = self.settingsViewModel.profileInfos?.pp_url else { return }
                     self.nameLabel.text = name
                     self.profileImageView.kf.setImage(with: URL(string: image))
+                    self.hideSpinner()
                 }
             }
         })
@@ -139,7 +129,7 @@ class SettingsViewController: UIViewController {
 
     private func setupLayout() {
         settingsLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.leading.equalToSuperview().offset(24)
         }
         logoutButton.snp.makeConstraints { make in
@@ -148,7 +138,7 @@ class SettingsViewController: UIViewController {
             make.width.height.equalTo(30)
         }
         componentsView.snp.makeConstraints { make in
-            make.top.equalTo(settingsLabel.snp.bottom).offset(54)
+            make.top.equalTo(settingsLabel.snp.bottom).offset(36)
             make.leading.trailing.bottom.equalToSuperview()
         }
         profileImageView.snp.makeConstraints { make in
@@ -166,10 +156,10 @@ class SettingsViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
         settingsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(editButton.snp.bottom).offset(24)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview().offset(-54)
+            make.top.equalTo(editButton.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 }
@@ -185,8 +175,13 @@ extension SettingsViewController: ProfileUpdateDelegate {
 
 extension SettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width - 32, height: 54)
+        return CGSize(width: collectionView.frame.width - 32, height: 54)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            let inset: CGFloat = 12
+            return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
+        }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return settingsViewModel.settingsParametres.count
@@ -206,7 +201,6 @@ extension SettingsViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.item == 0 {
-                self.tabBarController?.tabBar.isHidden = true
                 let viewController = SecurityViewController()
                 navigationController?.pushViewController(viewController, animated: true)
             }

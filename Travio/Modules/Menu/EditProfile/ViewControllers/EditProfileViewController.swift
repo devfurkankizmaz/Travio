@@ -41,7 +41,7 @@ class EditProfileViewController: UIViewController {
     private lazy var componentsView = ComponentsView()
     
     private lazy var profileImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "imageNotFound"))
+        let imageView = UIImageView(image: UIImage(named: "person.circle.fill"))
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 60
@@ -82,6 +82,7 @@ class EditProfileViewController: UIViewController {
     private lazy var fullNameView: TravioUIView = {
         let view = TravioUIView()
         view.placeholderText = "bilge_adam"
+        view.textField.text = "Muhammet Bozkurt"
         view.titleView = "Full Name"
         return view
     }()
@@ -89,6 +90,7 @@ class EditProfileViewController: UIViewController {
     private lazy var emailView: TravioUIView = {
         let view = TravioUIView()
         view.placeholderText = "bilge_adam"
+        view.textField.text = "muhammet@nik.com"
         view.titleView = "Email"
         return view
     }()
@@ -119,6 +121,7 @@ class EditProfileViewController: UIViewController {
     }
     
     @objc private func saveButtonTapped() {
+        showSpinner()
         editProfileViewModel.uploadImage(images: selectedImages) { success in
             if success{
                 DispatchQueue.main.async { [self] in
@@ -131,11 +134,13 @@ class EditProfileViewController: UIViewController {
                     
                 }
             }
+            self.hideSpinner()
             self.dismiss(animated: true, completion: nil)
         }
     }
     
     private func getProfile() {
+        showSpinner()
         editProfileViewModel.getProfile(callback: { success in
             if success {
                     guard let name = self.editProfileViewModel.profileInfos?.full_name,
@@ -147,6 +152,7 @@ class EditProfileViewController: UIViewController {
                 self.profileImageView.kf.setImage(with: URL(string: imageURL))
                     self.roleView.labelView = role
             }
+            self.hideSpinner()
         })
     }
     
