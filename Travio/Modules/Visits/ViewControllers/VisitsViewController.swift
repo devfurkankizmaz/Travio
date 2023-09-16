@@ -38,7 +38,7 @@ class VisitsViewController: UIViewController {
         cv.showsVerticalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "visitIdentifier")
+        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: PlaceViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -57,10 +57,12 @@ class VisitsViewController: UIViewController {
 
     private func fetchVisits() {
         showSpinner()
+
         visitsViewModel.fetchVisits { [weak self] _, success in
             if success {
                 DispatchQueue.main.async {
                     self?.visitListCollectionView.reloadData()
+
                     self?.hideSpinner()
                 }
             }
@@ -103,7 +105,7 @@ class VisitsViewController: UIViewController {
 
 extension VisitsViewController: VisitsViewControllerDelegate {
     func showDeletionAlert(message: String) {
-        showAlert(title: "success", message: message)
+        showAlert(title: "Success", message: message)
     }
 
     func reloadView() {
@@ -143,7 +145,7 @@ extension VisitsViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "visitIdentifier", for: indexPath) as? PlaceViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceViewCell.reuseIdentifier, for: indexPath) as? PlaceViewCell else {
             return UICollectionViewCell()
         }
 
