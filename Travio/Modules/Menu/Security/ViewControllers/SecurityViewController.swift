@@ -46,7 +46,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
 
     private lazy var backButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "back_go")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let arrowImage = UIImage(named: "back")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         button.setImage(arrowImage, for: .normal)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
