@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permission needed</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location permission needed</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Library permission needed</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Light.ttf</string>
