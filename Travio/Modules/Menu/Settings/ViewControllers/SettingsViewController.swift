@@ -8,12 +8,17 @@ class SettingsViewController: UIViewController {
     private var selectedViewController: UIViewController?
     private lazy var viewModel: SettingsViewModel = .init()
 
+    private lazy var placeHolderImage: UIImage = {
+        let image = UIImage(systemName: "person.circle.fill")
+        return image ?? UIImage()
+    }()
+
     private lazy var profilePictureImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 60
-        imageView.backgroundColor = .darkGray
-        imageView.image = UIImage(named: "imageNotFound")
         imageView.contentMode = .scaleAspectFill
+        imageView.image = placeHolderImage
+        imageView.tintColor = AppColor.primary.color
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -146,7 +151,7 @@ class SettingsViewController: UIViewController {
                     self?.hideSpinner()
                     self?.fullNameLabel.text = self?.viewModel.profile?.fullName
                     let imageUrl = URL(string: self?.viewModel.profile?.ppUrl ?? "")
-                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
+                    self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: self?.placeHolderImage)
                 }
             } else {
                 self?.hideSpinner()
@@ -167,12 +172,21 @@ class SettingsViewController: UIViewController {
     @objc func logoutButtonTapped() {
         let title = "Confirm Logout"
         let message = "Are you sure you want to log out?"
-        showConfirmationAlert(title: title, message: message, completion: {
+
+        showConfirmationAlert(title: title, message: message) { [weak self] in
             KeychainHelper.deleteAccessToken()
+            KeychainHelper.deleteRefreshToken()
             let loginViewController = LoginViewController()
-            self.navigationController?.setViewControllers([loginViewController], animated: true)
-            loginViewController.showAlert(from: self, title: "Success Logout", message: "You're successfully logged out.", completion: {})
-        })
+
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first
+            {
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    window.rootViewController = UINavigationController(rootViewController: loginViewController)
+                }, completion: nil)
+            }
+            loginViewController.showAlert(from: self!, title: "Success Logout", message: "You're successfully logged out.") {}
+        }
     }
 }
 
@@ -210,6 +224,29 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.row {
             case 0:
                 selectedViewController = SecurityViewController()
+            case 1:
+                selectedViewController = ListViewController()
+
+                if let listVC = selectedViewController as? ListViewController {
+                    listVC.selectedSectionType = .added
+                }
+            case 2:
+                selectedViewController = HelpViewController()
+            case 3:
+                selectedViewController = WebViewController()
+
+                if let webVC = selectedViewController as? WebViewController {
+                    webVC.titleWeb = "About"
+                    webVC.url = "https://api.iosclass.live/about"
+                }
+            case 4:
+                selectedViewController = WebViewController()
+
+                if let webVC = selectedViewController as? WebViewController {
+                    webVC.titleWeb = "Terms of Use"
+                    webVC.url = "https://api.iosclass.live/terms"
+                }
+
             default:
                 selectedViewController = nil
         }

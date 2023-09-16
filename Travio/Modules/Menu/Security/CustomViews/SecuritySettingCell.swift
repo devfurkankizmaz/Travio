@@ -8,11 +8,11 @@
 import UIKit
 
 class SecuritySettingCell: UICollectionViewCell {
-    static let identifier = "SecuritySettingCell"
-    
     // MARK: - Properties
     
-    private lazy var privacyView: PrivacyView = {
+    static let identifier = "SecuritySettingCell"
+
+    lazy var privacyView: PrivacyView = {
         let view = PrivacyView()
         return view
     }()
@@ -22,11 +22,7 @@ class SecuritySettingCell: UICollectionViewCell {
         view.isSecure = true
         return view
     }()
- 
-    // MARK: - Properties
-    
-    var onSwitchToggle: ((Bool) -> Void)?
-    
+
     // MARK: - Initialization
     
     override init(frame: CGRect) {

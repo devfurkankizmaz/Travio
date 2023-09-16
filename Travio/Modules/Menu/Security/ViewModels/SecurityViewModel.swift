@@ -26,6 +26,6 @@ class SecurityViewModel {
 
         let privacySection = Section(title: "Privacy", items: privacyItems)
 
-        sections = [changePasswordSection, privacySection]
+        self.sections = [changePasswordSection, privacySection]
     }
 }

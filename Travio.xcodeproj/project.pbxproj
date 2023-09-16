@@ -23,6 +23,7 @@
 		0A5E190C2A98430C00895386 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E190B2A98430B00895386 /* PlaceModel.swift */; };
 		0A60CA242A98A51B00A8418E /* PlaceViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */; };
 		0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */; };
+		0A741BA82AB1AD7B00A1AC1C /* FAQHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A741BA72AB1AD7B00A1AC1C /* FAQHeaderView.swift */; };
 		0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */; };
 		0A7A7A4D2A937D3C000A4B43 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7A7A4C2A937D3C000A4B43 /* IQKeyboardManagerSwift */; };
 		0A7DD9B82AA9110D0067BED4 /* SettingsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9B72AA9110D0067BED4 /* SettingsViewCell.swift */; };
@@ -32,6 +33,11 @@
 		0A7DD9C02AA91AC40067BED4 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A7DD9BF2AA91AC40067BED4 /* Poppins-Light.ttf */; };
 		0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */; };
 		0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */; };
+		0A9811372AAEFA5F009AB71A /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811362AAEFA5F009AB71A /* HelpViewController.swift */; };
+		0A9811392AAEFCCB009AB71A /* FAQModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811382AAEFCCB009AB71A /* FAQModel.swift */; };
+		0A98113B2AAEFD57009AB71A /* HelpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */; };
+		0A9811412AAF3D4C009AB71A /* ExpandableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */; };
+		0A9811432AAF8832009AB71A /* NavigationControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */; };
 		0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9D20B72AA4FA2200334128 /* ListViewController.swift */; };
 		0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA44B352A95F1AF0070052D /* CustomTextView.swift */; };
 		0AA8C3902A9A6B0700F25219 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */; };
@@ -48,7 +54,8 @@
 		0ABB1CCE2AAB07C40059A913 /* SecuritySettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CCD2AAB07C40059A913 /* SecuritySettingCell.swift */; };
 		0ABB1CD02AAB18430059A913 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CCF2AAB18430059A913 /* PrivacyView.swift */; };
 		0ABB1CD22AAB1D5E0059A913 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CD12AAB1D5E0059A913 /* SectionHeaderView.swift */; };
-		0ABB1CD42AAB4B000059A913 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CD32AAB4B000059A913 /* ActivityIndicator.swift */; };
+		0ABB1CD42AAB4B000059A913 /* ActivityIndicatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABB1CD32AAB4B000059A913 /* ActivityIndicatorHelper.swift */; };
+		0AC701D72AB040360082C2D0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC701D62AB040360082C2D0 /* WebViewController.swift */; };
 		0AC837352AA88E2400425FB6 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837342AA88E2400425FB6 /* UIImage+Extension.swift */; };
 		0AC837372AA88E5000425FB6 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837362AA88E5000425FB6 /* String+Extension.swift */; };
 		0AC837392AA88E9B00425FB6 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC837382AA88E9B00425FB6 /* UIView+Extension.swift */; };
@@ -99,6 +106,7 @@
 		0A5E190B2A98430B00895386 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
 		0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewCell.swift; sourceTree = "<group>"; };
 		0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		0A741BA72AB1AD7B00A1AC1C /* FAQHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQHeaderView.swift; sourceTree = "<group>"; };
 		0A7899CA2AA1BD27005CCF45 /* CustomDetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDetailButton.swift; sourceTree = "<group>"; };
 		0A7DD9B72AA9110D0067BED4 /* SettingsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewCell.swift; sourceTree = "<group>"; };
 		0A7DD9B92AA914260067BED4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +115,11 @@
 		0A7DD9BF2AA91AC40067BED4 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
 		0A7DD9C12AA9217F0067BED4 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
+		0A9811362AAEFA5F009AB71A /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		0A9811382AAEFCCB009AB71A /* FAQModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQModel.swift; sourceTree = "<group>"; };
+		0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewModel.swift; sourceTree = "<group>"; };
+		0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCell.swift; sourceTree = "<group>"; };
+		0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerHelper.swift; sourceTree = "<group>"; };
 		0A9D20B72AA4FA2200334128 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		0AA44B352A95F1AF0070052D /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -123,7 +136,8 @@
 		0ABB1CCD2AAB07C40059A913 /* SecuritySettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecuritySettingCell.swift; sourceTree = "<group>"; };
 		0ABB1CCF2AAB18430059A913 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		0ABB1CD12AAB1D5E0059A913 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
-		0ABB1CD32AAB4B000059A913 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		0ABB1CD32AAB4B000059A913 /* ActivityIndicatorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorHelper.swift; sourceTree = "<group>"; };
+		0AC701D62AB040360082C2D0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		0AC837342AA88E2400425FB6 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		0AC837362AA88E5000425FB6 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		0AC837382AA88E9B00425FB6 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -279,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				0AA44B352A95F1AF0070052D /* CustomTextView.swift */,
+				0AF07A052AA72E4400DB194B /* ListViewCell.swift */,
 				0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */,
 				0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */,
 				0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */,
@@ -323,7 +338,6 @@
 			isa = PBXGroup;
 			children = (
 				0A35EEC12A9FA6BE008E9299 /* HomeViewController.swift */,
-				0A9D20B72AA4FA2200334128 /* ListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -332,7 +346,6 @@
 			isa = PBXGroup;
 			children = (
 				0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */,
-				0AF07A032AA72A3B00DB194B /* ListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -341,7 +354,6 @@
 			isa = PBXGroup;
 			children = (
 				0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */,
-				0AF07A052AA72E4400DB194B /* ListViewCell.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -349,6 +361,8 @@
 		0A7DD9B22AA90E310067BED4 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				0AC701D52AB03F470082C2D0 /* About & Terms */,
+				0A9811312AAEFA01009AB71A /* Help */,
 				0A98111C2AAE380A009AB71A /* Settings */,
 				0A98111D2AAE3812009AB71A /* Security */,
 				0A9811262AAE3A60009AB71A /* EditProfile */,
@@ -487,9 +501,54 @@
 			path = CustomViews;
 			sourceTree = "<group>";
 		};
+		0A9811312AAEFA01009AB71A /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811352AAEFA4C009AB71A /* CustomViews */,
+				0A9811342AAEFA40009AB71A /* ViewModels */,
+				0A9811332AAEFA3A009AB71A /* ViewControllers */,
+				0A9811322AAEFA33009AB71A /* Models */,
+			);
+			path = Help;
+			sourceTree = "<group>";
+		};
+		0A9811322AAEFA33009AB71A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811382AAEFCCB009AB71A /* FAQModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0A9811332AAEFA3A009AB71A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811362AAEFA5F009AB71A /* HelpViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0A9811342AAEFA40009AB71A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0A98113A2AAEFD57009AB71A /* HelpViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0A9811352AAEFA4C009AB71A /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				0A9811402AAF3D4C009AB71A /* ExpandableCell.swift */,
+				0A741BA72AB1AD7B00A1AC1C /* FAQHeaderView.swift */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
 		0AA8C38E2A9A6AE700F25219 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				0A9D20B72AA4FA2200334128 /* ListViewController.swift */,
 				0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */,
 			);
 			path = ViewControllers;
@@ -499,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				0AA8C3922A9A6BB600F25219 /* DetailsViewModel.swift */,
+				0AF07A032AA72A3B00DB194B /* ListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -519,6 +579,14 @@
 				0AA8C3962A9B088800F25219 /* VisitsViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0AC701D52AB03F470082C2D0 /* About & Terms */ = {
+			isa = PBXGroup;
+			children = (
+				0AC701D62AB040360082C2D0 /* WebViewController.swift */,
+			);
+			path = "About & Terms";
 			sourceTree = "<group>";
 		};
 		0AC837332AA88E0E00425FB6 /* Extensions */ = {
@@ -593,13 +661,14 @@
 		0AFC1DCC2A8F5541002A55B1 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
+				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
+				0A9811422AAF8832009AB71A /* NavigationControllerHelper.swift */,
+				0ABB1CD32AAB4B000059A913 /* ActivityIndicatorHelper.swift */,
 				0AFC1DD52A8F55A0002A55B1 /* KeychainHelper.swift */,
 				0AFC1DE12A8F5666002A55B1 /* Font.swift */,
 				0AFC1DE52A8F5A0B002A55B1 /* Color.swift */,
 				0A09334D2A990DFF00AE9B99 /* Router.swift */,
-				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
-				0AC8373E2AA892CF00425FB6 /* NotificationCenterManager.swift */,
-				0ABB1CD32AAB4B000059A913 /* ActivityIndicator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -710,8 +779,10 @@
 				0A6636EB2AA31D3200515C8B /* HomeViewModel.swift in Sources */,
 				0A9D20B82AA4FA2200334128 /* ListViewController.swift in Sources */,
 				0ABB1CCE2AAB07C40059A913 /* SecuritySettingCell.swift in Sources */,
+				0A98113B2AAEFD57009AB71A /* HelpViewModel.swift in Sources */,
 				0A35EEC22A9FA6BE008E9299 /* HomeViewController.swift in Sources */,
 				0A7DD9BC2AA918ED0067BED4 /* SettingsModel.swift in Sources */,
+				0A741BA82AB1AD7B00A1AC1C /* FAQHeaderView.swift in Sources */,
 				0AFC1DE82A8F5AFD002A55B1 /* LoginViewController.swift in Sources */,
 				0A7DD9BE2AA919080067BED4 /* SettingsViewModel.swift in Sources */,
 				0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */,
@@ -727,7 +798,8 @@
 				0ACBC2212A9B66A600141CB9 /* VisitModel.swift in Sources */,
 				0AB141192A94A2B600EEE32A /* GalleryViewCell.swift in Sources */,
 				0AC837372AA88E5000425FB6 /* String+Extension.swift in Sources */,
-				0ABB1CD42AAB4B000059A913 /* ActivityIndicator.swift in Sources */,
+				0ABB1CD42AAB4B000059A913 /* ActivityIndicatorHelper.swift in Sources */,
+				0AC701D72AB040360082C2D0 /* WebViewController.swift in Sources */,
 				0A5B3D712AA9F6330091DFC2 /* EditProfileViewModel.swift in Sources */,
 				0ABB1CCC2AAB04100059A913 /* SecurityViewModel.swift in Sources */,
 				0AFC1DF12A8FA892002A55B1 /* ComponentsView.swift in Sources */,
@@ -748,11 +820,15 @@
 				0ACBC2242A9B67C300141CB9 /* VisitsViewModel.swift in Sources */,
 				0AA8C3992A9B09BC00F25219 /* LoginViewModel.swift in Sources */,
 				0AAEFAC02A9CCE1A0075B7C4 /* UploadModel.swift in Sources */,
+				0A9811412AAF3D4C009AB71A /* ExpandableCell.swift in Sources */,
 				0AFC1DE22A8F5666002A55B1 /* Font.swift in Sources */,
 				0AC837352AA88E2400425FB6 /* UIImage+Extension.swift in Sources */,
 				0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */,
 				0AC8373B2AA88F6C00425FB6 /* UIStackView+Extension.swift in Sources */,
+				0A9811372AAEFA5F009AB71A /* HelpViewController.swift in Sources */,
+				0A9811392AAEFCCB009AB71A /* FAQModel.swift in Sources */,
 				0AF07A042AA72A3B00DB194B /* ListViewModel.swift in Sources */,
+				0A9811432AAF8832009AB71A /* NavigationControllerHelper.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
 				0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */,
 				0A5B3D732AAA6D340091DFC2 /* SecurityViewController.swift in Sources */,
@@ -909,10 +985,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Travio/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Travio;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera permission needed";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo Library permission needed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -940,10 +1018,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Travio/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Travio;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera permission needed";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo Library permission needed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

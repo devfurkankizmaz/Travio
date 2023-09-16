@@ -43,6 +43,7 @@ class NetworkManager {
     private func handleSuccessResponse<T: Decodable>(data: T, response: AFDataResponse<T>, completion: @escaping Completion<T>) {
         if let loginResponse = data as? LoginResponse {
             KeychainHelper.saveAccessToken(loginResponse.accessToken)
+            KeychainHelper.saveRefreshToken(loginResponse.refreshToken)
         }
         completion(.success(data))
     }

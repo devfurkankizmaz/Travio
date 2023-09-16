@@ -52,14 +52,6 @@ class TravioTextView: UIView {
         setupConstraints()
     }
 
-    func addShadow() {
-        layer.shadowRadius = 8
-        layer.shadowOpacity = 0.15
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        layer.shadowColor = AppColor.secondary.color.cgColor
-        layer.masksToBounds = false
-    }
-
     private func setupConstraints() {
         label.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(8)
