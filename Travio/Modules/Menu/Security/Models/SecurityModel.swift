@@ -7,16 +7,12 @@
 
 import Foundation
 
-struct Section {
-    let title: String
-    let items: [Item]
+struct SecurityModel {
+    let type: String
+    let index: [String]
+    
 }
 
-struct Item {
-    let type: ItemType
-}
-
-enum ItemType {
-    case textInput(String, String)
-    case switchItem(String)
+struct ChangePassword {
+    let new_password: String
 }

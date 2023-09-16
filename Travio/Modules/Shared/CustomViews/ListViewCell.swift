@@ -6,10 +6,12 @@ class ListViewCell: UICollectionViewCell {
     // MARK: - Properties
 
     private var imageDownloader: DownloadTask?
+    static let reuseIdentifier = "ListIdentifier"
 
     private lazy var backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = AppColor.primary.color
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -67,33 +69,17 @@ class ListViewCell: UICollectionViewCell {
         setupView()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        backgroundImageView.kf.cancelDownloadTask()
-        backgroundImageView.image = nil
-    }
-
     // MARK: - Private Methods
 
-    private func addShadow() {
-        contentView.layer.shadowRadius = 8
-        contentView.layer.shadowOpacity = 0.15
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowColor = AppColor.secondary.color.cgColor
-    }
-
     private func setupView() {
-        contentView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        contentView.clipsToBounds = false
-        contentView.layer.cornerRadius = 16
-        addShadow()
+        contentView.roundCornersWithShadow([.bottomLeft, .topLeft, .topRight], radius: 16)
+        contentView.backgroundColor = .white
+        contentView.layer.shadowPath = UIBezierPath(rect: contentView.bounds).cgPath
 
-        backgroundImageView.addSubviews(indicator)
-
-        backgroundImageView.clipsToBounds = true
         backgroundImageView.layer.cornerRadius = 16
         backgroundImageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        backgroundImageView.addSubviews(indicator)
         locationStackView.addArrangedSubviews(locationImageView, locationLabel)
         contentView.addSubviews(backgroundImageView, titleLabel, locationStackView)
         contentView.sendSubviewToBack(backgroundImageView)
@@ -108,7 +94,9 @@ class ListViewCell: UICollectionViewCell {
 
         backgroundImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.width.height.equalTo(90)
+            make.width.equalTo(90)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
 
         locationImageView.snp.makeConstraints { make in
@@ -133,11 +121,11 @@ class ListViewCell: UICollectionViewCell {
         titleLabel.text = place.title
         imageDownloader?.cancel()
         guard let urlStr = place.coverImageUrl else {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
             return
         }
         if !urlStr.isValidURL {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
             return
         }
 
@@ -153,13 +141,9 @@ class ListViewCell: UICollectionViewCell {
                 case .success:
                     break
                 case .failure:
-                    self.backgroundImageView.image = UIImage(named: "failed")
+                    self.backgroundImageView.image = UIImage(named: "placeholderImage")
                 }
             }
         )
     }
-
-    // MARK: - Actions
 }
-
-// MARK: - Extensions

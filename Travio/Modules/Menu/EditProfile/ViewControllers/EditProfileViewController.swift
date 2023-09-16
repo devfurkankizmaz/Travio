@@ -28,12 +28,17 @@ class EditProfileViewController: UIViewController {
         return vm
     }()
 
+    private lazy var placeHolderImage: UIImage = {
+        let image = UIImage(systemName: "person.circle.fill")
+        return image ?? UIImage()
+    }()
+
     private lazy var profilePictureImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 60
-        imageView.backgroundColor = .darkGray
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "imageNotFound")
+        imageView.image = placeHolderImage
+        imageView.tintColor = AppColor.primary.color
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -128,7 +133,7 @@ class EditProfileViewController: UIViewController {
 
     private func updateUIComponents(with profile: Profile) {
         let imageUrl = URL(string: profile.ppUrl)
-        profilePictureImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "imageNotFound"))
+        profilePictureImageView.kf.setImage(with: imageUrl, placeholder: placeHolderImage)
         createdInfo.titleView = profile.createdAt.formatISO8601ToCustomFormat()
         roleInfo.titleView = profile.role
         fullNameView.textField.text = profile.fullName
@@ -221,7 +226,7 @@ class EditProfileViewController: UIViewController {
         }
 
         saveButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(54)
@@ -272,8 +277,28 @@ class EditProfileViewController: UIViewController {
     @objc func changePhotoButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
+
+        let alertController = UIAlertController(title: "Select a Photo Source", message: nil, preferredStyle: .actionSheet)
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
+                imagePicker.sourceType = .camera
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+            alertController.addAction(cameraAction)
+        }
+
+        let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { _ in
+            imagePicker.sourceType = .photoLibrary
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        alertController.addAction(photoLibraryAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
     }
 }
 

@@ -30,7 +30,7 @@ class EditProfileViewModel {
 
     private func editProfile(input: ProfileInput, callback: @escaping CompletionHandler) {
         let params: Parameters = ["full_name": input.fullName, "email": input.email, "pp_url": input.ppUrl]
-        NetworkManager.shared.request(TravioRouter.editProfile(params: params), responseType: ResponseModel.self) { result in
+        NetworkManager.shared.request(TravioRouter.putEditProfile(params: params), responseType: ResponseModel.self) { result in
             switch result {
             case .success:
                 callback(true)

@@ -20,9 +20,8 @@ class DetailsViewModel {
             case .success(let response):
                 callback(true)
                 self.place = response.data.place
-            case .failure(let error):
+            case .failure:
                 callback(false)
-                print(error)
             }
         }
     }
@@ -33,9 +32,8 @@ class DetailsViewModel {
             case .success(let response):
                 callback(true)
                 self.images = response.data.images
-            case .failure(let error):
+            case .failure:
                 callback(false)
-                print(error)
             }
         }
     }
@@ -47,14 +45,12 @@ class DetailsViewModel {
                 callback(response.message)
             case .failure(let error):
                 callback(error.localizedDescription)
-                print(error)
             }
         }
     }
 
     func getCurrentSystemDate() -> String {
         let currentDate = Date()
-
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         let formattedDate = dateFormatter.string(from: currentDate)

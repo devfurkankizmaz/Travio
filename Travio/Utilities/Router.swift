@@ -11,9 +11,9 @@ import Foundation
 enum TravioRouter {
     case login(params: Parameters)
     case register(params: Parameters)
-    case getProfile
-    case editProfile(params: Parameters)
+    case refresh(params: Parameters)
     case getAllPlaces
+    case getUserPlaces
     case getPopularPlaces(limit: Int)
     case getNewPlaces(limit: Int)
     case getPlaceById(id: String)
@@ -25,6 +25,9 @@ enum TravioRouter {
     case uploadImage(imageData: [Data])
     case deleteVisitById(id: String)
     case getVisitByPlace(id: String)
+    case getProfileInfo
+    case putEditProfile(params: Parameters)
+    case putChangePassword(params: Parameters)
 
     var baseURL: URL {
         URL(string: "https://api.iosclass.live")!
@@ -36,12 +39,12 @@ enum TravioRouter {
             return "/v1/auth/login"
         case .register:
             return "/v1/auth/register"
-        case .getProfile:
-            return "/v1/me"
-        case .editProfile:
-            return "/v1/edit-profile"
+        case .refresh:
+            return "/v1/auth/refresh"
         case .getAllPlaces:
             return "/v1/places"
+        case .getUserPlaces:
+            return "v1/places/user"
         case .getPopularPlaces:
             return "/v1/places/popular"
         case .getNewPlaces:
@@ -64,18 +67,24 @@ enum TravioRouter {
             return "/v1/visits/\(visitId)"
         case .getVisitByPlace(let placeId):
             return "/v1/visits/user/\(placeId)"
+        case .getProfileInfo:
+            return "/v1/me"
+        case .putEditProfile:
+            return "/v1/edit-profile"
+        case .putChangePassword:
+            return "/v1/change-password"
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .login, .register, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
+        case .login, .register, .refresh, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
-        case .getProfile, .getAllPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace:
+        case .getAllPlaces, .getUserPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace, .getProfileInfo:
             return .get
         case .deleteVisitById:
             return .delete
-        case .editProfile:
+        case .putEditProfile, .putChangePassword:
             return .put
         }
     }
@@ -86,11 +95,15 @@ enum TravioRouter {
             return parameters
         case .register(let parameters):
             return parameters
-        case .getProfile:
+        case .refresh(let parameters):
+            return parameters
+        case .getProfileInfo:
             return nil
-        case .editProfile(let parameters):
+        case .putEditProfile(let parameters):
             return parameters
         case .getAllPlaces:
+            return nil
+        case .getUserPlaces:
             return nil
         case .getPopularPlaces(let limit):
             return ["limit": limit]
@@ -114,14 +127,16 @@ enum TravioRouter {
             return nil
         case .getVisitByPlace:
             return nil
+        case .putChangePassword(let parameters):
+            return parameters
         }
     }
 
     var headers: HTTPHeaders {
         switch self {
-        case .login, .register, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
+        case .login, .register, .refresh, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
-        case .getProfile, .editProfile, .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit:
+        case .getProfileInfo, .putEditProfile, .getAllVisits, .getUserPlaces, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit, .putChangePassword:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
         case .uploadImage:
             return ["Content-Type": "multipart/form-data"]

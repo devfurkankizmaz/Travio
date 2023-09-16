@@ -13,7 +13,6 @@ class SettingsViewModel {
 
     private let settingsItems: [SettingsItem] = [
         SettingsItem(title: "Security Settings", image: UIImage(named: "securitySettings")!),
-        SettingsItem(title: "App Defaults", image: UIImage(named: "appDefaults")!),
         SettingsItem(title: "My Added Places", image: UIImage(named: "map")!),
         SettingsItem(title: "Help & Support", image: UIImage(named: "helpSupport")!),
         SettingsItem(title: "About", image: UIImage(named: "about")!),
@@ -28,14 +27,14 @@ class SettingsViewModel {
         return settingsItems[index]
     }
 
-    func fetchProfile(completion: @escaping CompletionHandler) {
-        NetworkManager.shared.request(TravioRouter.getProfile, responseType: Profile.self) { [weak self] result in
+    func getProfile(callback: @escaping CompletionHandler) {
+        NetworkManager.shared.request(TravioRouter.getProfileInfo, responseType: Profile.self) { result in
             switch result {
             case .success(let response):
-                self?.profile = response
-                completion(true)
+                self.profile = response
+                callback(true)
             case .failure:
-                completion(false)
+                callback(false)
             }
         }
     }

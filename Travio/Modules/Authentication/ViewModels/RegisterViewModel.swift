@@ -35,8 +35,8 @@ class RegisterViewModel {
 
         NetworkManager.shared.request(TravioRouter.register(params: params), responseType: ResponseModel.self) { result in
             switch result {
-            case .success:
-                callback("You're registered successfully.", true)
+            case .success(let response):
+                callback(response.message, true)
             case .failure(let error):
                 callback(error.localizedDescription, false)
             }

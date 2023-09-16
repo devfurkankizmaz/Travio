@@ -12,7 +12,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     weak var delegate: MainCollectionViewCellDelegate?
 
     private var places: [Place] = []
-    static let identifier = "MainCell"
+    static let reuseIdentifier = "MainIdentifier"
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -40,7 +40,7 @@ class MainCollectionViewCell: UICollectionViewCell {
         cv.showsHorizontalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: "placesIdentifier")
+        cv.register(PlaceViewCell.self, forCellWithReuseIdentifier: PlaceViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -130,7 +130,7 @@ extension MainCollectionViewCell: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "placesIdentifier", for: indexPath) as? PlaceViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceViewCell.reuseIdentifier, for: indexPath) as? PlaceViewCell else {
             return UICollectionViewCell()
         }
         let place = places[indexPath.row]

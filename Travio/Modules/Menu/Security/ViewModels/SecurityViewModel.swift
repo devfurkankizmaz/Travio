@@ -6,26 +6,26 @@
 //
 
 import Foundation
+import Alamofire
 
 class SecurityViewModel {
-    var sections: [Section] = []
-
-    init() {
-        let changePasswordItems: [Item] = [
-            Item(type: .textInput("New Password", "Enter your new password")),
-            Item(type: .textInput("New Password Confirm", "Confirm your new password")),
-        ]
-
-        let changePasswordSection = Section(title: "Change Password", items: changePasswordItems)
-
-        let privacyItems: [Item] = [
-            Item(type: .switchItem("Camera")),
-            Item(type: .switchItem("Photo Library")),
-            Item(type: .switchItem("Location")),
-        ]
-
-        let privacySection = Section(title: "Privacy", items: privacyItems)
-
-        sections = [changePasswordSection, privacySection]
+    
+    var tableViewArray = [SecurityModel(type: "Change Password",
+                                        index: ["New Password", "New Password Confirm"]),
+                          SecurityModel(type: "Privacy",
+                                        index: ["Camera", "Photo Library", "Location"])]
+    
+    typealias ChangePasswordHandler = (String, Bool) -> Void
+    var changePasswordInfos: ChangePassword?
+    
+    func putChangePassword(change_password: String) {
+        NetworkManager.shared.request(TravioRouter.putChangePassword(params: ["new_password": change_password]), responseType: ResponseModel.self) { result in
+            switch result {
+            case .success(let response):
+                print("Change password \(response)")
+            case .failure(let error):
+                print("Change Password Error: \(error.localizedDescription)")
+            }
+        }
     }
 }

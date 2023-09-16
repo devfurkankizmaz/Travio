@@ -1,13 +1,21 @@
+//
+//  FAQHeaderView.swift
+//  Travio
+//
+//  Created by Furkan Kızmaz on 13.09.2023.
+//
+
 import SnapKit
 import UIKit
 
-class SectionHeaderView: UICollectionReusableView {
-    static let identifier = "SectionHeaderView"
+class FAQHeaderView: UICollectionReusableView {
+    static let identifier = "FAQHeaderView"
     
     let label: UILabel = {
         let label = UILabel()
-        label.font = AppFont.poppinsSemiBold.withSize(16)
+        label.font = AppFont.poppinsSemiBold.withSize(24)
         label.textColor = AppColor.primary.color
+        label.text = "FAQ"
         return label
     }()
     
@@ -26,9 +34,5 @@ class SectionHeaderView: UICollectionReusableView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(with title: String) {
-        label.text = title
     }
 }
