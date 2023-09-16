@@ -290,6 +290,7 @@
 		0A09336D2A995BEB00AE9B99 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				0AF07A052AA72E4400DB194B /* ListViewCell.swift */,
 				0AA44B352A95F1AF0070052D /* CustomTextView.swift */,
 				0ACBC21D2A9B4DEE00141CB9 /* PhotoViewCell.swift */,
 				0A60CA232A98A51B00A8418E /* PlaceViewCell.swift */,
@@ -335,7 +336,6 @@
 			isa = PBXGroup;
 			children = (
 				0A35EEC12A9FA6BE008E9299 /* HomeViewController.swift */,
-				0A9D20B72AA4FA2200334128 /* ListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -344,7 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				0A6636EA2AA31D3200515C8B /* HomeViewModel.swift */,
-				0AF07A032AA72A3B00DB194B /* ListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -353,7 +352,6 @@
 			isa = PBXGroup;
 			children = (
 				0A8544EE2AA684BC0095BF39 /* MainCollectionViewCell.swift */,
-				0AF07A052AA72E4400DB194B /* ListViewCell.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -495,6 +493,7 @@
 		0AA8C38E2A9A6AE700F25219 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				0A9D20B72AA4FA2200334128 /* ListViewController.swift */,
 				0AA8C38F2A9A6B0700F25219 /* DetailsViewController.swift */,
 			);
 			path = ViewControllers;
@@ -503,6 +502,7 @@
 		0AA8C3912A9A6BA000F25219 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				0AF07A032AA72A3B00DB194B /* ListViewModel.swift */,
 				0AA8C3922A9A6BB600F25219 /* DetailsViewModel.swift */,
 			);
 			path = ViewModels;
