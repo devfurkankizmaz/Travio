@@ -51,7 +51,7 @@ class SecurityViewController: UIViewController {
     private lazy var saveButton: TravioButton = {
         let button = TravioButton()
         button.setTitle("Save", for: .normal)
-        // button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -109,6 +109,10 @@ class SecurityViewController: UIViewController {
 
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+
+    @objc func saveButtonTapped() {
+        // Will be save changed pass
     }
 }
 

@@ -63,9 +63,7 @@ class SecuritySettingCell: UICollectionViewCell {
             passwordView.isHidden = true
             privacyView.isHidden = false
         }
-        
     }
     
     // MARK: - Actions
-
 }
