@@ -13,6 +13,7 @@ enum TravioRouter {
     case register(params: Parameters)
     case refresh(params: Parameters)
     case getAllPlaces
+    case getUserPlaces
     case getPopularPlaces(limit: Int)
     case getNewPlaces(limit: Int)
     case getPlaceById(id: String)
@@ -42,6 +43,8 @@ enum TravioRouter {
             return "/v1/auth/refresh"
         case .getAllPlaces:
             return "/v1/places"
+        case .getUserPlaces:
+            return "v1/places/user"
         case .getPopularPlaces:
             return "/v1/places/popular"
         case .getNewPlaces:
@@ -77,7 +80,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .refresh, .postPlace, .postVisit, .uploadImage, .postGalleryByPlaceId:
             return .post
-        case .getAllPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace, .getProfileInfo:
+        case .getAllPlaces, .getUserPlaces, .getPopularPlaces, .getNewPlaces, .getPlaceById, .getGalleryByPlaceId, .getAllVisits, .getVisitByPlace, .getProfileInfo:
             return .get
         case .deleteVisitById:
             return .delete
@@ -99,6 +102,8 @@ enum TravioRouter {
         case .putEditProfile(let parameters):
             return parameters
         case .getAllPlaces:
+            return nil
+        case .getUserPlaces:
             return nil
         case .getPopularPlaces(let limit):
             return ["limit": limit]
@@ -131,7 +136,7 @@ enum TravioRouter {
         switch self {
         case .login, .register, .refresh, .getAllPlaces, .getNewPlaces, .getPopularPlaces, .getPlaceById, .getGalleryByPlaceId:
             return [:]
-        case .getProfileInfo, .putEditProfile, .getAllVisits, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit, .putChangePassword:
+        case .getProfileInfo, .putEditProfile, .getAllVisits, .getUserPlaces, .postPlace, .postGalleryByPlaceId, .deleteVisitById, .getVisitByPlace, .postVisit, .putChangePassword:
             return ["Authorization": "Bearer \(KeychainHelper.loadAccessToken()!)"]
         case .uploadImage:
             return ["Content-Type": "multipart/form-data"]
