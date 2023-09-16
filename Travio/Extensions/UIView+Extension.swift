@@ -32,7 +32,6 @@ extension UIView {
             let endColor = UIColor(red: 61/255, green: 61/255, blue: 61/255, alpha: 0.0).cgColor
             gradientLayer.colors = [startColor, endColor]
         case .light:
-            gradientLayer.frame = CGRect(x: 0, y: 0, width: view!.bounds.width, height: 248)
             let startColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0).cgColor
             let endColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 0.0).cgColor
             gradientLayer.colors = [startColor, endColor]
