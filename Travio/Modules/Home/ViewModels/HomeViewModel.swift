@@ -49,6 +49,8 @@ class HomeViewModel {
             return newPlaces
         case .visits:
             return visits.map { $0.place }
+        default:
+            return []
         }
     }
 }

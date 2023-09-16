@@ -6,19 +6,12 @@ class PlaceViewCell: UICollectionViewCell {
     // MARK: - Properties
 
     private var imageDownloader: DownloadTask?
+    static let reuseIdentifier = "PlaceIdentifier"
 
     private lazy var backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        // imageView.alpha = 0.5
-        return imageView
-    }()
-
-    private lazy var gradientImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "grad")
         return imageView
     }()
 
@@ -28,6 +21,11 @@ class PlaceViewCell: UICollectionViewCell {
         indicator.color = .white
         indicator.style = .medium
         return indicator
+    }()
+
+    private lazy var gradientView: UIView = {
+        let view = UIView()
+        return view
     }()
 
     private lazy var locationImageView: UIImageView = {
@@ -83,26 +81,19 @@ class PlaceViewCell: UICollectionViewCell {
 
     // MARK: - Private Methods
 
-    private func addShadow() {
-        contentView.layer.shadowRadius = 8
-        contentView.layer.shadowOpacity = 0.25
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentView.layer.shadowColor = AppColor.secondary.color.cgColor
-        contentView.layer.masksToBounds = false
-    }
-
     private func setupView() {
-        addShadow()
-        contentView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
+        contentView.addShadow()
+        contentView.backgroundColor = AppColor.primary.color.withAlphaComponent(0.7)
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 16
 
         backgroundImageView.addSubviews(indicator)
         contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
         locationStackView.addArrangedSubviews(locationImageView, locationLabel)
-        contentView.addSubviews(backgroundImageView, gradientImageView, titleLabel, locationStackView)
+        contentView.addSubviews(backgroundImageView, gradientView, titleLabel, locationStackView)
         contentView.sendSubviewToBack(backgroundImageView)
         setupLayout()
+        gradientView.applyGradient(type: .dark, view: contentView)
     }
 
     private func setupLayout() {
@@ -110,10 +101,11 @@ class PlaceViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        gradientImageView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(110)
+
+        gradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -138,13 +130,19 @@ class PlaceViewCell: UICollectionViewCell {
         locationLabel.text = place.place
         titleLabel.text = place.title
         imageDownloader?.cancel()
+        gradientView.isHidden = true
+        backgroundImageView.contentMode = .scaleAspectFill
 
         guard let urlStr = place.coverImageUrl else {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
+            backgroundImageView.contentMode = .scaleAspectFit
+
             return
         }
         if !urlStr.isValidURL {
-            backgroundImageView.image = UIImage(named: "failed")
+            backgroundImageView.image = UIImage(named: "placeholderImage")
+            backgroundImageView.contentMode = .scaleAspectFit
+
             return
         }
 
@@ -152,21 +150,21 @@ class PlaceViewCell: UICollectionViewCell {
 
         backgroundImageView.kf.setImage(
             with: URL(string: urlStr),
-            completionHandler: { [weak indicator] result in
+            completionHandler: { [weak self] result in
 
-                indicator?.stopAnimating()
-                indicator?.removeFromSuperview()
+                self?.indicator.stopAnimating()
+                self?.indicator.removeFromSuperview()
+                self?.gradientView.isHidden = false
+
                 switch result {
                 case .success:
-                    break
+                    self?.gradientView.isHidden = false
                 case .failure:
-                    self.backgroundImageView.image = UIImage(named: "failed")
+                    self?.backgroundImageView.image = UIImage(named: "placeholderImage")
+                    self?.backgroundImageView.contentMode = .center
+                    self?.gradientView.isHidden = true
                 }
             }
         )
     }
-
-    // MARK: - Actions
 }
-
-// MARK: - Extensions

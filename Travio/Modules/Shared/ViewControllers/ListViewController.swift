@@ -6,14 +6,9 @@ class ListViewController: UIViewController {
 
     private var dataSource: [Place] = []
 
-    var selectedSection: SectionType? {
-        didSet {
-            titleLabel.text = selectedSection?.title
-        }
-    }
-
     var selectedSectionType: SectionType? {
         didSet {
+            titleLabel.text = selectedSectionType?.title
             updateCollectionViewData()
         }
     }
@@ -51,14 +46,13 @@ class ListViewController: UIViewController {
         cv.showsVerticalScrollIndicator = false
         cv.delegate = self
         cv.dataSource = self
-        cv.register(ListViewCell.self, forCellWithReuseIdentifier: "listIdentifier")
+        cv.register(ListViewCell.self, forCellWithReuseIdentifier: ListViewCell.reuseIdentifier)
         return cv
     }()
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(32)
-        label.text = ""
         label.textColor = .white
         return label
     }()
@@ -80,22 +74,25 @@ class ListViewController: UIViewController {
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
-        view.addSubviews(componentsView, backButton, titleLabel)
+        view.addSubviews(componentsView, listCollectionView, sortButton, backButton, titleLabel)
         view.backgroundColor = AppColor.primary.color
-        componentsView.addSubviews(listCollectionView, sortButton)
+
         setupLayout()
     }
 
     private func setupLayout() {
         sortButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(24)
+            make.top.equalTo(componentsView.snp.top).offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.width.equalTo(26)
             make.height.equalTo(22)
         }
 
         listCollectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(sortButton.snp.bottom).offset(12)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
 
         backButton.snp.makeConstraints { make in
@@ -108,16 +105,14 @@ class ListViewController: UIViewController {
             make.leading.equalTo(backButton.snp.trailing).offset(24)
         }
         componentsView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(125)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(128)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
 
     private func updateCollectionViewData() {
-        guard let selectedSectionType = selectedSectionType else { return }
         showSpinner()
+        guard let selectedSectionType = selectedSectionType else { return }
 
         switch selectedSectionType {
         case .popular:
@@ -129,7 +124,7 @@ class ListViewController: UIViewController {
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
-                }
+                } else { self?.hideSpinner() }
             }
         case .new:
             listViewModel.fetchNewPlaces { [weak self] success in
@@ -140,7 +135,7 @@ class ListViewController: UIViewController {
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
-                }
+                } else { self?.hideSpinner() }
             }
         case .visits:
             listViewModel.fetchVisits { [weak self] success in
@@ -151,7 +146,18 @@ class ListViewController: UIViewController {
                         self?.sortPlaces()
                         self?.listCollectionView.reloadData()
                     }
-                }
+                } else { self?.hideSpinner() }
+            }
+        case .added:
+            listViewModel.fetchUserPlaces { [weak self] success in
+                if success {
+                    DispatchQueue.main.async {
+                        self?.hideSpinner()
+                        self?.dataSource = self?.listViewModel.getDataSource(for: selectedSectionType) ?? []
+                        self?.sortPlaces()
+                        self?.listCollectionView.reloadData()
+                    }
+                } else { self?.hideSpinner() }
             }
         }
     }
@@ -192,8 +198,7 @@ extension ListViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let topInset: CGFloat = 70
-        return UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -211,7 +216,7 @@ extension ListViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listIdentifier", for: indexPath) as? ListViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListViewCell.reuseIdentifier, for: indexPath) as? ListViewCell else {
             return UICollectionViewCell()
         }
         let place = dataSource[indexPath.item]
