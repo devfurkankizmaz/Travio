@@ -3,6 +3,21 @@ import Security
 
 struct KeychainHelper {
     private static let accessTokenKey = "access-token"
+    private static let refreshTokenKey = "refresh-token"
+        
+    @discardableResult
+    static func saveRefreshToken(_ token: String) -> Bool {
+        return saveString(refreshTokenKey, value: token)
+    }
+
+    static func loadRefreshToken() -> String? {
+        return loadString(refreshTokenKey)
+    }
+
+    @discardableResult
+    static func deleteRefreshToken() -> Bool {
+        return deleteString(refreshTokenKey)
+    }
     
     @discardableResult
     static func saveAccessToken(_ token: String) -> Bool {

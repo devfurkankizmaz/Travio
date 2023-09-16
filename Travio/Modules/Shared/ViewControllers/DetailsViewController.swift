@@ -33,6 +33,7 @@ class DetailsViewController: UIViewController {
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = UIColor(white: 1, alpha: 0.5)
         pageControl.backgroundStyle = .prominent
+        pageControl.isEnabled = false
         return pageControl
     }()
 
@@ -42,13 +43,16 @@ class DetailsViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.scrollDirection = .horizontal
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        cv.backgroundColor = AppColor.background.color
+        cv.backgroundColor = AppColor.primary.color.withAlphaComponent(0.6)
         cv.delegate = self
         cv.dataSource = self
         cv.isDirectionalLockEnabled = true
+        cv.showsHorizontalScrollIndicator = false
+        let bgView = UIImageView(image: UIImage(named: "placeholderImage"))
+        bgView.contentMode = .scaleAspectFit
+        cv.backgroundView = bgView
         cv.isPagingEnabled = true
-        cv.backgroundView = UIImageView(image: UIImage(named: "imageNotFound"))
-        cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: "galleryIdentifier")
+        cv.register(GalleryViewCell.self, forCellWithReuseIdentifier: GalleryViewCell.reuseIdentifier)
         return cv
     }()
 
@@ -82,7 +86,6 @@ class DetailsViewController: UIViewController {
 
     private lazy var locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "İstanbul"
         label.font = AppFont.poppinsSemiBold.withSize(30)
         label.textColor = AppColor.secondary.color
         return label
@@ -90,7 +93,6 @@ class DetailsViewController: UIViewController {
 
     private lazy var visitDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "24 Nisan 2023"
         label.font = AppFont.poppinsRegular.withSize(14)
         label.textColor = AppColor.secondary.color
         return label
@@ -98,7 +100,6 @@ class DetailsViewController: UIViewController {
 
     private lazy var creatorLabel: UILabel = {
         let label = UILabel()
-        label.text = "added by @furkankizmaz"
         label.font = AppFont.poppinsRegular.withSize(10)
         label.textColor = #colorLiteral(red: 0.6642268896, green: 0.6642268896, blue: 0.6642268896, alpha: 1)
         return label
@@ -110,13 +111,6 @@ class DetailsViewController: UIViewController {
         sv.spacing = 4
         sv.alignment = .leading
         return sv
-    }()
-
-    private lazy var gradientImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "gradientwhite")
-        return imageView
     }()
 
     private lazy var visitedButton: DetailButton = {
@@ -151,6 +145,7 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+
         setupView()
         fetchPlace()
         fetchGallery()
@@ -171,18 +166,17 @@ class DetailsViewController: UIViewController {
             return
         }
         showAlert(title: "Visit deleted", message: "This place has been deleted from visits.")
-        visitedButtonImageView.image = UIImage(named: "unmark")
-        visitedButton.backgroundColor = AppColor.primary.color
-        visitButtonIsHidden = false
         NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
+        visitButtonIsHidden = false
+        visitedButtonImageView.image = UIImage(named: "unmark")
     }
 
     private func handleVisitCreation(confirm: Bool) {
         if confirm {
-            visitButtonIsHidden = true
-            visitedButtonImageView.image = UIImage(named: "markasvisit")
             showAlert(title: "Visit created", message: "This place has been marked as visited.")
             NotificationCenterManager.shared.postNotification(name: NSNotification.Name(rawValue: "VisitChanged"))
+            visitedButtonImageView.image = UIImage(named: "markasvisit")
+            visitButtonIsHidden = true
         }
     }
 
@@ -251,7 +245,7 @@ class DetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubviews(stackView, mapUIView, descLabel)
         visitedButton.addSubviews(visitedButtonImageView)
-        view.addSubviews(galleryCollectionView, gradientImageView, backButton, pageControl, scrollView, visitedButton)
+        view.addSubviews(scrollView, galleryCollectionView, backButton, pageControl, visitedButton)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
@@ -265,22 +259,15 @@ class DetailsViewController: UIViewController {
         }
 
         galleryCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(-30)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(300)
         }
 
-        gradientImageView.snp.makeConstraints { make in
-            make.leading.equalTo(galleryCollectionView.snp.leading)
-            make.trailing.equalTo(galleryCollectionView.snp.trailing)
-            make.bottom.equalTo(galleryCollectionView.snp.bottom)
-            make.height.equalTo(120)
-        }
-
         pageControl.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(gradientImageView.snp.bottom).offset(-10)
+            make.bottom.equalTo(galleryCollectionView.snp.bottom).offset(-10)
         }
 
         scrollView.snp.makeConstraints { make in
@@ -335,20 +322,23 @@ class DetailsViewController: UIViewController {
 
     @objc func visitedButtonTapped() {
         guard let placeId = placeId else { return }
-
         if visitButtonIsHidden {
             showDeleteConfirmationAlert { [weak self] confirm in
                 if confirm {
+                    self?.showSpinner()
                     self?.detailsViewModel.deleteVisit(with: placeId) { [weak self] message in
                         DispatchQueue.main.async {
+                            self?.hideSpinner()
                             self?.handleVisitDeletion(message: message)
                         }
                     }
                 }
             }
         } else {
+            showSpinner()
             detailsViewModel.postVisit(placeId: placeId) { [weak self] confirm in
                 DispatchQueue.main.async {
+                    self?.hideSpinner()
                     self?.handleVisitCreation(confirm: confirm)
                 }
             }
@@ -408,7 +398,7 @@ extension DetailsViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryIdentifier", for: indexPath) as? GalleryViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryViewCell.reuseIdentifier, for: indexPath) as? GalleryViewCell else {
             return UICollectionViewCell()
         }
 
