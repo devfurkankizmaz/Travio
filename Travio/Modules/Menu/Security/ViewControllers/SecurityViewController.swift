@@ -71,7 +71,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         tableView.register(NewPasswordViewCell.self, forCellReuseIdentifier: NewPasswordViewCell().identifier)
         tableView.register(PrivacyViewCell.self, forCellReuseIdentifier: PrivacyViewCell().identifier)
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear //#colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
+        tableView.backgroundColor = .clear
         return tableView
     }()
 
@@ -140,6 +140,9 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         let newPassword = newPasswordCell.changePasswordView.textField.text ?? ""
         let newPasswordConfirm = newPasswordConfirmCell.changePasswordView.textField.text ?? ""
         performPasswordChange(newPassword: newPassword)
+        
+        navigationController?.popViewController(animated: true)
+
     }
 
     @objc private func toggleButtonTapped(_ sender: UISwitch) {
@@ -265,7 +268,6 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     private func openPhotoLibrarySettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsURL, options: [:]) { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
             }
         }
     }
@@ -273,7 +275,6 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     private func openLocationSettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsURL, options: [:]) { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
             }
         }
     }
@@ -319,7 +320,6 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     private func openAppSettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsURL, options: [:]) { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
             }
         }
     }
