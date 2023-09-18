@@ -48,6 +48,7 @@ class DetailsViewController: UIViewController {
         cv.dataSource = self
         cv.isDirectionalLockEnabled = true
         cv.showsHorizontalScrollIndicator = false
+        cv.contentInsetAdjustmentBehavior = .never
         let bgView = UIImageView(image: UIImage(named: "placeholderImage"))
         bgView.contentMode = .scaleAspectFit
         cv.backgroundView = bgView
@@ -245,7 +246,7 @@ class DetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubviews(stackView, mapUIView, descLabel)
         visitedButton.addSubviews(visitedButtonImageView)
-        view.addSubviews(scrollView, galleryCollectionView, backButton, pageControl, visitedButton)
+        view.addSubviews(galleryCollectionView, backButton, pageControl, visitedButton, scrollView)
         view.backgroundColor = AppColor.background.color
         setupLayout()
     }
