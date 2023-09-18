@@ -26,8 +26,8 @@ final class ActivityIndicator {
         
         isAnimating = true
 
-        guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
-
+        guard let keyWindow = UIApplication.shared.connectedScenes.map({ $0 as? UIWindowScene }).compactMap({ $0 }).first?.windows.first else { return }
+        
         DispatchQueue.main.async {
             let blurEffect = UIBlurEffect(style: .dark)
             self.blurEffectView = UIVisualEffectView(effect: blurEffect)

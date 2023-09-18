@@ -8,6 +8,8 @@
 import Kingfisher
 import SnapKit
 import UIKit
+import Photos
+import AVFoundation
 
 class EditProfileViewController: UIViewController {
     // MARK: - Properties
@@ -273,7 +275,7 @@ class EditProfileViewController: UIViewController {
     @objc func dismissButtonTapped() {
         dismiss(animated: true)
     }
-
+    
     @objc func changePhotoButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -281,16 +283,27 @@ class EditProfileViewController: UIViewController {
         let alertController = UIAlertController(title: "Select a Photo Source", message: nil, preferredStyle: .actionSheet)
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
-                imagePicker.sourceType = .camera
-                self.present(imagePicker, animated: true, completion: nil)
+            if AVCaptureDevice.authorizationStatus(for: .video) == .authorized {
+                let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
+                    imagePicker.sourceType = .camera
+                    self.present(imagePicker, animated: true, completion: nil)
+                }
+                alertController.addAction(cameraAction)
+            } else {
+                let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
+                    self.showAlert(title: "Camera Access Required", message: "Please grant camera access in Settings to use this feature.")
+                }
+                alertController.addAction(cameraAction)
             }
-            alertController.addAction(cameraAction)
         }
 
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { _ in
-            imagePicker.sourceType = .photoLibrary
-            self.present(imagePicker, animated: true, completion: nil)
+            if PHPhotoLibrary.authorizationStatus() == .authorized {
+                imagePicker.sourceType = .photoLibrary
+                self.present(imagePicker, animated: true, completion: nil)
+            } else {
+                self.showAlert(title: "Photo Library Access Required", message: "Please grant photo library access in Settings to use this feature.")
+            }
         }
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

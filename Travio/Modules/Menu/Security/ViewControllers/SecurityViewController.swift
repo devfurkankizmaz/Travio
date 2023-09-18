@@ -5,12 +5,12 @@
 //  Created by Furkan Kızmaz on 7.09.2023.
 //
 
+import AVFoundation
+import CoreLocation
 import Kingfisher
+import Photos
 import SnapKit
 import UIKit
-import AVFoundation
-import Photos
-import CoreLocation
 
 enum PermissionType: Int {
     case camera
@@ -32,7 +32,6 @@ enum PermissionType: Int {
 }
 
 class SecurityViewController: UIViewController, CLLocationManagerDelegate {
-
     private let locationManager = CLLocationManager()
     private var cameraPermissionGranted = false
     private var photoLibraryPermissionGranted = false
@@ -71,7 +70,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         tableView.register(NewPasswordViewCell.self, forCellReuseIdentifier: NewPasswordViewCell().identifier)
         tableView.register(PrivacyViewCell.self, forCellReuseIdentifier: PrivacyViewCell().identifier)
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear //#colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
+        tableView.backgroundColor = .clear
         return tableView
     }()
 
@@ -86,34 +85,33 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         setupView()
         observePermissionChanges()
-        
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
-            if cameraAuthorizationStatus == .authorized {
-                enableCameraToggle()
-                cameraPermissionGranted = true
-            }
-            let photoLibraryAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
-            if photoLibraryAuthorizationStatus == .authorized {
-                enablePhotoLibraryToggle()
-                photoLibraryPermissionGranted = true
-            }
-            let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
-            if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
-                enableLocationToggle()
-                locationPermissionGranted = true
-                requestLocationPermission()
-            }
+        super.viewDidAppear(animated)
+        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        if cameraAuthorizationStatus == .authorized {
+            enableCameraToggle()
+            cameraPermissionGranted = true
         }
-    
+        let photoLibraryAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+        if photoLibraryAuthorizationStatus == .authorized {
+            enablePhotoLibraryToggle()
+            photoLibraryPermissionGranted = true
+        }
+        let manager = CLLocationManager()
+        let locationAuthorizationStatus = manager.authorizationStatus
+        if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
+            enableLocationToggle()
+            locationPermissionGranted = true
+            requestLocationPermission()
+        }
+    }
+
     private func observePermissionChanges() {
         NotificationCenter.default.addObserver(self, selector: #selector(requestCameraPermission), name: .AVCaptureDeviceWasConnected, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(requestPhotoLibraryPermission), name: .init("photoLibraryPermissionDidChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(requestLocationPermission), name: .init("locationPermissionDidChange"), object: nil)
-
     }
 
     @objc func backButtonTapped() {
@@ -134,12 +132,15 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
               let newPasswordIndex = changePasswordSection.index.firstIndex(of: "New Password"),
               let newPasswordConfirmIndex = changePasswordSection.index.firstIndex(of: "New Password Confirm"),
               let newPasswordCell = tableView.cellForRow(at: IndexPath(row: newPasswordIndex, section: 0)) as? NewPasswordViewCell,
-              let newPasswordConfirmCell = tableView.cellForRow(at: IndexPath(row: newPasswordConfirmIndex, section: 0)) as? NewPasswordViewCell else {
+              let newPasswordConfirmCell = tableView.cellForRow(at: IndexPath(row: newPasswordConfirmIndex, section: 0)) as? NewPasswordViewCell
+        else {
             return
         }
         let newPassword = newPasswordCell.changePasswordView.textField.text ?? ""
         let newPasswordConfirm = newPasswordConfirmCell.changePasswordView.textField.text ?? ""
         performPasswordChange(newPassword: newPassword)
+
+        navigationController?.popViewController(animated: true)
     }
 
     @objc private func toggleButtonTapped(_ sender: UISwitch) {
@@ -240,41 +241,45 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     @objc private func requestLocationPermission() {
+        let manager = CLLocationManager()
+
         if !locationPermissionRequested {
             locationPermissionRequested = true
 
             if CLLocationManager.locationServicesEnabled() {
-                switch CLLocationManager.authorizationStatus() {
+                switch manager.authorizationStatus {
                 case .authorizedAlways, .authorizedWhenInUse:
-                    enableLocationToggle()
-                    locationPermissionGranted = true
+                    DispatchQueue.main.async {
+                        self.enableLocationToggle()
+                        self.locationPermissionGranted = true
+                    }
                 case .notDetermined:
                     DispatchQueue.global(qos: .background).async {
                         self.locationManager.delegate = self
                         self.locationManager.requestWhenInUseAuthorization()
                     }
                 default:
-                    openAppSettings()
+                    DispatchQueue.main.async {
+                        self.openAppSettings()
+                    }
                 }
             } else {
-                openAppSettings()
+                DispatchQueue.main.async {
+                    self.openAppSettings()
+                }
             }
         }
     }
-    
+
     private func openPhotoLibrarySettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL, options: [:]) { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
-            }
+            UIApplication.shared.open(settingsURL, options: [:]) { _ in }
         }
     }
 
     private func openLocationSettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL, options: [:]) { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
-            }
+            UIApplication.shared.open(settingsURL, options: [:]) { _ in }
         }
     }
 
@@ -298,7 +303,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
                         self?.openPhotoLibrarySettings()
                     }
                 } else if status == .authorized {
-                    //self?.disablePhotoLibraryToggle()
+                    // self?.disablePhotoLibraryToggle()
                     self?.photoLibraryPermissionGranted = false
                 }
             }
@@ -318,9 +323,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
 
     private func openAppSettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL, options: [:]) { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
-            }
+            UIApplication.shared.open(settingsURL, options: [:]) { _ in }
         }
     }
 
@@ -365,6 +368,7 @@ extension SecurityViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 76
     }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         let label = UILabel()
