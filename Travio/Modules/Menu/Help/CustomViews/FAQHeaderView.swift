@@ -27,7 +27,7 @@ class FAQHeaderView: UICollectionReusableView {
         
         label.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(24)
-            make.centerY.equalToSuperview()
+            make.bottom.equalToSuperview().offset(12)
         }
     }
     
