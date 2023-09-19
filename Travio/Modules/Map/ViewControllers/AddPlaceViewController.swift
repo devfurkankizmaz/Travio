@@ -232,7 +232,7 @@ extension AddPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
 
 extension AddPlaceViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth: CGFloat = collectionView.bounds.height - 124
+        let cellWidth: CGFloat = 270
         let cellHeight: CGFloat = 210
 
         return CGSize(width: cellWidth, height: cellHeight)
