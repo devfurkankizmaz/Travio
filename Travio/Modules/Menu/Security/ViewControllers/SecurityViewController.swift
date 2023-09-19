@@ -1,8 +1,8 @@
 //
-//  SecuritySettingsViewController.swift
+//  SecurityViewController.swift
 //  Travio
 //
-//  Created by Furkan Kızmaz on 7.09.2023.
+//  Created by Muhammet on 19.09.2023.
 //
 
 import AVFoundation
@@ -38,9 +38,20 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     private var locationPermissionGranted = false
     private var locationPermissionRequested = false
 
-    private lazy var securitySettingsViewModel: SecurityViewModel = {
-        let viewModel = SecurityViewModel()
-        return viewModel
+    // MARK: - Properties
+
+    weak var delegate: SettingsViewControllerDelegate?
+
+    private lazy var viewModel: SecurityViewModel = .init()
+
+    private lazy var componentsView: ComponentsView = .init()
+
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFont.poppinsSemiBold.withSize(32)
+        label.text = "Security Settings"
+        label.textColor = .white
+        return label
     }()
 
     private lazy var backButton: UIButton = {
@@ -52,26 +63,19 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         return button
     }()
 
-    private lazy var securitySettingsLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.poppinsSemiBold.withSize(32)
-        label.textAlignment = .center
-        label.text = "Security Settings"
-        label.textColor = .white
-        return label
-    }()
-
-    private lazy var componentsView = ComponentsView()
-
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(NewPasswordViewCell.self, forCellReuseIdentifier: NewPasswordViewCell().identifier)
-        tableView.register(PrivacyViewCell.self, forCellReuseIdentifier: PrivacyViewCell().identifier)
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-        return tableView
+    private lazy var securityCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 8
+        layout.headerReferenceSize = CGSizeMake(self.view.frame.width, 36)
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .clear
+        cv.delegate = self
+        cv.showsVerticalScrollIndicator = false
+        cv.dataSource = self
+        cv.register(SecuritySettingCell.self, forCellWithReuseIdentifier: SecuritySettingCell.identifier)
+        cv.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.identifier)
+        return cv
     }()
 
     private lazy var saveButton: TravioButton = {
@@ -99,13 +103,12 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
             enablePhotoLibraryToggle()
             photoLibraryPermissionGranted = true
         }
-        let manager = CLLocationManager()
-        let locationAuthorizationStatus = manager.authorizationStatus
-        if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
-            enableLocationToggle()
-            locationPermissionGranted = true
-            requestLocationPermission()
-        }
+        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
+            if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
+                enableLocationToggle()
+                locationPermissionGranted = true
+            }
+
     }
 
     private func observePermissionChanges() {
@@ -118,32 +121,32 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         navigationController?.popViewController(animated: true)
     }
 
-    func performPasswordChange(newPassword: String) {
-        if newPassword.isEmpty {
-            print("Şifre boş olamaz.")
-        } else {
-            securitySettingsViewModel.changePasswordInfos = ChangePassword(new_password: newPassword)
-            securitySettingsViewModel.putChangePassword(change_password: newPassword)
-        }
-    }
-
     @objc func saveButtonTapped() {
-        guard let changePasswordSection = securitySettingsViewModel.tableViewArray.first(where: { $0.type == "Change Password" }),
-              let newPasswordIndex = changePasswordSection.index.firstIndex(of: "New Password"),
-              let newPasswordConfirmIndex = changePasswordSection.index.firstIndex(of: "New Password Confirm"),
-              let newPasswordCell = tableView.cellForRow(at: IndexPath(row: newPasswordIndex, section: 0)) as? NewPasswordViewCell,
-              let newPasswordConfirmCell = tableView.cellForRow(at: IndexPath(row: newPasswordConfirmIndex, section: 0)) as? NewPasswordViewCell
-        else {
-            return
-        }
-        let newPassword = newPasswordCell.changePasswordView.textField.text ?? ""
-        let newPasswordConfirm = newPasswordConfirmCell.changePasswordView.textField.text ?? ""
-        performPasswordChange(newPassword: newPassword)
+        let newPasswordCell = securityCollectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? SecuritySettingCell
 
-        navigationController?.popViewController(animated: true)
+        let newPasswordConfirmCell = securityCollectionView.cellForItem(at: IndexPath(item: 1, section: 0)) as? SecuritySettingCell
+
+        let newPassword = newPasswordCell?.passwordView.textField.text ?? ""
+        let newPasswordConfirm = newPasswordConfirmCell?.passwordView.textField.text ?? ""
+
+        let input = NewPassInput(newPass: newPassword, newPassConfirm: newPasswordConfirm)
+
+        showSpinner()
+
+        viewModel.changePassword(input, callback: { [weak self] message, confirm in
+            if confirm {
+                self?.backButtonTapped()
+                self?.delegate?.didShowAlert()
+                self?.hideSpinner()
+            } else {
+                self?.showAlert(title: "Error", message: message)
+                self?.hideSpinner()
+            }
+        })
     }
 
     @objc private func toggleButtonTapped(_ sender: UISwitch) {
+        print(sender.tag)
         let permissionType = PermissionType(rawValue: sender.tag) ?? .camera
 
         switch permissionType {
@@ -199,21 +202,24 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     private func enableCameraToggle() {
-        if let cameraCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? PrivacyViewCell {
-            cameraCell.toggle.isOn = true
+        if let cell = securityCollectionView.cellForItem(at: IndexPath(item: 0, section: 1)) as? SecuritySettingCell {
+            cell.privacyView.switchControl.isOn = true
         }
     }
 
     private func enablePhotoLibraryToggle() {
-        if let photoLibraryCell = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as? PrivacyViewCell {
-            photoLibraryCell.toggle.isOn = true
+        if let cell = securityCollectionView.cellForItem(at: IndexPath(item: 1, section: 1)) as? SecuritySettingCell {
+            cell.privacyView.switchControl.isOn = true
         }
     }
 
     private func enableLocationToggle() {
-        if let locationCell = tableView.cellForRow(at: IndexPath(row: 2, section: 1)) as? PrivacyViewCell {
-            locationCell.toggle.isOn = true
-        }
+        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
+            let isLocationToggleOn = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
+
+            if let locationCell = securityCollectionView.cellForItem(at: IndexPath(row: 2, section: 1)) as? SecuritySettingCell {
+                locationCell.privacyView.switchControl.isOn = true
+            }
     }
 
     @objc private func requestCameraPermission() {
@@ -239,35 +245,29 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
-
+    
     @objc private func requestLocationPermission() {
-        let manager = CLLocationManager()
+        if !locationPermissionGranted {
+            let manager = CLLocationManager()
+            manager.delegate = self
 
-        if !locationPermissionRequested {
-            locationPermissionRequested = true
-
-            if CLLocationManager.locationServicesEnabled() {
-                switch manager.authorizationStatus {
-                case .authorizedAlways, .authorizedWhenInUse:
-                    DispatchQueue.main.async {
-                        self.enableLocationToggle()
-                        self.locationPermissionGranted = true
-                    }
-                case .notDetermined:
-                    DispatchQueue.global(qos: .background).async {
-                        self.locationManager.delegate = self
-                        self.locationManager.requestWhenInUseAuthorization()
-                    }
-                default:
-                    DispatchQueue.main.async {
-                        self.openAppSettings()
-                    }
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedAlways, .authorizedWhenInUse:
+                DispatchQueue.main.async {
+                    self.locationPermissionGranted = true
+                    self.enableLocationToggle()
                 }
-            } else {
+            case .notDetermined:
+                DispatchQueue.global(qos: .background).async {
+                    manager.requestWhenInUseAuthorization()
+                }
+            default:
                 DispatchQueue.main.async {
                     self.openAppSettings()
                 }
             }
+        } else {
+            self.enableLocationToggle()
         }
     }
 
@@ -327,11 +327,16 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
 
+    // MARK: - Private Methods
+
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = AppColor.primary.color
-        view.addSubviews(backButton, securitySettingsLabel, componentsView)
-        componentsView.addSubviews(tableView, saveButton)
+        componentsView.addSubviews(securityCollectionView)
+        view.addSubviews(backButton,
+                         titleLabel,
+                         componentsView,
+                         saveButton)
         setupLayout()
     }
 
@@ -341,79 +346,88 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
             make.leading.equalToSuperview().offset(24)
             make.width.height.equalTo(32)
         }
-        securitySettingsLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
-            make.centerX.equalToSuperview()
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(backButton.snp.top).offset(-6)
+            make.leading.equalTo(backButton.snp.trailing).offset(24)
         }
         componentsView.snp.makeConstraints { make in
-            make.top.equalTo(securitySettingsLabel.snp.bottom).offset(58)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-        tableView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(44)
+            make.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(saveButton.snp.top).offset(-20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(125)
+        }
+        securityCollectionView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(saveButton.snp.top)
+            make.top.equalToSuperview().offset(32)
         }
         saveButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(54)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-18)
         }
     }
 }
 
-extension SecurityViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 76
+// MARK: - Extensions
+
+extension SecurityViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = collectionView.frame.width - 48
+        let cellHeight: CGFloat = 74
+
+        return CGSize(width: cellWidth, height: cellHeight)
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        let label = UILabel()
-        label.text = securitySettingsViewModel.tableViewArray[section].type
-        label.textColor = #colorLiteral(red: 0.2196078431, green: 0.6784313725, blue: 0.662745098, alpha: 1)
-        label.font = AppFont.poppinsSemiBold.withSize(16)
-        headerView.addSubview(label)
-        label.snp.makeConstraints { make in
-            make.leading.equalTo(headerView.snp.leading).offset(16)
-            make.centerY.equalToSuperview()
-        }
-        return headerView
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let inset: CGFloat = 24
+        return UIEdgeInsets(top: 0, left: 0, bottom: inset, right: 0)
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+}
+
+extension SecurityViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewModel.sections.count
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return securitySettingsViewModel.tableViewArray.count
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.sections[section].items.count
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return securitySettingsViewModel.tableViewArray[section].index.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = indexPath.section
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let permissionType: PermissionType
+        permissionType = PermissionType.permissionType(for: indexPath)
 
-        if section == 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewPasswordViewCell().identifier) as? NewPasswordViewCell else { return UITableViewCell() }
-            let data = securitySettingsViewModel.tableViewArray[indexPath.section].index[indexPath.row]
-            cell.configure(model: data)
-            cell.selectionStyle = .none
-            return cell
-        } else {
-            permissionType = PermissionType.permissionType(for: indexPath)
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PrivacyViewCell().identifier) as? PrivacyViewCell else { return UITableViewCell() }
-            let data = securitySettingsViewModel.tableViewArray[indexPath.section].index[indexPath.row]
-            cell.configure(model: data, permissionType: permissionType)
-            cell.selectionStyle = .none
-            cell.toggle.tag = permissionType.rawValue // Hücrenin tag'ını izin türüne ayarlayın
-            cell.toggle.addTarget(self, action: #selector(toggleButtonTapped), for: .valueChanged)
-            return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SecuritySettingCell.identifier, for: indexPath) as? SecuritySettingCell else {
+            return UICollectionViewCell()
         }
+
+        let section = viewModel.sections[indexPath.section]
+        let item = section.items[indexPath.row]
+
+        cell.configure(with: item)
+        cell.privacyView.switchControl.tag = permissionType.rawValue
+        cell.privacyView.switchControl.addTarget(self, action: #selector(toggleButtonTapped), for: .valueChanged)
+
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeaderView.identifier, for: indexPath) as? SectionHeaderView else {
+                return UICollectionReusableView()
+            }
+
+            let section = viewModel.sections[indexPath.section]
+            headerView.configure(with: section.title)
+
+            return headerView
+        }
+
+        return UICollectionReusableView()
     }
 }

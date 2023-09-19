@@ -194,7 +194,7 @@ class SettingsViewController: UIViewController {
 
 protocol SettingsViewControllerDelegate: AnyObject {
     func didFetchProfile()
-    func didShowAlert()
+    func didShowAlert(title: String, message: String)
 }
 
 extension SettingsViewController: SettingsViewControllerDelegate {
@@ -202,8 +202,8 @@ extension SettingsViewController: SettingsViewControllerDelegate {
         fetchProfile()
     }
 
-    func didShowAlert() {
-        showAlert(title: "Success", message: "User successfully updated.")
+    func didShowAlert(title: String, message: String) {
+        showAlert(title: title, message: message)
     }
 }
 

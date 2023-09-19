@@ -2,14 +2,14 @@
 //  EditProfileViewController.swift
 //  Travio
 //
-//  Created by Furkan Kızmaz on 7.09.2023.
+//  Created by Muhammet on 19.09.2023.
 //
 
+import AVFoundation
 import Kingfisher
+import Photos
 import SnapKit
 import UIKit
-import Photos
-import AVFoundation
 
 class EditProfileViewController: UIViewController {
     // MARK: - Properties
@@ -253,7 +253,7 @@ class EditProfileViewController: UIViewController {
                     self?.hideSpinner()
                     self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
-                    self?.delegate?.didShowAlert()
+                    self?.delegate?.didShowAlert(title: "Success", message: "User successfully updated.")
                 } else {
                     self?.hideSpinner()
                 }
@@ -264,7 +264,7 @@ class EditProfileViewController: UIViewController {
                     self?.hideSpinner()
                     self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
-                    self?.delegate?.didShowAlert()
+                    self?.delegate?.didShowAlert(title: "Success", message: "User successfully updated.")
                 } else {
                     self?.hideSpinner()
                 }
@@ -275,7 +275,7 @@ class EditProfileViewController: UIViewController {
     @objc func dismissButtonTapped() {
         dismiss(animated: true)
     }
-    
+
     @objc func changePhotoButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
