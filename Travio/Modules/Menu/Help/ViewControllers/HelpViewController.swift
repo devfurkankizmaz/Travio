@@ -36,7 +36,7 @@ class HelpViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
-        layout.headerReferenceSize = CGSizeMake(self.view.frame.width, 80)
+        layout.headerReferenceSize = CGSizeMake(self.view.frame.width, 100)
 
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
@@ -130,7 +130,7 @@ extension HelpViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let inset: CGFloat = 16
-        return UIEdgeInsets(top: -16, left: 0, bottom: inset, right: 0)
+        return UIEdgeInsets(top: 0, left: 0, bottom: inset, right: 0)
     }
 }
 

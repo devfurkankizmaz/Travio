@@ -142,8 +142,8 @@ extension MapViewController: MapViewControllerDelegate {
 
     func fetchPlaces() {
         showSpinner()
-        mapViewModel.fetchPlaces { [weak self] _, success in
-            if success {
+        mapViewModel.fetchPlaces { [weak self] message, confirm in
+            if confirm {
                 DispatchQueue.main.async {
                     self?.visitedPlaceIDs = Set(self?.mapViewModel.places.map { $0.id } ?? [])
                     self?.placesCollectionView.reloadData()
@@ -151,6 +151,9 @@ extension MapViewController: MapViewControllerDelegate {
                     self?.updateMapAnnotations()
                     self?.hideSpinner()
                 }
+            } else {
+                self?.hideSpinner()
+                self?.showAlert(title: "Error", message: message)
             }
         }
     }
@@ -205,7 +208,7 @@ extension MapViewController: MKMapViewDelegate {
 
 extension MapViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth: CGFloat = 310
+        let cellWidth: CGFloat = collectionView.bounds.width - 82
         let cellHeight: CGFloat = 180
 
         return CGSize(width: cellWidth, height: cellHeight)
