@@ -74,7 +74,13 @@ class ListViewController: UIViewController {
 
     private func setupView() {
         navigationController?.isNavigationBarHidden = true
-        view.addSubviews(componentsView, listCollectionView, sortButton, backButton, titleLabel)
+        
+        view.addSubviews(componentsView,
+                         listCollectionView,
+                         sortButton,
+                         backButton,
+                         titleLabel)
+        
         view.backgroundColor = AppColor.primary.color
 
         setupLayout()
