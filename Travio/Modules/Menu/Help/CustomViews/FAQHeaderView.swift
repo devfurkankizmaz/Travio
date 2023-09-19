@@ -11,7 +11,7 @@ import UIKit
 class FAQHeaderView: UICollectionReusableView {
     static let identifier = "FAQHeaderView"
     
-    let label: UILabel = {
+    private lazy var label: UILabel = {
         let label = UILabel()
         label.font = AppFont.poppinsSemiBold.withSize(24)
         label.textColor = AppColor.primary.color
@@ -27,7 +27,7 @@ class FAQHeaderView: UICollectionReusableView {
         
         label.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(24)
-            make.centerY.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
     

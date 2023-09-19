@@ -130,7 +130,7 @@ extension HelpViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let inset: CGFloat = 16
-        return UIEdgeInsets(top: -16, left: 0, bottom: inset, right: 0)
+        return UIEdgeInsets(top: inset, left: 0, bottom: inset, right: 0)
     }
 }
 
