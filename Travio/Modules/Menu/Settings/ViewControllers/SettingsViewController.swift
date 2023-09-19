@@ -145,8 +145,8 @@ class SettingsViewController: UIViewController {
 
     private func fetchProfile() {
         showSpinner()
-        viewModel.getProfile { [weak self] success in
-            if success {
+        viewModel.getProfile { [weak self] message, confirm in
+            if confirm {
                 DispatchQueue.main.async {
                     self?.hideSpinner()
                     self?.fullNameLabel.text = self?.viewModel.profile?.fullName
@@ -154,6 +154,7 @@ class SettingsViewController: UIViewController {
                     self?.profilePictureImageView.kf.setImage(with: imageUrl, placeholder: self?.placeHolderImage)
                 }
             } else {
+                self?.showAlert(title: "Error", message: message)
                 self?.hideSpinner()
             }
         }

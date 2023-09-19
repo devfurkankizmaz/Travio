@@ -58,13 +58,15 @@ class VisitsViewController: UIViewController {
     private func fetchVisits() {
         showSpinner()
 
-        visitsViewModel.fetchVisits { [weak self] _, success in
-            if success {
+        visitsViewModel.fetchVisits { [weak self] message, confirm in
+            if confirm {
                 DispatchQueue.main.async {
                     self?.visitListCollectionView.reloadData()
-
                     self?.hideSpinner()
                 }
+            } else {
+                self?.hideSpinner()
+                self?.showAlert(title: "Error", message: message)
             }
         }
     }

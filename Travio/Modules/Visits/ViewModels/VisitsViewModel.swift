@@ -9,7 +9,7 @@ import Foundation
 
 class VisitsViewModel {
     typealias Completion = (String, Bool) -> Void
-    var visits: [Visit] = []
+    private var visits: [Visit] = []
 
     func fetchVisits(completion: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getAllVisits(), responseType: VisitResponse.self) { [weak self] result in
