@@ -248,25 +248,27 @@ class EditProfileViewController: UIViewController {
 
         showSpinner()
         if let selectedImage = selectedImage {
-            viewModel.saveProfile(image: selectedImage, input: updatedProfile) { [weak self] success in
-                if success {
+            viewModel.saveProfile(image: selectedImage, input: updatedProfile) { [weak self] message, confirm in
+                if confirm {
                     self?.hideSpinner()
                     self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
-                    self?.delegate?.didShowAlert(title: "Success", message: "User successfully updated.")
+                    self?.delegate?.didShowAlert(title: "Success", message: message)
                 } else {
                     self?.hideSpinner()
+                    self?.showAlert(title: "Error", message: message)
                 }
             }
         } else {
-            viewModel.saveProfile(image: nil, input: updatedProfile) { [weak self] success in
-                if success {
+            viewModel.saveProfile(image: nil, input: updatedProfile) { [weak self] message, confirm in
+                if confirm {
                     self?.hideSpinner()
                     self?.delegate?.didFetchProfile()
                     self?.dismiss(animated: true)
-                    self?.delegate?.didShowAlert(title: "Success", message: "User successfully updated.")
+                    self?.delegate?.didShowAlert(title: "Success", message: message)
                 } else {
                     self?.hideSpinner()
+                    self?.showAlert(title: "Error", message: message)
                 }
             }
         }

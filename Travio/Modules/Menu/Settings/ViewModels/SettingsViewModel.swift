@@ -8,7 +8,7 @@
 import UIKit
 
 class SettingsViewModel {
-    typealias CompletionHandler = (Bool) -> Void
+    typealias Completion = (String, Bool) -> Void
     var profile: Profile?
 
     private let settingsItems: [SettingsItem] = [
@@ -27,14 +27,14 @@ class SettingsViewModel {
         return settingsItems[index]
     }
 
-    func getProfile(callback: @escaping CompletionHandler) {
+    func getProfile(callback: @escaping Completion) {
         NetworkManager.shared.request(TravioRouter.getProfileInfo, responseType: Profile.self) { result in
             switch result {
             case .success(let response):
                 self.profile = response
-                callback(true)
+                callback("Profile fetched successfully", true)
             case .failure:
-                callback(false)
+                callback("An error occurred while fetching data from remote", false)
             }
         }
     }
