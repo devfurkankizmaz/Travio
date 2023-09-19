@@ -92,6 +92,8 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        let manager = CLLocationManager()
+        manager.delegate = self
         super.viewDidAppear(animated)
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         if cameraAuthorizationStatus == .authorized {
@@ -103,7 +105,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
             enablePhotoLibraryToggle()
             photoLibraryPermissionGranted = true
         }
-        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
+        let locationAuthorizationStatus = manager.authorizationStatus
             if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
                 enableLocationToggle()
                 locationPermissionGranted = true
@@ -136,7 +138,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         viewModel.changePassword(input, callback: { [weak self] message, confirm in
             if confirm {
                 self?.backButtonTapped()
-                self?.delegate?.didShowAlert()
+               // self?.delegate?.didShowAlert()
                 self?.hideSpinner()
             } else {
                 self?.showAlert(title: "Error", message: message)
@@ -214,11 +216,13 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     private func enableLocationToggle() {
-        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
+        let manager = CLLocationManager()
+        manager.delegate = self
+        let locationAuthorizationStatus = manager.authorizationStatus
             let isLocationToggleOn = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
 
             if let locationCell = securityCollectionView.cellForItem(at: IndexPath(row: 2, section: 1)) as? SecuritySettingCell {
-                locationCell.privacyView.switchControl.isOn = true
+                locationCell.privacyView.switchControl.isOn = isLocationToggleOn
             }
     }
 
@@ -251,7 +255,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
             let manager = CLLocationManager()
             manager.delegate = self
 
-            switch CLLocationManager.authorizationStatus() {
+            switch manager.authorizationStatus {
             case .authorizedAlways, .authorizedWhenInUse:
                 DispatchQueue.main.async {
                     self.locationPermissionGranted = true
