@@ -9,11 +9,12 @@ import Alamofire
 import UIKit
 
 class EditProfileViewModel {
-    typealias CompletionHandler = (Bool) -> Void
+    typealias Completion = (Bool) -> Void
+    typealias EditHandler = (String, Bool) -> Void
 
     var ppUrl: String?
 
-    func saveProfile(image: UIImage?, input: ProfileInput, callback: @escaping CompletionHandler) {
+    func saveProfile(image: UIImage?, input: ProfileInput, callback: @escaping EditHandler) {
         var updatedInput = input
         if let image = image {
             uploadImage(image: image) { [weak self] success in
@@ -28,19 +29,19 @@ class EditProfileViewModel {
         }
     }
 
-    private func editProfile(input: ProfileInput, callback: @escaping CompletionHandler) {
+    private func editProfile(input: ProfileInput, callback: @escaping EditHandler) {
         let params: Parameters = ["full_name": input.fullName, "email": input.email, "pp_url": input.ppUrl]
         NetworkManager.shared.request(TravioRouter.putEditProfile(params: params), responseType: ResponseModel.self) { result in
             switch result {
-            case .success:
-                callback(true)
+            case .success(let response):
+                callback(response.message, true)
             case .failure:
-                callback(false)
+                callback("An error occured when put your new data", false)
             }
         }
     }
 
-    private func uploadImage(image: UIImage?, callback: @escaping CompletionHandler) {
+    private func uploadImage(image: UIImage?, callback: @escaping Completion) {
         guard let image = image else {
             callback(false)
             return
