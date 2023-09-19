@@ -13,6 +13,8 @@
 		0A0933742A9A343100AE9B99 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0933732A9A343100AE9B99 /* NetworkManager.swift */; };
 		0A09337A2A9A3E2B00AE9B99 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0933792A9A3E2B00AE9B99 /* MapViewController.swift */; };
 		0A09337C2A9A3EEB00AE9B99 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A09337B2A9A3EEB00AE9B99 /* MapViewModel.swift */; };
+		0A25B33A2AB988D1005D9D7E /* SecuritySettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A25B3392AB988D1005D9D7E /* SecuritySettingCell.swift */; };
+		0A25B33C2AB988ED005D9D7E /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A25B33B2AB988ED005D9D7E /* SectionHeaderView.swift */; };
 		0A35EEC22A9FA6BE008E9299 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A35EEC12A9FA6BE008E9299 /* HomeViewController.swift */; };
 		0A56F5412A90B8540093BBAA /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A56F5402A90B8540093BBAA /* RegisterViewModel.swift */; };
 		0A56F5622A90FF3F0093BBAA /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A56F5612A90FF3F0093BBAA /* MainTabBarController.swift */; };
@@ -84,8 +86,7 @@
 		0AFC1DEF2A8F96A1002A55B1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFC1DEE2A8F96A1002A55B1 /* RegisterViewController.swift */; };
 		0AFC1DF12A8FA892002A55B1 /* ComponentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */; };
 		0AFD27DC2A916B5C009BEC15 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 0AFD27DB2A916B5C009BEC15 /* Kingfisher */; };
-		D33E9CFA2AAE5AD800606247 /* NewPasswordViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33E9CF92AAE5AD800606247 /* NewPasswordViewCell.swift */; };
-		D33E9CFC2AAE5AF800606247 /* PrivacyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33E9CFB2AAE5AF800606247 /* PrivacyViewCell.swift */; };
+		D33E9CFC2AAE5AF800606247 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33E9CFB2AAE5AF800606247 /* PrivacyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,8 @@
 		0A0933732A9A343100AE9B99 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0A0933792A9A3E2B00AE9B99 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0A09337B2A9A3EEB00AE9B99 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		0A25B3392AB988D1005D9D7E /* SecuritySettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecuritySettingCell.swift; sourceTree = "<group>"; };
+		0A25B33B2AB988ED005D9D7E /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		0A35EEC12A9FA6BE008E9299 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		0A56F5402A90B8540093BBAA /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		0A56F5612A90FF3F0093BBAA /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -164,8 +167,7 @@
 		0AFC1DEC2A8F8C3C002A55B1 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		0AFC1DEE2A8F96A1002A55B1 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsView.swift; sourceTree = "<group>"; };
-		D33E9CF92AAE5AD800606247 /* NewPasswordViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewCell.swift; sourceTree = "<group>"; };
-		D33E9CFB2AAE5AF800606247 /* PrivacyViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewCell.swift; sourceTree = "<group>"; };
+		D33E9CFB2AAE5AF800606247 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -401,8 +403,9 @@
 		0A98111F2AAE383B009AB71A /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				D33E9CF92AAE5AD800606247 /* NewPasswordViewCell.swift */,
-				D33E9CFB2AAE5AF800606247 /* PrivacyViewCell.swift */,
+				D33E9CFB2AAE5AF800606247 /* PrivacyView.swift */,
+				0A25B3392AB988D1005D9D7E /* SecuritySettingCell.swift */,
+				0A25B33B2AB988ED005D9D7E /* SectionHeaderView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -781,7 +784,6 @@
 				0A7DD9BE2AA919080067BED4 /* SettingsViewModel.swift in Sources */,
 				0A8544EF2AA684BC0095BF39 /* MainCollectionViewCell.swift in Sources */,
 				0A56F5622A90FF3F0093BBAA /* MainTabBarController.swift in Sources */,
-				D33E9CFA2AAE5AD800606247 /* NewPasswordViewCell.swift in Sources */,
 				0AFC1DEF2A8F96A1002A55B1 /* RegisterViewController.swift in Sources */,
 				0AC837392AA88E9B00425FB6 /* UIView+Extension.swift in Sources */,
 				0AFC1DE62A8F5A0B002A55B1 /* Color.swift in Sources */,
@@ -820,10 +822,12 @@
 				0AB5FC362AB5CBB2001400C2 /* WebViewController.swift in Sources */,
 				0A7DD9C22AA9217F0067BED4 /* ProfileModel.swift in Sources */,
 				0AC8373B2AA88F6C00425FB6 /* UIStackView+Extension.swift in Sources */,
-				D33E9CFC2AAE5AF800606247 /* PrivacyViewCell.swift in Sources */,
+				D33E9CFC2AAE5AF800606247 /* PrivacyView.swift in Sources */,
 				0AB5FC302AB5C898001400C2 /* NavigationControllerHelper.swift in Sources */,
 				0AF07A042AA72A3B00DB194B /* ListViewModel.swift in Sources */,
 				0AA44B362A95F1AF0070052D /* CustomTextView.swift in Sources */,
+				0A25B33A2AB988D1005D9D7E /* SecuritySettingCell.swift in Sources */,
+				0A25B33C2AB988ED005D9D7E /* SectionHeaderView.swift in Sources */,
 				0A7899CB2AA1BD27005CCF45 /* CustomDetailButton.swift in Sources */,
 				0A5B3D732AAA6D340091DFC2 /* SecurityViewController.swift in Sources */,
 				0AAEFABC2A9CB9500075B7C4 /* AddPlaceViewModel.swift in Sources */,

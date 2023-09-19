@@ -194,7 +194,7 @@ class SettingsViewController: UIViewController {
 
 protocol SettingsViewControllerDelegate: AnyObject {
     func didFetchProfile()
-    func didShowAlert()
+    func didShowAlert(title: String, message: String)
 }
 
 extension SettingsViewController: SettingsViewControllerDelegate {
@@ -202,8 +202,8 @@ extension SettingsViewController: SettingsViewControllerDelegate {
         fetchProfile()
     }
 
-    func didShowAlert() {
-        showAlert(title: "Success", message: "User successfully updated.")
+    func didShowAlert(title: String, message: String) {
+        showAlert(title: title, message: message)
     }
 }
 
@@ -224,6 +224,9 @@ extension SettingsViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.row {
             case 0:
                 selectedViewController = SecurityViewController()
+                if let listVC = selectedViewController as? SecurityViewController {
+                    listVC.delegate = self
+                }
             case 1:
                 selectedViewController = ListViewController()
 
