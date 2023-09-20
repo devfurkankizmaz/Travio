@@ -82,6 +82,7 @@
 		0AFC1DEF2A8F96A1002A55B1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFC1DEE2A8F96A1002A55B1 /* RegisterViewController.swift */; };
 		0AFC1DF12A8FA892002A55B1 /* ComponentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */; };
 		0AFD27DC2A916B5C009BEC15 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 0AFD27DB2A916B5C009BEC15 /* Kingfisher */; };
+		D399E6C52ABAD45000AFDA84 /* SecurityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D399E6C42ABAD45000AFDA84 /* SecurityHelper.swift */; };
 		D3B1F1A02AB9B2D6009ED3F2 /* SecuritySettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B1F19F2AB9B2D6009ED3F2 /* SecuritySettingCell.swift */; };
 		D3B1F1A22AB9B392009ED3F2 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B1F1A12AB9B392009ED3F2 /* SectionHeaderView.swift */; };
 		D3B1F1A42AB9B494009ED3F2 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B1F1A32AB9B494009ED3F2 /* PrivacyView.swift */; };
@@ -163,6 +164,7 @@
 		0AFC1DEC2A8F8C3C002A55B1 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		0AFC1DEE2A8F96A1002A55B1 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		0AFC1DF02A8FA892002A55B1 /* ComponentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsView.swift; sourceTree = "<group>"; };
+		D399E6C42ABAD45000AFDA84 /* SecurityHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityHelper.swift; sourceTree = "<group>"; };
 		D3B1F19F2AB9B2D6009ED3F2 /* SecuritySettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecuritySettingCell.swift; sourceTree = "<group>"; };
 		D3B1F1A12AB9B392009ED3F2 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		D3B1F1A32AB9B494009ED3F2 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				D3B1F1A52AB9B589009ED3F2 /* SecurityViewController.swift */,
+				D399E6C42ABAD45000AFDA84 /* SecurityHelper.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -797,6 +800,7 @@
 				0ACBC2212A9B66A600141CB9 /* VisitModel.swift in Sources */,
 				0AB141192A94A2B600EEE32A /* GalleryViewCell.swift in Sources */,
 				0AC837372AA88E5000425FB6 /* String+Extension.swift in Sources */,
+				D399E6C52ABAD45000AFDA84 /* SecurityHelper.swift in Sources */,
 				0ABB1CD42AAB4B000059A913 /* ActivityIndicatorHelper.swift in Sources */,
 				0AB5FC3F2AB5CC2E001400C2 /* FAQHeaderView.swift in Sources */,
 				0A5B3D712AA9F6330091DFC2 /* EditProfileViewModel.swift in Sources */,
