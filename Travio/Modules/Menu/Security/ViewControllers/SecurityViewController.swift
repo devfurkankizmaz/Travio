@@ -12,25 +12,6 @@ import Photos
 import SnapKit
 import UIKit
 
-enum PermissionType: Int {
-    case camera
-    case photoLibrary
-    case location
-
-    static func permissionType(for indexPath: IndexPath) -> PermissionType {
-        switch indexPath.row {
-        case 0:
-            return .camera
-        case 1:
-            return .photoLibrary
-        case 2:
-            return .location
-        default:
-            return .camera
-        }
-    }
-}
-
 class SecurityViewController: UIViewController, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
     private var cameraPermissionGranted = false
@@ -97,18 +78,18 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidAppear(animated)
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         if cameraAuthorizationStatus == .authorized {
-            enableCameraToggle()
+            SecurityHelper.enableCameraToggle(securityCollectionView)
             cameraPermissionGranted = true
         }
         let photoLibraryAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
         if photoLibraryAuthorizationStatus == .authorized {
-            enablePhotoLibraryToggle()
+            SecurityHelper.enablePhotoLibraryToggle(securityCollectionView)
             photoLibraryPermissionGranted = true
         }
         let locationAuthorizationStatus = manager.authorizationStatus
-            if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
-                enableLocationToggle()
-                locationPermissionGranted = true
+        if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
+            SecurityHelper.enableLocationToggle(securityCollectionView)
+            locationPermissionGranted = true
             }
 
     }
@@ -138,7 +119,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         viewModel.changePassword(input, callback: { [weak self] message, confirm in
             if confirm {
                 self?.backButtonTapped()
-               // self?.delegate?.didShowAlert()
+                self?.delegate?.didShowAlert(title: "Success", message: "User successfully updated.")
                 self?.hideSpinner()
             } else {
                 self?.showAlert(title: "Error", message: message)
@@ -149,7 +130,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
 
     @objc private func toggleButtonTapped(_ sender: UISwitch) {
         print(sender.tag)
-        let permissionType = PermissionType(rawValue: sender.tag) ?? .camera
+        let permissionType = SecurityHelper.PermissionType(rawValue: sender.tag) ?? .camera
 
         switch permissionType {
         case .camera:
@@ -161,96 +142,53 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
         case .photoLibrary:
             if sender.isOn {
                 if photoLibraryPermissionGranted {
-                    enablePhotoLibraryToggle()
+                    SecurityHelper.enablePhotoLibraryToggle(securityCollectionView)
                 } else {
                     requestPhotoLibraryPermission()
                 }
             } else {
-                openPhotoLibrarySettings()
+                SecurityHelper.openPhotoLibrarySettings()
             }
         case .location:
             if sender.isOn {
                 if locationPermissionGranted {
-                    enableLocationToggle()
+                    SecurityHelper.enableLocationToggle(securityCollectionView)
                 } else {
                     requestLocationPermission()
                 }
             } else {
-                openLocationSettings()
+                SecurityHelper.openLocationSettings()
             }
         }
     }
 
-    private func requestPermission(for permissionType: PermissionType) {
-        switch permissionType {
-        case .camera:
-            requestCameraPermission()
-        case .photoLibrary:
-            requestPhotoLibraryPermission()
-        case .location:
-            requestLocationPermission()
-        }
-    }
-
-    private func resetPermission(for permissionType: PermissionType) {
-        switch permissionType {
-        case .camera:
-            resetCameraPermission()
-        case .photoLibrary:
-            resetPhotoLibraryPermission()
-        case .location:
-            resetLocationPermission()
-        }
-    }
-
-    private func enableCameraToggle() {
-        if let cell = securityCollectionView.cellForItem(at: IndexPath(item: 0, section: 1)) as? SecuritySettingCell {
-            cell.privacyView.switchControl.isOn = true
-        }
-    }
-
-    private func enablePhotoLibraryToggle() {
-        if let cell = securityCollectionView.cellForItem(at: IndexPath(item: 1, section: 1)) as? SecuritySettingCell {
-            cell.privacyView.switchControl.isOn = true
-        }
-    }
-
-    private func enableLocationToggle() {
-        let manager = CLLocationManager()
-        manager.delegate = self
-        let locationAuthorizationStatus = manager.authorizationStatus
-            let isLocationToggleOn = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
-
-            if let locationCell = securityCollectionView.cellForItem(at: IndexPath(row: 2, section: 1)) as? SecuritySettingCell {
-                locationCell.privacyView.switchControl.isOn = isLocationToggleOn
-            }
-    }
-
-    @objc private func requestCameraPermission() {
-        AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+    @objc public func requestCameraPermission() {
+        AVCaptureDevice.requestAccess(for: .video) { granted in
             if !granted {
                 DispatchQueue.main.async {
-                    self?.openAppSettings()
+                    SecurityHelper.openAppSettings()
                 }
             }
         }
     }
 
-    @objc private func requestPhotoLibraryPermission() {
+    @objc public func requestPhotoLibraryPermission() {
         PHPhotoLibrary.requestAuthorization { [weak self] status in
             if status == .denied || status == .restricted {
                 DispatchQueue.main.async {
-                    self?.openPhotoLibrarySettings()
+                    SecurityHelper.openAppSettings()
                 }
             } else if status == .authorized {
-                self?.enablePhotoLibraryToggle()
+                if let collectionView = self?.securityCollectionView {
+                           SecurityHelper.enablePhotoLibraryToggle(collectionView)
+                    }
                 self?.photoLibraryPermissionGranted = true
                 NotificationCenter.default.post(name: .init("photoLibraryPermissionDidChange"), object: nil)
             }
         }
     }
     
-    @objc private func requestLocationPermission() {
+    @objc public func requestLocationPermission() {
         if !locationPermissionGranted {
             let manager = CLLocationManager()
             manager.delegate = self
@@ -259,7 +197,7 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
             case .authorizedAlways, .authorizedWhenInUse:
                 DispatchQueue.main.async {
                     self.locationPermissionGranted = true
-                    self.enableLocationToggle()
+                    SecurityHelper.enableLocationToggle(self.securityCollectionView)
                 }
             case .notDetermined:
                 DispatchQueue.global(qos: .background).async {
@@ -267,67 +205,48 @@ class SecurityViewController: UIViewController, CLLocationManagerDelegate {
                 }
             default:
                 DispatchQueue.main.async {
-                    self.openAppSettings()
+                    SecurityHelper.openAppSettings()
                 }
             }
         } else {
-            self.enableLocationToggle()
+            SecurityHelper.enableLocationToggle(securityCollectionView)
         }
     }
 
-    private func openPhotoLibrarySettings() {
-        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL, options: [:]) { _ in }
-        }
-    }
-
-    private func openLocationSettings() {
-        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL, options: [:]) { _ in }
-        }
-    }
-
-    private func resetCameraPermission() {
+    public func resetCameraPermission() {
         if cameraPermissionGranted {
-            AVCaptureDevice.requestAccess(for: .video) { [weak self] _ in
+            AVCaptureDevice.requestAccess(for: .video) { _ in
                 DispatchQueue.main.async {
-                    self?.openAppSettings()
+                    SecurityHelper.openAppSettings()
                 }
             }
         } else {
-            openAppSettings()
+            SecurityHelper.openAppSettings()
         }
     }
 
-    private func resetPhotoLibraryPermission() {
+    public func resetPhotoLibraryPermission() {
         if photoLibraryPermissionGranted {
             PHPhotoLibrary.requestAuthorization { [weak self] status in
                 if status == .denied || status == .restricted {
                     DispatchQueue.main.async {
-                        self?.openPhotoLibrarySettings()
+                        SecurityHelper.openPhotoLibrarySettings()
                     }
                 } else if status == .authorized {
-                    // self?.disablePhotoLibraryToggle()
                     self?.photoLibraryPermissionGranted = false
                 }
             }
         } else {
-            openPhotoLibrarySettings()
+            SecurityHelper.openPhotoLibrarySettings()
         }
     }
 
-    private func resetLocationPermission() {
+    public func resetLocationPermission() {
         if locationPermissionGranted {
             let locationManager = CLLocationManager()
             locationManager.requestWhenInUseAuthorization()
         } else {
-            openAppSettings()
-        }
-    }
-
-    private func openAppSettings() {
-        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(settingsURL, options: [:]) { _ in }
+            SecurityHelper.openAppSettings()
         }
     }
 
@@ -403,8 +322,8 @@ extension SecurityViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let permissionType: PermissionType
-        permissionType = PermissionType.permissionType(for: indexPath)
+        let permissionType: SecurityHelper.PermissionType
+        permissionType = SecurityHelper.PermissionType.permissionType(for: indexPath)
 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SecuritySettingCell.identifier, for: indexPath) as? SecuritySettingCell else {
             return UICollectionViewCell()
