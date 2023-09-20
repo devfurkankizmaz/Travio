@@ -424,7 +424,6 @@
 			isa = PBXGroup;
 			children = (
 				D3B1F1A52AB9B589009ED3F2 /* SecurityViewController.swift */,
-				D399E6C42ABAD45000AFDA84 /* SecurityHelper.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -666,6 +665,7 @@
 			children = (
 				0AFC1DD52A8F55A0002A55B1 /* KeychainHelper.swift */,
 				0AFC1DE12A8F5666002A55B1 /* Font.swift */,
+				D399E6C42ABAD45000AFDA84 /* SecurityHelper.swift */,
 				0AFC1DE52A8F5A0B002A55B1 /* Color.swift */,
 				0A09334D2A990DFF00AE9B99 /* Router.swift */,
 				0A0933732A9A343100AE9B99 /* NetworkManager.swift */,
